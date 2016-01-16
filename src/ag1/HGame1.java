@@ -31,7 +31,7 @@ public class HGame1 extends Game{
 	
 	@Override
 	public void tick(Graphics2D g, Input p1, Input p2, Sound s) {
-		g.setColor(Color.BLUE);
+		g.setColor(Color.green);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
 		velocity += gratity;
