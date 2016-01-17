@@ -14,10 +14,11 @@ import arcadia.Input;
 import arcadia.Sound;
 
 public class HGame1 extends Game{
-	float y = 10;
+	float y = WIDTH/2 - 100;
 	float velocity = 0;
 	float gratity = 0.5f;
 	boolean canJump = false;
+	levels l = new levels();
 	Image banner;
 	
 	public HGame1(){
@@ -37,13 +38,17 @@ public class HGame1 extends Game{
 		velocity += gratity;
 		y += velocity;
 		
-		g.setColor(Color.BLACK);
-		g.fillOval(0, (int) y, 100, 100);
+		l.level1(g, HEIGHT, WIDTH);
 		
-		if(y + 100 >= HEIGHT){
+		g.setColor(Color.BLACK);
+		g.fillRect(HEIGHT - 100, (int) y, 64, 96);
+		
+		
+		
+		if(y + 128 >= HEIGHT){
 			velocity = 0;
 			
-			y = HEIGHT - 100;
+			y = HEIGHT - 128;
 			canJump = true;
 		}
 		
