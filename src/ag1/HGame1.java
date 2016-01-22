@@ -79,7 +79,7 @@ public class HGame1 extends Game{
 			}
 			
 		}
-		
+		//test
 		//Button Mechanics
 		if(canJump && p1.pressed(Button.A)){
 			velocity = -9;
