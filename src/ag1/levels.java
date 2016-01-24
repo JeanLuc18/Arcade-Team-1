@@ -38,7 +38,7 @@ public class levels{
 		int blocksRead = 0;
 		int usableH;
 		int usableW = Game.WIDTH;
-		block[][] level;
+		block[][] level = null;
 		String token = " ";
 		//while loop reads an entire level segment and generates a level block array;
 		while(reader.hasNext() && token != "X"){//Level Text file should have an X at the end of each level segment
@@ -52,9 +52,7 @@ public class levels{
 					System.exit(1);
 				}
 				usableH = wallHeight;
-				usableW = usableW - (wallWidth*2);
-				
-				blocksRead = 2;                              // right [wallHeight/32][usableW/32 + 2] + 2 for the wall blocks
+				usableW = usableW - (wallWidth*2);//[wallHeight/32][usableW/32] + !2! for the wall blocks
 			}
 			level = new block[wallHeight/32][(usableW/32)+2];//creates single level segment array y, x format: from bottom left [0][0] to top
 			//rest of the blocks
@@ -62,31 +60,43 @@ public class levels{
 				token = reader.next();//gets the string of blocks to be read
 				int blockArrayPosX = 0;
 				int blockArrayPosY = 0;
+				block temp = null;
 				for(int i = 0; i < token.length(); i++){
 					char curr = token.charAt(i);
 					
-					if(curr == 'b'){//b is a breakable block
-						//create block 'b'
+					if(curr == 'b'){
+						temp = new block(blockArrayPosX * 32, blockArrayPosY * 32, 'b');//creates new breakable block 
 					}
 					else if(curr == 's'){
-						//create bloc 's'
+						temp = new block(blockArrayPosX * 32,blockArrayPosY * 32, 's');//creates new space block
+					}
+					else if(curr == 'w'){
+						temp = new block(blockArrayPosX * 32, blockArrayPosY * 32, 'w');//creates new unbreakable block
+					}
+					else if(curr == 'X'){
+						break;//end of level segment
 					}
 					
 					
-					//adds block here
+					
 					if(blockArrayPosX > level.length && blockArrayPosY > level[0].length-2){
-						System.out.println("No more room!!!");
+						System.out.println("No more room!!!");//if the level segment cant fit any more blocks
 					}
-					else if(blockArrayPosX > level.length && !(blockArrayPosY > level[0].length-2)){
+					else if(blockArrayPosX > level.length && !(blockArrayPosY > level[0].length-2)){//new "level" of blocks !!!Not another Level segment!!!
 						blockArrayPosX = 0;
 						blockArrayPosY += 1;
-						//add block to array at that pos
+						level[blockArrayPosX][blockArrayPosY] = temp;
+						blockArrayPosX += 1;
+						
+					}
+					else{
+						level[blockArrayPosX][blockArrayPosY] = temp;
 						blockArrayPosX += 1;
 					}
 				}
 			}
 		}
-		return null;
+		return level;
 	}
 	
 	/**
@@ -107,36 +117,37 @@ public class levels{
 	 * @return true if the block can fit false otherwise
 	 */
 	private boolean canFitH(block b, int heightLeft){
-		return (heightLeft - b.getHieght()>0);
+		return (heightLeft - b.getHeight()>0);
 	}
+	
 	public void level1(Graphics2D g, int height, int width){
 		block newest;
 		
 		g.setColor(Color.YELLOW);
 		g.fillRect(0, height - wallHeight, 128, 192);
-		newest = new block(0, height - wallHeight , 2);
+		newest = new block(0, height - wallHeight , 'b');
 		blocks1.add(newest);
 		g.fillRect(width - wallWidth, height - wallHeight, 128, wallHeight);
-		newest = new block(width - wallWidth, height - wallHeight , 3);
+		newest = new block(width - wallWidth, height - wallHeight , 'b');
 		blocks1.add(newest);
 		g.setColor(Color.CYAN);
 		g.fillRect(0, height - wallHeight*2, wallWidth, wallHeight);
-		newest = new block(0, height - wallHeight*2 , 2);
+		newest = new block(0, height - wallHeight*2 , 'b');
 		blocks1.add(newest);
 		g.fillRect(width - wallWidth, height - wallHeight*2, wallWidth, wallHeight);
-		newest = new block(width - wallWidth, height - wallHeight*2 , 3);
+		newest = new block(width - wallWidth, height - wallHeight*2 , 'b');
 		blocks1.add(newest);
 		
 		for(int j = 0; j < 2; j += 1){
 		for(int i = 0; i < (width / 32 ); i += 1){
 			g.setColor(Color.CYAN);
 		g.fillRect(0 + 32 * i, (height - 32) - wallHeight*j  , 32, 32);
-		newest = new block(0 + 32 * i, height - 32, 1);
+		newest = new block(0 + 32 * i, height - 32, 'b');
 		blocks1.add(newest);
 		g.setColor(Color.BLACK);
 		g.drawRect(0 + 32 * i, (height - 32) - wallHeight*j , 32, 32);
 		}
-		}
 	}
-
 }
+}
+
