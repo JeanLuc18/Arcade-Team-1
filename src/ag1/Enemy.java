@@ -13,6 +13,7 @@ public class Enemy {
 	float speed = 2;        //Speed in horizontal direction, constant
 	Rectangle collider;
 	boolean repair = false;         //true if there is a space block in the level
+	boolean pushLeft, pushRight;
 
 	public Enemy(float x, float y, int width, int height){
 		this.x = x;
@@ -38,6 +39,16 @@ public class Enemy {
 		if(x >= (game.WIDTH - width) || x <= 0){
 			speed *= -1;
 		}
+		
+		//push a block
+		if(pushRight){
+			g.setColor(Color.GRAY);
+			g.fillRect((int)(x + width), (int)(y - (height - 25)), 25, 25);
+		}
+		if(pushLeft){
+			g.setColor(Color.GRAY);
+			g.fillRect((int)(x - 25), (int)(y - (height - 25)), 25, 25);
+		}
 
 		//fall
 		yVelocity += gravity;
@@ -54,27 +65,34 @@ public class Enemy {
 			rect = ((block)game.l.blocks1.get(i)).bounds();
 
 			if(collider.intersects(rect)){
-				if(((block)game.l.blocks1.get(i)).getType() == 1){
+				if(((block)game.l.blocks1.get(i)).getType() == 1){					//floor
 					yVelocity = 0;
 					y = ((block)game.l.blocks1.get(i)).getY() - height;
 				}
-				else if(((block)game.l.blocks1.get(i)).getType() == 2){
+				else if(((block)game.l.blocks1.get(i)).getType() == 2){				//left wall
 					if(repair){
-						
+						pushRight = true;
 					}
 					
 					speed *= -1;
 					x+= 2 * speed;
 				}
-				else if(((block)game.l.blocks1.get(i)).getType() == 3){
+				else if(((block)game.l.blocks1.get(i)).getType() == 3){				//right wall
+					if(repair){
+						pushLeft = true;
+					}
+					
 					speed *= -1;
 					x+= 2 * speed;
 				}
-				else if(((block)game.l.blocks1.get(i)).getType() == 4){
+				else if(((block)game.l.blocks1.get(i)).getType() == 4){				//space
 					speed *= -1;
+					x+= 2 * speed;
 					if(repair){
 						((block)game.l.blocks1.get(i)).setType(1);
 						repair = false;
+						pushLeft = false;
+						pushRight = false;
 					}
 					else{
 						repair = true;
