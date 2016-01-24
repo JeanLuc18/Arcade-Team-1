@@ -41,7 +41,10 @@ public class HGame1 extends Game{
 	Image NMenu3;
 	Image SMenu3;
 	Enemy testEnemy = null;   //delete later
+<<<<<<< HEAD
 
+=======
+>>>>>>> bd25b92b7eb46781132700df398395b1e1b14333
 	
 	public HGame1(){
 	try {
@@ -118,6 +121,9 @@ public class HGame1 extends Game{
 			x -= 5;
 			right = true;
 		}
+		
+		g.setColor(Color.BLUE);
+		g.fillRect(100, 100, 100, 100);
 		
 		//Spawn debug enemy
 		if(testEnemy == null){
