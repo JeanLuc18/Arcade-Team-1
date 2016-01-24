@@ -32,7 +32,6 @@ public class HGame1 extends Game{
 	int startPlace = 0;
 	levels l;
 	Image banner;
-<<<<<<< HEAD
 	Image Title;
 	Image NMenu1;
 	Image SMenu1;
@@ -40,9 +39,7 @@ public class HGame1 extends Game{
 	Image SMenu2;
 	Image NMenu3;
 	Image SMenu3;
-=======
 	Enemy testEnemy = null;   //delete later
->>>>>>> cf21c2eede7fc330d653fd09a3638678ba32b9e3
 	
 	public HGame1(){
 	try {
