@@ -1,3 +1,4 @@
+
 package ag1;
 
 import java.awt.Color;
@@ -12,7 +13,7 @@ public class Enemy {
 	float gravity = 0.5f;
 	float speed = 2;        //Speed in horizontal direction, constant
 	Rectangle collider;
-	boolean repair = false;         //true if there is a space block in the level
+	boolean repair;
 	boolean pushLeft, pushRight;
 
 	public Enemy(float x, float y, int width, int height){
@@ -39,7 +40,7 @@ public class Enemy {
 		if(x >= (game.WIDTH - width) || x <= 0){
 			speed *= -1;
 		}
-		
+
 		//push a block
 		if(pushRight){
 			g.setColor(Color.GRAY);
@@ -73,7 +74,7 @@ public class Enemy {
 					if(repair){
 						pushRight = true;
 					}
-					
+
 					speed *= -1;
 					x+= 2 * speed;
 				}
@@ -81,7 +82,7 @@ public class Enemy {
 					if(repair){
 						pushLeft = true;
 					}
-					
+
 					speed *= -1;
 					x+= 2 * speed;
 				}
@@ -100,7 +101,7 @@ public class Enemy {
 				}
 			}
 		}
-		
+
 		//if(collider.intersects(game.player)){
 			//System.out.println("player dead"); //change to kill player
 		//}
