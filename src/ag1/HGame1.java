@@ -27,6 +27,7 @@ public class HGame1 extends Game{
 	boolean right = true;
 	boolean breakb = false;
 	int block = 0;
+	boolean starting = true;
 	levels l;
 	Image banner;
 	Enemy testEnemy = null;   //delete later
@@ -42,6 +43,9 @@ public class HGame1 extends Game{
 	
 	@Override
 	public void tick(Graphics2D g, Input p1, Input p2, Sound s) {
+		if(starting == true)
+			startup(g);
+		else{
 		l  = new levels();
 		g.setColor(Color.blue);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -87,12 +91,12 @@ public class HGame1 extends Game{
 			canJump = false;
 		}
 		
-		if(right && p1.pressed(Button.C)){
+		if(right && p1.pressed(Button.R)){
 			x += 5;
 			left = true;
 		}
 		
-		if(left && p1.pressed(Button.B)){
+		if(left && p1.pressed(Button.L)){
 			x -= 5;
 			right = true;
 		}
@@ -102,8 +106,16 @@ public class HGame1 extends Game{
 			testEnemy = new Enemy(200, 100, 50, 50);
 		}
 		testEnemy.update(g, this);
+		}
 	}
 
+	public void startup(Graphics2D g){
+		
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		
+	}
+	
 	@Override
 	public void reset() {
 		// TODO Auto-generated method stub
