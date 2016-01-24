@@ -29,6 +29,7 @@ public class HGame1 extends Game{
 	int block = 0;
 	levels l;
 	Image banner;
+	Enemy testEnemy = null;   //delete later
 	
 	public HGame1(){
 	try {
@@ -95,6 +96,12 @@ public class HGame1 extends Game{
 			x -= 5;
 			right = true;
 		}
+		
+		//Spawn debug enemy
+		if(testEnemy == null){
+			testEnemy = new Enemy(200, 100, 50, 50);
+		}
+		testEnemy.update(g, this);
 	}
 
 	@Override
