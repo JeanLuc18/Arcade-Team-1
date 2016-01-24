@@ -28,31 +28,61 @@ public class levels{
 		level = new File("Level.txt");
 		reader = new Scanner(level);
 	}
-	
-	private block[] genLevel(Scanner reader){
+	/**
+	 * genLevel reads a single level segment from the level txt and then gives back the array of blocks for that level with the two wall
+	 * objects in the [][ ....last two of this bracket](sorry for my nontechnical speak] will probably add a getWalls method for easier access
+	 * @param reader level.txt scanner
+	 * @return block[][] which is the level segment block array
+	 */
+	private block[][] genLevel(Scanner reader){
 		int blocksRead = 0;
 		int usableH;
 		int usableW = Game.WIDTH;
-		String token;
-		while(reader.hasNext()){
+		block[][] level;
+		String token = " ";
+		//while loop reads an entire level segment and generates a level block array;
+		while(reader.hasNext() && token != "X"){//Level Text file should have an X at the end of each level segment
 			token = reader.next();
 			//Wall type Block
 			if(token.charAt(0) == 'W'){
 				wallWidth = reader.nextInt();
 				wallHeight = reader.nextInt();
+				if(wallWidth % 32 > 0 || wallHeight % 32 > 0){  //checks to make sure the wall allows even block distribution 
+					System.err.println("Invalid Wall Deminsions: Must be a divisiable by 32");
+					System.exit(1);
+				}
 				usableH = wallHeight;
-				usableW = usableW - (wallWidth*2); 
-				blocksRead = 2;
+				usableW = usableW - (wallWidth*2);
+				
+				blocksRead = 2;                              // right [wallHeight/32][usableW/32 + 2] + 2 for the wall blocks
 			}
+			level = new block[wallHeight/32][(usableW/32)+2];//creates single level segment array y, x format: from bottom left [0][0] to top
 			//rest of the blocks
-			else if(token.charAt(0) == 'r'){
-				token = reader.next();
+			if(token.charAt(0) == 'b'){
+				token = reader.next();//gets the string of blocks to be read
+				int blockArrayPosX = 0;
+				int blockArrayPosY = 0;
 				for(int i = 0; i < token.length(); i++){
 					char curr = token.charAt(i);
-					//check if the block can fit and add if so
-					//actually I should be adding to the array here to be more 
-					//that is what I will do here I just need to figure out the number of blocks per level segment (heightWise)
-					// and calculate number with wall width considerations. 
+					
+					if(curr == 'b'){//b is a breakable block
+						//create block 'b'
+					}
+					else if(curr == 's'){
+						//create bloc 's'
+					}
+					
+					
+					//adds block here
+					if(blockArrayPosX > level.length && blockArrayPosY > level[0].length-2){
+						System.out.println("No more room!!!");
+					}
+					else if(blockArrayPosX > level.length && !(blockArrayPosY > level[0].length-2)){
+						blockArrayPosX = 0;
+						blockArrayPosY += 1;
+						//add block to array at that pos
+						blockArrayPosX += 1;
+					}
 				}
 			}
 		}

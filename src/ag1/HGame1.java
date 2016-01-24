@@ -30,9 +30,9 @@ public class HGame1 extends Game{
 	int block = 0;
 	boolean starting = true;
 	int startPlace = 0;
+	int sLevel = 1;
 	levels l;
 	Image banner;
-<<<<<<< HEAD
 	Image Title;
 	Image NMenu1;
 	Image SMenu1;
@@ -40,9 +40,8 @@ public class HGame1 extends Game{
 	Image SMenu2;
 	Image NMenu3;
 	Image SMenu3;
-=======
 	Enemy testEnemy = null;   //delete later
->>>>>>> cf21c2eede7fc330d653fd09a3638678ba32b9e3
+
 	
 	public HGame1(){
 	try {
@@ -139,22 +138,27 @@ public class HGame1 extends Game{
 			g.drawString("1 PLAYER GAME", WIDTH/2 - 125, 216);
 		else{
 			g.setColor(Color.red);
-			
-			
-			g.drawImage(NMenu1, 0, 144, null);
-		
+			g.drawString("1 PLAYER GAME", WIDTH/2 - 125, 216);
+			g.setColor(Color.yellow);
 		}
 		if(startPlace == 1)
-			g.drawImage(SMenu2, 0, 144 + 108, null);
-		else
-			g.drawImage(NMenu2, 0, 144 + 108, null);
-		
+			g.drawString("MOUNTAIN 01", WIDTH/2 - 125, 316);
+		else{
+			g.setColor(Color.red);
+			g.drawString("MOUNTAIN" + sLevel, WIDTH/2 - 125, 316);
+			g.setColor(Color.yellow);
+		}
 		if(startPlace == 2)
-			g.drawImage(SMenu3, 0, 144 + 108*2, null);
-		else
-			g.drawImage(NMenu3, 0, 144 + 108*2, null);
+			g.drawString("DEVELOPERS", WIDTH/2 - 125, 416);
+		else{
+			g.setColor(Color.red);
+			g.drawString("DEVELOPERS", WIDTH/2 - 125, 416);
+			g.setColor(Color.yellow);
+		}
 		
 		
+		
+		//Starting Button Mechanics
 		if(p1.pressed(Button.U))
 			if(startPlace == 0)
 				startPlace = 2;
