@@ -101,6 +101,9 @@ public class HGame1 extends Game{
 			right = true;
 		}
 		
+		g.setColor(Color.BLUE);
+		g.fillRect(100, 100, 100, 100);
+		
 		//Spawn debug enemy
 		if(testEnemy == null){
 			testEnemy = new Enemy(200, 100, 50, 50);
