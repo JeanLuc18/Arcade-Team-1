@@ -1,6 +1,7 @@
 package ag1;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -28,13 +29,31 @@ public class HGame1 extends Game{
 	boolean breakb = false;
 	int block = 0;
 	boolean starting = true;
+	int startPlace = 0;
 	levels l;
 	Image banner;
+<<<<<<< HEAD
+	Image Title;
+	Image NMenu1;
+	Image SMenu1;
+	Image NMenu2;
+	Image SMenu2;
+	Image NMenu3;
+	Image SMenu3;
+=======
 	Enemy testEnemy = null;   //delete later
+>>>>>>> cf21c2eede7fc330d653fd09a3638678ba32b9e3
 	
 	public HGame1(){
 	try {
 		banner = ImageIO.read(HGame1.class.getResource("banner.png"));
+		Title = ImageIO.read(HGame1.class.getResource("Title.gif"));
+		NMenu1 = ImageIO.read(HGame1.class.getResource("NMenu1.gif"));
+		SMenu1 = ImageIO.read(HGame1.class.getResource("SMenu1.gif"));
+		NMenu2 = ImageIO.read(HGame1.class.getResource("NMenu2.gif"));
+		SMenu2 = ImageIO.read(HGame1.class.getResource("SMenu2.gif"));
+		NMenu3 = ImageIO.read(HGame1.class.getResource("NMenu3.gif"));
+		SMenu3 = ImageIO.read(HGame1.class.getResource("SMenu3.gif"));
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -44,7 +63,7 @@ public class HGame1 extends Game{
 	@Override
 	public void tick(Graphics2D g, Input p1, Input p2, Sound s) {
 		if(starting == true)
-			startup(g);
+			startup(g, p1);
 		else{
 		l  = new levels();
 		g.setColor(Color.blue);
@@ -112,10 +131,48 @@ public class HGame1 extends Game{
 		}
 	}
 
-	public void startup(Graphics2D g){
+	public void startup(Graphics2D g, Input p1){
 		
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.drawImage(Title, 0, 0, null);
+		g.setColor(Color.YELLOW);
+		g.setFont(new Font("Stencil", Font.PLAIN, 36));
+		if(startPlace == 0)
+			g.drawString("1 PLAYER GAME", WIDTH/2 - 125, 216);
+		else{
+			g.setColor(Color.red);
+			
+			
+			g.drawImage(NMenu1, 0, 144, null);
+		
+		}
+		if(startPlace == 1)
+			g.drawImage(SMenu2, 0, 144 + 108, null);
+		else
+			g.drawImage(NMenu2, 0, 144 + 108, null);
+		
+		if(startPlace == 2)
+			g.drawImage(SMenu3, 0, 144 + 108*2, null);
+		else
+			g.drawImage(NMenu3, 0, 144 + 108*2, null);
+		
+		
+		if(p1.pressed(Button.U))
+			if(startPlace == 0)
+				startPlace = 2;
+			else
+				startPlace -= 1;
+		
+		if(p1.pressed(Button.D))
+			if(startPlace == 2)
+				startPlace = 0;
+			else
+				startPlace += 1;
+		
+		if(p1.pressed(Button.A))
+			if(startPlace == 0)
+			starting = false;
 		
 	}
 	
