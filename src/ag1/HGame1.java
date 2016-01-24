@@ -41,14 +41,11 @@ public class HGame1 extends Game{
 	Image NMenu3;
 	Image SMenu3;
 	Enemy testEnemy = null;   //delete later
-<<<<<<< HEAD
 
-=======
->>>>>>> bd25b92b7eb46781132700df398395b1e1b14333
 	
 	public HGame1(){
 	try {
-		banner = ImageIO.read(HGame1.class.getResource("banner.png"));
+		//banner = ImageIO.read(HGame1.class.getResource("banner.png"));
 		Title = ImageIO.read(HGame1.class.getResource("Title.gif"));
 		NMenu1 = ImageIO.read(HGame1.class.getResource("NMenu1.gif"));
 		SMenu1 = ImageIO.read(HGame1.class.getResource("SMenu1.gif"));

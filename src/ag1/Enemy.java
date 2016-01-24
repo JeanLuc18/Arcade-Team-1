@@ -12,16 +12,17 @@ public class Enemy {
 	float gravity = 0.5f;
 	float speed = 2;        //Speed in horizontal direction, constant
 	Rectangle collider;
-	
+	boolean repair = false;         //true if there is a space block in the level
+
 	public Enemy(float x, float y, int width, int height){
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		
+
 		collider = new Rectangle((int)x, (int)y, width, height);
 	}
-	
+
 	/**
 	 * Function update - update status of enemy object
 	 * 					 called every tick
@@ -29,10 +30,7 @@ public class Enemy {
 	 * @param - HGame1 object
 	 * Calling method - HGame1.java tick()
 	 */
-<<<<<<< HEAD
 	@SuppressWarnings("static-access")
-=======
->>>>>>> bd25b92b7eb46781132700df398395b1e1b14333
 	public void update(Graphics2D g, HGame1 game){
 		//Move enemy
 		x+=speed;
@@ -40,27 +38,31 @@ public class Enemy {
 		if(x >= (game.WIDTH - width) || x <= 0){
 			speed *= -1;
 		}
-		
+
 		//fall
 		yVelocity += gravity;
 		y += yVelocity;
 		if(y + height >= game.HEIGHT){
 			yVelocity = 0;
-			
+
 			y = game.HEIGHT - height;
 		}
-		
+
 		Rectangle rect;
 		for(int i = 0; i < game.l.blocks1.size(); i += 1){
-		
+
 			rect = ((block)game.l.blocks1.get(i)).bounds();
-			
+
 			if(collider.intersects(rect)){
 				if(((block)game.l.blocks1.get(i)).getType() == 1){
 					yVelocity = 0;
 					y = ((block)game.l.blocks1.get(i)).getY() - height;
 				}
 				else if(((block)game.l.blocks1.get(i)).getType() == 2){
+					if(repair){
+						
+					}
+					
 					speed *= -1;
 					x+= 2 * speed;
 				}
@@ -68,13 +70,26 @@ public class Enemy {
 					speed *= -1;
 					x+= 2 * speed;
 				}
+				else if(((block)game.l.blocks1.get(i)).getType() == 4){
+					speed *= -1;
+					if(repair){
+						((block)game.l.blocks1.get(i)).setType(1);
+						repair = false;
+					}
+					else{
+						repair = true;
+					}
+				}
 			}
-			
 		}
 		
+		//if(collider.intersects(game.player)){
+			//System.out.println("player dead"); //change to kill player
+		//}
+
 		collider.setLocation((int)x, (int)y);
 		g.setColor(Color.RED);
 		g.fillRect((int)x, (int)y, width, height);
 	}
-	
+
 }
