@@ -29,10 +29,9 @@ public class Enemy {
 	 * @param - HGame1 object
 	 * Calling method - HGame1.java tick()
 	 */
-<<<<<<< HEAD
+
 	@SuppressWarnings("static-access")
-=======
->>>>>>> bd25b92b7eb46781132700df398395b1e1b14333
+
 	public void update(Graphics2D g, HGame1 game){
 		//Move enemy
 		x+=speed;

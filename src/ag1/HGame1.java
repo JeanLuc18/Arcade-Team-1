@@ -34,28 +34,13 @@ public class HGame1 extends Game{
 	levels l;
 	Image banner;
 	Image Title;
-	Image NMenu1;
-	Image SMenu1;
-	Image NMenu2;
-	Image SMenu2;
-	Image NMenu3;
-	Image SMenu3;
 	Enemy testEnemy = null;   //delete later
-<<<<<<< HEAD
 
-=======
->>>>>>> bd25b92b7eb46781132700df398395b1e1b14333
 	
 	public HGame1(){
 	try {
-		banner = ImageIO.read(HGame1.class.getResource("banner.png"));
-		Title = ImageIO.read(HGame1.class.getResource("Title.gif"));
-		NMenu1 = ImageIO.read(HGame1.class.getResource("NMenu1.gif"));
-		SMenu1 = ImageIO.read(HGame1.class.getResource("SMenu1.gif"));
-		NMenu2 = ImageIO.read(HGame1.class.getResource("NMenu2.gif"));
-		SMenu2 = ImageIO.read(HGame1.class.getResource("SMenu2.gif"));
-		NMenu3 = ImageIO.read(HGame1.class.getResource("NMenu3.gif"));
-		SMenu3 = ImageIO.read(HGame1.class.getResource("SMenu3.gif"));
+		banner = ImageIO.read(HGame1.class.getResource("Banner.gif")); //help from pixabay.com
+		Title = ImageIO.read(HGame1.class.getResource("MenuTitle.gif"));
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -148,10 +133,10 @@ public class HGame1 extends Game{
 			g.setColor(Color.yellow);
 		}
 		if(startPlace == 1)
-			g.drawString("MOUNTAIN 01", WIDTH/2 - 125, 316);
+			g.drawString("MOUNTAIN    "+ sLevel , WIDTH/2 - 125, 316);
 		else{
 			g.setColor(Color.red);
-			g.drawString("MOUNTAIN" + sLevel, WIDTH/2 - 125, 316);
+			g.drawString("MOUNTAIN    " + sLevel, WIDTH/2 - 125, 316);
 			g.setColor(Color.yellow);
 		}
 		if(startPlace == 2)
@@ -180,6 +165,19 @@ public class HGame1 extends Game{
 		if(p1.pressed(Button.A))
 			if(startPlace == 0)
 			starting = false;
+		
+		if(p1.pressed(Button.L))
+			if(startPlace == 1)
+				if(sLevel == 1)
+					sLevel = 20;
+				else 
+					sLevel -= 1;
+		if(p1.pressed(Button.R))
+			if(startPlace == 1)
+				if(sLevel == 20)
+					sLevel = 1;
+				else 
+					sLevel += 1;
 		
 	}
 	
