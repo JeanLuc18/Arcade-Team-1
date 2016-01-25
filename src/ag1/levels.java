@@ -24,8 +24,8 @@ public class levels{
 	 * level class constructor which opens level text document and scanner to read said document
 	 * @throws FileNotFoundException
 	 */
-	public void level() throws FileNotFoundException{
-		level = new File("Level.txt");
+	public void level(String levelN) throws FileNotFoundException{
+		level = new File(levelN+".txt");
 		reader = new Scanner(level);
 	}
 	/**
