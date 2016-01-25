@@ -44,7 +44,7 @@ public class block {
 	 * @param h height
 	 * @param w width
 	 */
-	public block(int p1, int p2, char t, int h, int w){
+	public block(int p1, int p2, char t, int w, int h){
 		x = p1;
 		y = p2;
 		type = t;

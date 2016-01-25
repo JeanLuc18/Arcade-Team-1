@@ -45,6 +45,7 @@ public class HGame1 extends Game{
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}	
+	l  = new levels();
 	}
 	
 	@Override
@@ -52,7 +53,6 @@ public class HGame1 extends Game{
 		if(starting == true)
 			startup(g, p1);
 		else{
-		l  = new levels();
 		g.setColor(Color.blue);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		

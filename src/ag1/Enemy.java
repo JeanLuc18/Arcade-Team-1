@@ -68,9 +68,10 @@ public class Enemy {
 			if(collider.intersects(rect)){
 				if(((block)game.l.blocks1.get(i)).getType() == 'b'){					//floor
 					yVelocity = 0;
+					gravity = 0;
 					y = ((block)game.l.blocks1.get(i)).getY() - height;
 				}
-				else if(((block)game.l.blocks1.get(i)).getType() == 'w'){				//left wall
+				else if(((block)game.l.blocks1.get(i)).getType() == 'W'){				//left wall
 					if(repair){
 						pushRight = true;
 					}
@@ -78,7 +79,7 @@ public class Enemy {
 					speed *= -1;
 					x+= 2 * speed;
 				}
-				else if(((block)game.l.blocks1.get(i)).getType() == 'w'){				//right wall
+				else if(((block)game.l.blocks1.get(i)).getType() == 'W'){				//right wall
 					if(repair){
 						pushLeft = true;
 					}
@@ -86,11 +87,16 @@ public class Enemy {
 					speed *= -1;
 					x+= 2 * speed;
 				}
-				else if(((block)game.l.blocks1.get(i)).getType() == 4){				//space
+				else if(((block)game.l.blocks1.get(i)).getType() == 's'){				//space
+					System.out.println("intersect");
+					System.out.println(i);
 					speed *= -1;
 					x+= 2 * speed;
+					gravity = 0.5f;
 					if(repair){
 						((block)game.l.blocks1.get(i)).setType('b');
+						((block)game.l.blocks1.get(i)).setHeight(((block)game.l.blocks1.get(i)).getHeight() + 2);
+						speed *= -1;
 						repair = false;
 						pushLeft = false;
 						pushRight = false;

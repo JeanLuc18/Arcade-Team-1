@@ -19,7 +19,7 @@ public class levels{
 	private File level;
 	private Scanner reader;
 	
-	ArrayList blocks1 = new ArrayList();
+	ArrayList<block> blocks1 = new ArrayList<block>();
 	/**
 	 * level class constructor which opens level text document and scanner to read said document
 	 * @throws FileNotFoundException
@@ -125,10 +125,10 @@ public class levels{
 		
 		g.setColor(Color.YELLOW);
 		g.fillRect(0, height - wallHeight, 128, 192);
-		newest = new block(0, height - wallHeight , 'b');
+		newest = new block(0, height - wallHeight , 'W', 128, 192);
 		blocks1.add(newest);
 		g.fillRect(width - wallWidth, height - wallHeight, 128, wallHeight);
-		newest = new block(width - wallWidth, height - wallHeight , 'b');
+		newest = new block(width - wallWidth, height - wallHeight , 'W', 128, wallHeight);
 		blocks1.add(newest);
 		g.setColor(Color.CYAN);
 		g.fillRect(0, height - wallHeight*2, wallWidth, wallHeight);
@@ -138,8 +138,17 @@ public class levels{
 		newest = new block(width - wallWidth, height - wallHeight*2 , 'b');
 		blocks1.add(newest);
 		
-		for(int j = 0; j < 2; j += 1){
+		for(int j = 0; j < 1; j += 1){
 		for(int i = 0; i < (width / 32 ); i += 1){
+			
+			if(i == 12 || i == 13 || i == 14){
+				newest = new block(0 + 32 * i, height - 34, 's');
+				blocks1.add(newest);
+				g.setColor(Color.BLACK);
+				g.drawRect(0 + 32 * i, (height - 34) - wallHeight*j , 32, 32);
+				continue;
+			}
+			
 			g.setColor(Color.CYAN);
 		g.fillRect(0 + 32 * i, (height - 32) - wallHeight*j  , 32, 32);
 		newest = new block(0 + 32 * i, height - 32, 'b');
