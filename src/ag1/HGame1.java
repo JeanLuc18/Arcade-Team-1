@@ -18,15 +18,7 @@ import arcadia.Input;
 import arcadia.Sound;
 
 public class HGame1 extends Game{
-	float y = HEIGHT/2 - 100;
-	float x = WIDTH/2 - 50;
-	float velocity = 0;
-	float gratity = 0.5f;
-	Rectangle player;
-	boolean canJump = false;
-	boolean left = true;
-	boolean right = true;
-	boolean breakb = false;
+
 	int block = 0;
 	boolean starting = true;
 	int startPlace = 0;
@@ -35,91 +27,58 @@ public class HGame1 extends Game{
 	Image banner;
 	Image Title;
 	Enemy testEnemy = null;   //delete later
+	Player player;
 
-	
+
 	public HGame1(){
-	try {
-		banner = ImageIO.read(HGame1.class.getResource("Banner.gif")); //help from pixabay.com
-		Title = ImageIO.read(HGame1.class.getResource("MenuTitle.gif"));
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}	
-	l  = new levels();
+		try {
+			banner = ImageIO.read(HGame1.class.getResource("Banner.gif")); //help from pixabay.com
+			Title = ImageIO.read(HGame1.class.getResource("MenuTitle.gif"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		l  = new levels();
 	}
-	
+
 	@Override
 	public void tick(Graphics2D g, Input p1, Input p2, Sound s) {
 		if(starting == true)
 			startup(g, p1);
 		else{
-		g.setColor(Color.blue);
-		g.fillRect(0, 0, WIDTH, HEIGHT);
-		
-		velocity += gratity;
-		y += velocity;
-		
-		l.level1(g, HEIGHT, WIDTH);
-		
-		g.setColor(Color.BLACK);
-		g.fillRect((int) x, (int) y, 64, 96);
-		player = new Rectangle((int) x, (int)y, 64, 96);
-		
-		//Collision Mechanics
-		if(y + 128 >= HEIGHT){
-			velocity = 0;
-			
-			y = HEIGHT - 128;
-			canJump = true;
-		}
-		
-		Rectangle rec2;
-		for(int i = 0; i < l.blocks1.size(); i += 1){
-		
-			rec2 = ((block)l.blocks1.get(i)).bounds();
-			
-			if(player.intersects(rec2)){
-				if(((block)l.blocks1.get(i)).getType() == 1){
-					block = i;
-					breakb = true;
-				}
-				else if(((block)l.blocks1.get(i)).getType() == 2)
-					left = false;
-				else if(((block)l.blocks1.get(i)).getType() == 3)
-					right = false;
+			g.setColor(Color.blue);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+
+			player.velocity += player.gratity;
+			player.y += player.velocity;
+
+			l.level1(g, HEIGHT, WIDTH);
+
+			player.redraw();
+
+			//Player Collision
+			player.groundCollision(128);
+			for(int i = 0; i < l.blocks1.size(); i += 1){
+				player.blockCollision((block)l.blocks1.get(i));
 			}
+
+			//Player Input/Buttons
+			player.input(p1);
 			
-		}
-		//test
-		//Button Mechanics
-		if(canJump && p1.pressed(Button.A)){
-			velocity = -9;
-			canJump = false;
-		}
-		
-		if(right && p1.pressed(Button.R)){
-			x += 5;
-			left = true;
-		}
-		
-		if(left && p1.pressed(Button.L)){
-			x -= 5;
-			right = true;
-		}
-		
-		g.setColor(Color.BLUE);
-		g.fillRect(100, 100, 100, 100);
-		
-		//Spawn debug enemy
-		if(testEnemy == null){
-			testEnemy = new Enemy(200, 100, 50, 50);
-		}
-		testEnemy.update(g, this);
+			g.setColor(Color.BLUE);
+			g.fillRect(100, 100, 100, 100);
+
+			//Spawn debug enemy
+			if(testEnemy == null){
+				testEnemy = new Enemy(200, 100, 50, 50);
+			}
+			testEnemy.update(g, this);
 		}
 	}
 
 	public void startup(Graphics2D g, Input p1){
-		
+		player = new Player(g);
+
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		g.drawImage(Title, 0, 0, null);
@@ -146,26 +105,26 @@ public class HGame1 extends Game{
 			g.drawString("DEVELOPERS", WIDTH/2 - 125, 416);
 			g.setColor(Color.yellow);
 		}
-		
-		
-		
+
+
+
 		//Starting Button Mechanics
 		if(p1.pressed(Button.U))
 			if(startPlace == 0)
 				startPlace = 2;
 			else
 				startPlace -= 1;
-		
+
 		if(p1.pressed(Button.D))
 			if(startPlace == 2)
 				startPlace = 0;
 			else
 				startPlace += 1;
-		
+
 		if(p1.pressed(Button.A))
 			if(startPlace == 0)
-			starting = false;
-		
+				starting = false;
+
 		if(p1.pressed(Button.L))
 			if(startPlace == 1)
 				if(sLevel == 1)
@@ -178,13 +137,13 @@ public class HGame1 extends Game{
 					sLevel = 1;
 				else 
 					sLevel += 1;
-		
+
 	}
-	
+
 	@Override
 	public void reset() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
