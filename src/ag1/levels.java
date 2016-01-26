@@ -12,13 +12,13 @@ import arcadia.Game;
 
 
 public class levels{
-	
+
 	private int wallWidth = 128;
 	private int wallHeight = 192;
 	private int blockType;
 	private File level;
 	private Scanner reader;
-	
+
 	ArrayList<block> blocks1 = new ArrayList<block>();
 	/**
 	 * level class constructor which opens level text document and scanner to read said document
@@ -63,7 +63,7 @@ public class levels{
 				block temp = null;
 				for(int i = 0; i < token.length(); i++){
 					char curr = token.charAt(i);
-					
+
 					if(curr == 'b'){
 						temp = new block(blockArrayPosX * 32, blockArrayPosY * 32, 'b');//creates new breakable block 
 					}
@@ -76,9 +76,9 @@ public class levels{
 					else if(curr == 'X'){
 						break;//end of level segment
 					}
-					
-					
-					
+
+
+
 					if(blockArrayPosX > level.length && blockArrayPosY > level[0].length-2){
 						System.out.println("No more room!!!");//if the level segment cant fit any more blocks
 					}
@@ -87,7 +87,7 @@ public class levels{
 						blockArrayPosY += 1;
 						level[blockArrayPosX][blockArrayPosY] = temp;
 						blockArrayPosX += 1;
-						
+
 					}
 					else{
 						level[blockArrayPosX][blockArrayPosY] = temp;
@@ -98,7 +98,7 @@ public class levels{
 		}
 		return level;
 	}
-	
+
 	/**
 	 * canFitW checks to see if the block b can fit within the level segment. (in terms of Width)
 	 * @param b block being tested 
@@ -109,7 +109,7 @@ public class levels{
 	private boolean canFitW(block b, int widthLeft){
 		return (widthLeft - b.getWidth() > 0);
 	}
-	
+
 	/**
 	 * canFitH checks to see if the block b can fit within the level segment. (in terms of Height)
 	 * @param b block being tested
@@ -119,10 +119,10 @@ public class levels{
 	private boolean canFitH(block b, int heightLeft){
 		return (heightLeft - b.getHeight()>0);
 	}
-	
+
 	public void level1(Graphics2D g, int height, int width){
 		block newest;
-		
+
 		g.setColor(Color.YELLOW);
 		g.fillRect(0, height - wallHeight, 128, 192);
 		newest = new block(0, height - wallHeight , 128, 192, 'W');
@@ -137,26 +137,26 @@ public class levels{
 		g.fillRect(width - wallWidth, height - wallHeight*2, wallWidth, wallHeight);
 		newest = new block(width - wallWidth, height - wallHeight*2 , 'b');
 		blocks1.add(newest);
-		
-		for(int j = 0; j < 1; j += 1){
-		for(int i = 0; i < (width / 32 ); i += 1){
-			
-			if(i == 12 || i == 13 || i == 14){
-				newest = new block(0 + 32 * i, height - 34, 's');
+
+		for(int j = 0; j < 2; j += 1){
+			for(int i = 0; i < (width / 32 ); i += 1){
+
+				if(i == 12 || i == 13 || i == 14){
+					newest = new block(0 + 32 * i, height - 34, 's');
+					blocks1.add(newest);
+					g.setColor(Color.BLACK);
+					g.drawRect(0 + 32 * i, (height - 34) - wallHeight*j , 32, 32);
+					continue;
+				}
+
+				g.setColor(Color.CYAN);
+				g.fillRect(0 + 32 * i, (height - 32) - wallHeight*j  , 32, 32);
+				newest = new block(0 + 32 * i, (height - 32) - wallHeight*j, 'b');
 				blocks1.add(newest);
 				g.setColor(Color.BLACK);
-				g.drawRect(0 + 32 * i, (height - 34) - wallHeight*j , 32, 32);
-				continue;
+				g.drawRect(0 + 32 * i, (height - 32) - wallHeight*j , 32, 32);
 			}
-			
-			g.setColor(Color.CYAN);
-		g.fillRect(0 + 32 * i, (height - 32) - wallHeight*j  , 32, 32);
-		newest = new block(0 + 32 * i, height - 32, 'b');
-		blocks1.add(newest);
-		g.setColor(Color.BLACK);
-		g.drawRect(0 + 32 * i, (height - 32) - wallHeight*j , 32, 32);
 		}
 	}
-}
 }
 

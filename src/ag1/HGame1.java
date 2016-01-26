@@ -43,18 +43,18 @@ public class HGame1 extends Game{
 			startup(g, p1);
 		else{
 			g.setColor(Color.LIGHT_GRAY);
+			g.setColor(new Color(51, 102, 255));
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 			
 			l.level1(g, HEIGHT, WIDTH);
 			
-			player.tick();
-			player.render(g);
 
-			//Player Collision
-			//player.groundCollision(128);
+			player.render(g);
+			player.tick();
+			
+			//Player/Block Collision
 			for(int i = 0; i < l.blocks1.size(); i += 1){
-				//player.blockCollision((block)l.blocks1.get(i));
-				player.bcollision((block)l.blocks1.get(i));
+				player.blockCollision((block)l.blocks1.get(i));
 			}
 
 			//Player Input/Buttons
