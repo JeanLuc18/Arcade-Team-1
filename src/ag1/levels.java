@@ -125,10 +125,10 @@ public class levels{
 		
 		g.setColor(Color.YELLOW);
 		g.fillRect(0, height - wallHeight, 128, 192);
-		newest = new block(0, height - wallHeight , 'W', 128, 192);
+		newest = new block(0, height - wallHeight , 128, 192, 'W');
 		blocks1.add(newest);
 		g.fillRect(width - wallWidth, height - wallHeight, 128, wallHeight);
-		newest = new block(width - wallWidth, height - wallHeight , 'W', 128, wallHeight);
+		newest = new block(width - wallWidth, height - wallHeight , 128, wallHeight, 'W');
 		blocks1.add(newest);
 		g.setColor(Color.CYAN);
 		g.fillRect(0, height - wallHeight*2, wallWidth, wallHeight);

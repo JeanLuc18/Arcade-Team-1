@@ -4,12 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-
 
 import arcadia.Arcadia;
 import arcadia.Button;
@@ -28,7 +25,6 @@ public class HGame1 extends Game{
 	Image Title;
 	Enemy testEnemy = null;   //delete later
 	Player player;
-
 
 	public HGame1(){
 		try {
@@ -49,22 +45,25 @@ public class HGame1 extends Game{
 			g.setColor(Color.blue);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 
-			player.velocity += player.gratity;
-			player.y += player.velocity;
+			//player.velocity += player.gratity;
+			//player.y += player.velocity;
+			player.setVelY(player.getVelY() + player.gravity);
+			player.setY(player.getY() + player.getVelY());
 
 			l.level1(g, HEIGHT, WIDTH);
 
-			player.redraw();
+			player.update(g);
 
 			//Player Collision
 			player.groundCollision(128);
 			for(int i = 0; i < l.blocks1.size(); i += 1){
 				player.blockCollision((block)l.blocks1.get(i));
+				//player.blockeeeCollision((block)l.blocks1.get(i));
 			}
 
 			//Player Input/Buttons
 			player.input(p1);
-			
+
 			g.setColor(Color.BLUE);
 			g.fillRect(100, 100, 100, 100);
 
@@ -77,7 +76,7 @@ public class HGame1 extends Game{
 	}
 
 	public void startup(Graphics2D g, Input p1){
-		player = new Player(g);
+		player = new Player();
 
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);

@@ -5,24 +5,16 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-public class Enemy {
+import arcadia.Game;
 
-	float x, y;             //X and Y coordinates, passed in by constructor
-	int width, height;		//width and height, passed in by constructor
-	float yVelocity = 0;    //For falling enemies
-	float gravity = 0.5f;
+public class Enemy extends GameObject{
+	
 	float speed = 2;        //Speed in horizontal direction, constant
-	Rectangle collider;
 	boolean repair;
 	boolean pushLeft, pushRight;
 
 	public Enemy(float x, float y, int width, int height){
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-
-		collider = new Rectangle((int)x, (int)y, width, height);
+		super(x, y, width, height);
 	}
 
 	/**
@@ -32,12 +24,11 @@ public class Enemy {
 	 * @param - HGame1 object
 	 * Calling method - HGame1.java tick()
 	 */
-	@SuppressWarnings("static-access")
 	public void update(Graphics2D g, HGame1 game){
 		//Move enemy
 		x+=speed;
 		//change direction an edges of screen CHANGE LATER
-		if(x >= (game.WIDTH - width) || x <= 0){
+		if(x >= (Game.WIDTH - width) || x <= 0){
 			speed *= -1;
 		}
 
@@ -52,22 +43,22 @@ public class Enemy {
 		}
 
 		//fall
-		yVelocity += gravity;
-		y += yVelocity;
-		if(y + height >= game.HEIGHT){
-			yVelocity = 0;
+		velY += gravity;
+		y += velY;
+		if(y + height >= Game.HEIGHT){
+			velY = 0;
 
-			y = game.HEIGHT - height;
+			y = Game.HEIGHT - height;
 		}
 
 		Rectangle rect;
 		for(int i = 0; i < game.l.blocks1.size(); i += 1){
 
-			rect = ((block)game.l.blocks1.get(i)).bounds();
+			rect = ((block)game.l.blocks1.get(i)).getBounds();
 
-			if(collider.intersects(rect)){
+			if(getBounds().intersects(rect)){
 				if(((block)game.l.blocks1.get(i)).getType() == 'b'){					//floor
-					yVelocity = 0;
+					velY = 0;
 					gravity = 0;
 					y = ((block)game.l.blocks1.get(i)).getY() - height;
 				}
@@ -112,9 +103,14 @@ public class Enemy {
 			//System.out.println("player dead"); //change to kill player
 		//}
 
-		collider.setLocation((int)x, (int)y);
 		g.setColor(Color.RED);
 		g.fillRect((int)x, (int)y, width, height);
+	}
+
+	@Override
+	public void update(Graphics2D g) {
+		// TODO THINGS
+		
 	}
 
 }
