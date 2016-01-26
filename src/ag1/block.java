@@ -42,10 +42,8 @@ public class block extends GameObject {
 	public char getType(){
 		return type;
 	}
-
-	@Override
-	public void update(Graphics2D g) {
-		// TODO Auto-generated method stub
-	}
+	
+	public void tick() {}
+	public void render(Graphics2D g) {}
 
 }

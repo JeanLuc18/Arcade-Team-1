@@ -42,23 +42,19 @@ public class HGame1 extends Game{
 		if(starting == true)
 			startup(g, p1);
 		else{
-			g.setColor(Color.blue);
+			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
-
-			//player.velocity += player.gratity;
-			//player.y += player.velocity;
-			player.setVelY(player.getVelY() + player.gravity);
-			player.setY(player.getY() + player.getVelY());
-
+			
 			l.level1(g, HEIGHT, WIDTH);
-
-			player.update(g);
+			
+			player.tick();
+			player.render(g);
 
 			//Player Collision
-			player.groundCollision(128);
+			//player.groundCollision(128);
 			for(int i = 0; i < l.blocks1.size(); i += 1){
-				player.blockCollision((block)l.blocks1.get(i));
-				//player.blockeeeCollision((block)l.blocks1.get(i));
+				//player.blockCollision((block)l.blocks1.get(i));
+				player.bcollision((block)l.blocks1.get(i));
 			}
 
 			//Player Input/Buttons

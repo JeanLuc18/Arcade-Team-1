@@ -107,10 +107,7 @@ public class Enemy extends GameObject{
 		g.fillRect((int)x, (int)y, width, height);
 	}
 
-	@Override
-	public void update(Graphics2D g) {
-		// TODO THINGS
-		
-	}
+	public void tick() {}
+	public void render(Graphics2D g) {}
 
 }
