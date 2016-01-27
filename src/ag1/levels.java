@@ -30,16 +30,24 @@ public class levels{
 		reader = new Scanner(level);
 	}
 	/**
+	 * genEnemy generates the enemies an returns an array of them to keep track
+	 * @param reader
+	 * @return Enemy[] array
+	 */
+	private Enemy[] genEnemy(Scanner reader){
+		return new Enemy[6];
+	}
+	/**
 	 * genLevel reads a single level segment from the level txt and then gives back the array of blocks for that level with the two wall
 	 * objects in the last two indexes left first right second
 	 * @param reader level.txt scanner
 	 * @return block[] which is the level segment block array
 	 */
 	private block[] genLevel(Scanner reader){
-		int blocksRead = 0;
-		int usableH;
+		int usableH = Game.HEIGHT;
 		int usableW = Game.WIDTH;
-		Block[] level = null;
+		int blocksPerRow = 0;
+		block[] level = null;
 		String token = " ";
 		//while loop reads an entire level segment and generates a level block array;
 		while(reader.hasNext() && token != "X"){//Level Text file should have an X at the end of each level segment
@@ -56,23 +64,22 @@ public class levels{
 				usableW = usableW - (wallWidth*2);//[wallHeight/32][usableW/32] + !2! for the wall blocks
 			}
 			level = new block[((usableW/32)*(usableH/32))+2];//creates single level segment array with space for rest of blocks + 2 for the walls
+			blocksPerRow = usableW / 32;
 			//rest of the blocks
 			if(token.charAt(0) == 'b'){
 				token = reader.next();//gets the string of blocks to be read
-				int blockArrayPosX = 0;
-				int blockArrayPosY = 0;
 				block temp = null;
 				for(int i = 0; i < token.length(); i++){
 					char curr = token.charAt(i);
 
 					if(curr == 'b'){
-						temp = new block(blockArrayPosX * 32, blockArrayPosY * 32, 'b');//creates new breakable block 
+						temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow), 'b');//creates new breakable block 
 					}
 					else if(curr == 's'){
-						temp = new block(blockArrayPosX * 32,blockArrayPosY * 32, 's');//creates new space block
+						temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow), 's');//creates new space block
 					}
 					else if(curr == 'w'){
-						temp = new block(blockArrayPosX * 32, blockArrayPosY * 32, 'w');//creates new unbreakable block
+						temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow), 'w');//creates new unbreakable block
 					}
 					else if(curr == 'X'){
 						System.out.println("End of level segment");
@@ -82,7 +89,7 @@ public class levels{
 						System.out.println("No more room!!!");//if the level segment cant fit any more blocks
 						break;
 					}
-
+					level[i] = temp;
 					
 				}
 			}
@@ -90,37 +97,29 @@ public class levels{
 		return level;
 	}
 	/**
-	 * CalcXCord takes the current index of the read block and the usable x space and uses it to calculate the blocks x cordinate 
+	 * CalcXCord takes the current index of the read block and the blocks per row and uses it to calculate the block's x coordinate 
 	 * @param i
-	 * @param space
-	 * @return xCord
+	 * @param blocksPerRow
+	 * @return xCoord
 	 */
-	private int calcXCord(int i, int space){
-		i = i % (space/32);//converts i to the corresponding block number (interms of x)
-		int xCord = i*32; 
+	private int calcXCord(int i, int blocksPerRow){
+		i = i % (blocksPerRow);//converts i to the corresponding block number (interms of x)
+		int xCoord = i*32; 
 			
-		return xCord
+		return xCoord;
 	}
 	/**
-	 * canFitW checks to see if the block b can fit within the level segment. (in terms of Width)
-	 * @param b block being tested 
-	 * @param widthLeft the amount of usable width left in level segment(also depends on height position of block)
-	 * @return true if the block can fit false otherwise
-	 * 
+	 * CalcYCord takes the current index of the read block and the blocks per row and uses it to calculate the block's y coordinate 
+	 * @param i
+	 * @param blocksPerRow
+	 * @return yCoord
 	 */
-	private boolean canFitW(block b, int widthLeft){
-		return (widthLeft - b.getWidth() > 0);
+	private int calcYCord(int i, int blocksPerRow){
+		i = i/blocksPerRow; //converts i to the corresponding row number
+		int yCoord = i*32;//*32 because a block is 32 pixels tall
+		return yCoord;
 	}
-
-	/**
-	 * canFitH checks to see if the block b can fit within the level segment. (in terms of Height)
-	 * @param b block being tested
-	 * @param heightLeft the amount of height left 
-	 * @return true if the block can fit false otherwise
-	 */
-	private boolean canFitH(block b, int heightLeft){
-		return (heightLeft - b.getHeight()>0);
-	}
+	
 
 	public void level1(Graphics2D g, int height, int width){
 		block newest;

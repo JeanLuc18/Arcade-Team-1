@@ -32,7 +32,7 @@ public abstract class GameObject {
 	}
 	
 	public float getX(){
-		return x;
+		return x; //bottom left pixel x position
 	}
 	
 	public void setX(float x){
@@ -40,7 +40,7 @@ public abstract class GameObject {
 	}
 	
 	public float getY(){
-		return y;
+		return y; //bottom left pixel y position
 	}
 	
 	public void setY(float y){
