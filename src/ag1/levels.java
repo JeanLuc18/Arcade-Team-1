@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import jdk.nashorn.internal.ir.Block;
 import arcadia.Game;
 
 
@@ -30,15 +31,15 @@ public class levels{
 	}
 	/**
 	 * genLevel reads a single level segment from the level txt and then gives back the array of blocks for that level with the two wall
-	 * objects in the [][ ....last two of this bracket](sorry for my nontechnical speak] will probably add a getWalls method for easier access
+	 * objects in the last two indexes left first right second
 	 * @param reader level.txt scanner
-	 * @return block[][] which is the level segment block array
+	 * @return block[] which is the level segment block array
 	 */
-	private block[][] genLevel(Scanner reader){
+	private block[] genLevel(Scanner reader){
 		int blocksRead = 0;
 		int usableH;
 		int usableW = Game.WIDTH;
-		block[][] level = null;
+		Block[] level = null;
 		String token = " ";
 		//while loop reads an entire level segment and generates a level block array;
 		while(reader.hasNext() && token != "X"){//Level Text file should have an X at the end of each level segment
@@ -54,7 +55,7 @@ public class levels{
 				usableH = wallHeight;
 				usableW = usableW - (wallWidth*2);//[wallHeight/32][usableW/32] + !2! for the wall blocks
 			}
-			level = new block[wallHeight/32][(usableW/32)+2];//creates single level segment array y, x format: from bottom left [0][0] to top
+			level = new block[((usableW/32)*(usableH/32))+2];//creates single level segment array with space for rest of blocks + 2 for the walls
 			//rest of the blocks
 			if(token.charAt(0) == 'b'){
 				token = reader.next();//gets the string of blocks to be read
@@ -74,31 +75,32 @@ public class levels{
 						temp = new block(blockArrayPosX * 32, blockArrayPosY * 32, 'w');//creates new unbreakable block
 					}
 					else if(curr == 'X'){
+						System.out.println("End of level segment");
 						break;//end of level segment
 					}
-
-
-
-					if(blockArrayPosX > level.length && blockArrayPosY > level[0].length-2){
+					if(i == level.length-3){
 						System.out.println("No more room!!!");//if the level segment cant fit any more blocks
+						break;
 					}
-					else if(blockArrayPosX > level.length && !(blockArrayPosY > level[0].length-2)){//new "level" of blocks !!!Not another Level segment!!!
-						blockArrayPosX = 0;
-						blockArrayPosY += 1;
-						level[blockArrayPosX][blockArrayPosY] = temp;
-						blockArrayPosX += 1;
 
-					}
-					else{
-						level[blockArrayPosX][blockArrayPosY] = temp;
-						blockArrayPosX += 1;
-					}
+					
 				}
 			}
 		}
 		return level;
 	}
-
+	/**
+	 * CalcXCord takes the current index of the read block and the usable x space and uses it to calculate the blocks x cordinate 
+	 * @param i
+	 * @param space
+	 * @return xCord
+	 */
+	private int calcXCord(int i, int space){
+		i = i % (space/32);//converts i to the corresponding block number (interms of x)
+		int xCord = i*32; 
+			
+		return xCord
+	}
 	/**
 	 * canFitW checks to see if the block b can fit within the level segment. (in terms of Width)
 	 * @param b block being tested 
