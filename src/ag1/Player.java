@@ -8,13 +8,12 @@ import arcadia.Button;
 public class Player extends GameObject {
 	
 	boolean canJump = false;
-	//boolean breakb = false;
 	boolean inAir = true;
 	Color color = Color.BLACK;
 	final int bd = 8; //bound dist
 	
 	public Player(){
-		//super(Game.HEIGHT/2 - 100, Game.WIDTH/2 - 50, 64, 96);
+		//super(Game.WIDTH/2, Game.HEIGHT-32-96, 64, 96);
 		super(200, 400, 64, 96);
 	}
 	
