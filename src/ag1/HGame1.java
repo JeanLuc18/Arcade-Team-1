@@ -4,7 +4,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
@@ -13,6 +16,7 @@ import arcadia.Button;
 import arcadia.Game;
 import arcadia.Input;
 import arcadia.Sound;
+import shooter.Shooter;
 
 public class HGame1 extends Game{
 
@@ -21,10 +25,14 @@ public class HGame1 extends Game{
 	int startPlace = 0;
 	int sLevel = 1;
 	levels l;
+	int numOLevels = 0;
+	boolean levelsLoaded = false;
 	Image banner;
 	Image Title;
 	Enemy testEnemy = null;   //delete later
 	Player player;
+	ArrayList<String> levelNames;
+	boolean hasLevels = false;
 
 	public HGame1(){
 		try {
@@ -39,9 +47,12 @@ public class HGame1 extends Game{
 
 	@Override
 	public void tick(Graphics2D g, Input p1, Input p2, Sound s) {
+		if(!levelsLoaded)
+			loadLevels();
+		
 		if(starting == true)
 			startup(g, p1);
-		else{
+		else if(hasLevels){
 			g.setColor(Color.LIGHT_GRAY);
 			g.setColor(new Color(51, 102, 255));
 			g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -69,6 +80,24 @@ public class HGame1 extends Game{
 			}
 			testEnemy.update(g, this);
 		}
+		else{
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+			g.setColor(Color.RED);
+			g.setFont(new Font("Stencil", Font.PLAIN, 50));
+			g.drawString("NO LEVELS FOUND!!!!", 0 + WIDTH/4, HEIGHT/2);
+			g.setFont(new Font("Stencil", Font.PLAIN, 30));
+			g.drawString("Please close and add levels, Thank you.", 0 + WIDTH/6, HEIGHT/2 + 30);
+		}
+	}
+
+	private void loadLevels() {
+		File f = new File("src/ag1/levelsFolder");
+		levelNames = new ArrayList<String>(Arrays.asList(f.list()));
+		// System.out.print(levelNames); delete later;
+		levelsLoaded = true;
+		if(levelNames.size() > 0)
+			hasLevels = true;
 	}
 
 	public void startup(Graphics2D g, Input p1){
@@ -101,40 +130,56 @@ public class HGame1 extends Game{
 			g.setColor(Color.yellow);
 		}
 
-
-
+		
 		//Starting Button Mechanics
-		if(p1.pressed(Button.U))
+		if(p1.pressed(Button.U)){
 			if(startPlace == 0)
 				startPlace = 2;
 			else
 				startPlace -= 1;
-
-		if(p1.pressed(Button.D))
+			waiting();
+		}
+		if(p1.pressed(Button.D)){
 			if(startPlace == 2)
 				startPlace = 0;
 			else
 				startPlace += 1;
-
-		if(p1.pressed(Button.A))
+			
+			waiting();
+		}
+		if(p1.pressed(Button.B)){
 			if(startPlace == 0)
 				starting = false;
-
-		if(p1.pressed(Button.L))
+			waiting();
+		}
+		if(p1.pressed(Button.L)){
 			if(startPlace == 1)
 				if(sLevel == 1)
 					sLevel = 20;
 				else 
 					sLevel -= 1;
-		if(p1.pressed(Button.R))
+			
+			waiting();
+		}
+		if(p1.pressed(Button.R)){
 			if(startPlace == 1)
 				if(sLevel == 20)
 					sLevel = 1;
 				else 
 					sLevel += 1;
-
+			waiting();
+		}
 	}
 
+	public void waiting(){
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public void reset() {
 		// TODO Auto-generated method stub
@@ -148,6 +193,7 @@ public class HGame1 extends Game{
 	}
 
 	public static void main(String[] args){
-		Arcadia.display(new Arcadia(new Game[] {new HGame1()}));
+		Arcadia.display(new Arcadia(new Game[] {new HGame1(), new Shooter()}));
 	}
 }
+

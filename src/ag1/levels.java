@@ -26,7 +26,7 @@ public class levels{
 	 * @throws FileNotFoundException
 	 */
 	public void level(String levelN) throws FileNotFoundException{
-		level = new File(levelN+".txt");
+		level = new File(levelN);
 		reader = new Scanner(level);
 		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
 								 //"The" and "Delimiter" with each call to reader.next();
