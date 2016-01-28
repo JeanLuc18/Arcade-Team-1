@@ -9,6 +9,8 @@ public class Player extends GameObject {
 	
 	boolean canJump = false;
 	boolean inAir = true;
+	boolean faceing = true; //true - player facing right , false - player facing left 
+	boolean attacking = false;
 	Color color = Color.BLACK;
 	final int bd = 8; //bound dist
 	
@@ -28,8 +30,16 @@ public class Player extends GameObject {
 	
 	public void render(Graphics2D g){
 		g.setColor(color);
-		g.fillRect((int)x, (int)y, width, height);
-		
+		//for the graphics
+		if(faceing && attacking)
+			g.fillRect((int)x, (int)y, width, height);
+		else if(!faceing && attacking)
+			g.fillRect((int)x, (int)y, width, height);
+		else if(faceing && !attacking)
+			g.fillRect((int)x, (int)y, width, height);
+		else
+			g.fillRect((int)x, (int)y, width, height);
+			
 		g.setColor(Color.GREEN);
 		g.draw(leftBound());
 		g.draw(rightBound());

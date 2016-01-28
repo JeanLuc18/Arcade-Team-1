@@ -26,10 +26,13 @@ public class HGame1 extends Game{
 	int sLevel = 1;
 	levels l;
 	int numOLevels = 0;
+	long score = 0;
+	String scoreS;
 	boolean levelsLoaded = false;
 	Image banner;
 	Image Title;
 	Enemy testEnemy = null;   //delete later
+	int lives = 3;
 	Player player;
 	ArrayList<String> levelNames;
 	boolean hasLevels = false;
@@ -56,11 +59,12 @@ public class HGame1 extends Game{
 			startup(g, p1);
 		
 		else if(hasLevels){
+			if(lives > 0){
 			g.setColor(Color.LIGHT_GRAY);
 			g.setColor(new Color(51, 102, 255));
 			g.fillRect(0, 0, WIDTH, HEIGHT);
 			
-			l.level1(g, HEIGHT, WIDTH);
+			l.level1(g, HEIGHT, WIDTH, score);
 			player.render(g);
 			
 			//----TICK----
@@ -85,10 +89,10 @@ public class HGame1 extends Game{
 			
 			g.translate(camera.getX(), camera.getY());
 			
-			l.level1(g, HEIGHT, WIDTH);
+			l.level1(g, HEIGHT, WIDTH, score);
 			
-			g.setColor(Color.BLUE);
-			g.fillRect(100, 100, 100, 100);
+//			g.setColor(Color.BLUE);  				what is this for?
+//			g.fillRect(100, 100, 100, 100);
 
 			//Spawn debug enemy
 			if(testEnemy == null){
@@ -99,6 +103,10 @@ public class HGame1 extends Game{
 			player.render(g);
 
 			g.translate(-camera.getX(), -camera.getY());
+			}
+			else{
+				gameover();
+			}
 
 		}else{
 			g.setColor(Color.BLACK);
@@ -108,6 +116,24 @@ public class HGame1 extends Game{
 			g.drawString("NO LEVELS FOUND!!!!", 0 + WIDTH/4, HEIGHT/2);
 			g.setFont(new Font("Stencil", Font.PLAIN, 30));
 			g.drawString("Please close and add levels, Thank you.", 0 + WIDTH/6, HEIGHT/2 + 30);
+		}
+	}
+
+	private void gameover(Graphics2D g, Input p1) {
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.setColor(Color.RED);
+		g.setFont(new Font("Stencil", Font.PLAIN, 50));
+		g.drawString("Game Over!!!", 0 + WIDTH/4, HEIGHT/2);
+		scoreS = Long.toString(score);
+	    scoreS = ("00000000" + this.score).substring(scoreS.length());
+		g.setFont(new Font("Stencil", Font.PLAIN, 30));
+		g.drawString("Score: " + scoreS, 0 + WIDTH/6, HEIGHT/2 + 30);
+		g.drawString("Hit A to go to Menu.", 0 + WIDTH/6, HEIGHT/2 + 30);
+		if(p1.pressed(Button.A)){
+				starting = true;
+				score = 3;
+			waiting();
 		}
 	}
 

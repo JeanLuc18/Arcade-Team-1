@@ -1,6 +1,7 @@
 package ag1;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,6 +19,7 @@ public class levels{
 	private int wallHeight = 192;
 	private int blockType;
 	private File level;
+	String score;
 	private Scanner reader;
 
 	ArrayList<block> blocks1 = new ArrayList<block>();
@@ -125,7 +127,7 @@ public class levels{
 	}
 	
 
-	public void level1(Graphics2D g, int height, int width){
+	public void level1(Graphics2D g, int height, int width, long score){
 		block newest;
 
 		g.setColor(Color.YELLOW);
@@ -137,11 +139,18 @@ public class levels{
 		blocks1.add(newest);
 		g.setColor(Color.CYAN);
 		g.fillRect(0, height - wallHeight*2, wallWidth, wallHeight);
-		newest = new block(0, height - wallHeight*2 , 'b');
+		newest = new block(0, height - wallHeight*2 , 128, wallHeight,'W');
 		blocks1.add(newest);
 		g.fillRect(width - wallWidth, height - wallHeight*2, wallWidth, wallHeight);
-		newest = new block(width - wallWidth, height - wallHeight*2 , 'b');
+		newest = new block(width - wallWidth, height - wallHeight*2 , 128, wallHeight,'W');
 		blocks1.add(newest);
+		g.setFont(new Font("Stencil", Font.PLAIN, 36));
+		
+		this.score = Long.toString(score);
+		
+		this.score = ("00000000" + this.score).substring(this.score.length());
+		
+		g.drawString(this.score, width/2 + 25, 196);
 
 		for(int j = 0; j < 2; j += 1){
 			for(int i = 0; i < (width / 32 ); i += 1){
