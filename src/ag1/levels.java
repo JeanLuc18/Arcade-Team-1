@@ -150,6 +150,8 @@ public class levels{
 		
 		this.score = ("00000000" + this.score).substring(this.score.length());
 		
+		//LSCounter
+		
 		g.drawString(this.score, width/2 + 25, 196);
 
 		for(int j = 0; j < 2; j += 1){

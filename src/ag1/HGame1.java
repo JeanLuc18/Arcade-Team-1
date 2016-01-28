@@ -105,7 +105,7 @@ public class HGame1 extends Game{
 			g.translate(-camera.getX(), -camera.getY());
 			}
 			else{
-				gameover();
+				gameover(g, p2);
 			}
 
 		}else{
