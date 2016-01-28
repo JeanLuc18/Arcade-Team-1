@@ -28,17 +28,12 @@ public class levels{
 	public void level(String levelN) throws FileNotFoundException{
 		level = new File(levelN+".txt");
 		reader = new Scanner(level);
+		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
+								 //"The" and "Delimiter" with each call to reader.next();
 	}
+	
 	/**
-	 * genEnemy generates the enemies an returns an array of them to keep track
-	 * @param reader
-	 * @return Enemy[] array
-	 */
-	private Enemy[] genEnemy(Scanner reader){
-		return new Enemy[6];
-	}
-	/**
-	 * genLevel reads a single level segment from the level txt and then gives back the array of blocks for that level with the two wall
+	 * genLevel reads a single level segment or enemy list from the level txt and then gives back the array of blocks/enemies for that level with the two wall
 	 * objects in the last two indexes left first right second
 	 * @param reader level.txt scanner
 	 * @return block[] which is the level segment block array
@@ -48,52 +43,61 @@ public class levels{
 		int usableW = Game.WIDTH;
 		int blocksPerRow = 0;
 		block[] level = null;
+		Scanner segReader = new Scanner(reader.next());//reads first level segment ie anything before first "X" in level file
 		String token = " ";
-		//while loop reads an entire level segment and generates a level block array;
-		while(reader.hasNext() && token != "X"){//Level Text file should have an X at the end of each level segment
-			token = reader.next();
+		//reads the level segment assuming the level segment isn't empty
+		if(segReader.hasNext()){
+			token = segReader.next();
+			if(token == "W"){
 			//Wall type Block
-			if(token.charAt(0) == 'W'){
-				wallWidth = reader.nextInt();
-				wallHeight = reader.nextInt();
+			
+				wallWidth = segReader.nextInt();
+				wallHeight = segReader.nextInt();
 				if(wallWidth % 32 > 0 || wallHeight % 32 > 0){  //checks to make sure the wall allows even block distribution 
 					System.err.println("Invalid Wall Deminsions: Must be a divisiable by 32");
 					System.exit(1);
 				}
 				usableH = wallHeight;
-				usableW = usableW - (wallWidth*2);//[wallHeight/32][usableW/32] + !2! for the wall blocks
-			}
+				usableW = usableW - (wallWidth*2);
+			
 			level = new block[((usableW/32)*(usableH/32))+2];//creates single level segment array with space for rest of blocks + 2 for the walls
 			blocksPerRow = usableW / 32;
-			//rest of the blocks
-			if(token.charAt(0) == 'b'){
-				token = reader.next();//gets the string of blocks to be read
-				block temp = null;
-				for(int i = 0; i < token.length(); i++){
-					char curr = token.charAt(i);
-
-					if(curr == 'b'){
-						temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow), 'b');//creates new breakable block 
-					}
-					else if(curr == 's'){
-						temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow), 's');//creates new space block
-					}
-					else if(curr == 'w'){
-						temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow), 'w');//creates new unbreakable block
-					}
-					else if(curr == 'X'){
-						System.out.println("End of level segment");
-						break;//end of level segment
-					}
-					if(i == level.length-3){
-						System.out.println("No more room!!!");//if the level segment cant fit any more blocks
-						break;
-					}
-					level[i] = temp;
-					
+			block temp = null;
+			token = segReader.next();//reads the string of blocks
+			
+			for(int i = 0; i < token.length(); i++){
+				
+				char curr = token.charAt(i);
+				
+				if(curr == 'b'){
+					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow), 'b');//creates new breakable block 
 				}
+				else if(curr == 's'){
+					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow), 's');//creates new space block
+				}
+				else if(curr == 'w'){
+					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow), 'w');//creates new unbreakable block
+				}
+				if(i == level.length-3){
+					System.out.println("No more room!!!");//if the level segment cant fit any more blocks
+					break;
+				}
+				level[i] = temp;
+			}
+			//level[level.length-2] = new block(x, y, width, height, type);//left wall
+			//level[level.length-1] = new block(x, y, width, height, type);//right wall
+			}
+		
+			else if(token == "E"){
+				int enemyCount = segReader.nextInt();//number of enemies in map
+				block[] enemies = new block[enemyCount];
+				for(int i = 0; i < enemies.length; i+=1){
+					//enemies[i] = new Enemy(segReader.nextFloat(), segReader.nextFloat(), segReader.next());//I would like a new Constructor to be Enemy (x , y , type)
+				}
+				return enemies;
 			}
 		}
+		
 		return level;
 	}
 	/**
@@ -116,7 +120,7 @@ public class levels{
 	 */
 	private int calcYCord(int i, int blocksPerRow){
 		i = i/blocksPerRow; //converts i to the corresponding row number
-		int yCoord = i*32;//*32 because a block is 32 pixels tall
+		int yCoord = i*32 + 32;//*32 because a block is 32 pixels tall
 		return yCoord;
 	}
 	

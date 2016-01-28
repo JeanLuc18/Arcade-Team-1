@@ -13,7 +13,7 @@ public class block extends GameObject {
 		setType(type);
 	}
 
-	public block(float x, float y, int width, int height, char type){
+	public block(float x, float y, int width, int height, char type){//wall type block
 		super(x, y, width, height);
 		setType(type);
 	}
