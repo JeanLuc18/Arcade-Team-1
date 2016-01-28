@@ -25,6 +25,7 @@ public class HGame1 extends Game{
 	Image Title;
 	Enemy testEnemy = null;   //delete later
 	Player player;
+	Camera camera;
 
 	public HGame1(){
 		try {
@@ -42,24 +43,30 @@ public class HGame1 extends Game{
 		if(starting == true)
 			startup(g, p1);
 		else{
-			g.setColor(Color.LIGHT_GRAY);
-			g.setColor(new Color(51, 102, 255));
-			g.fillRect(0, 0, WIDTH, HEIGHT);
-			
-			l.level1(g, HEIGHT, WIDTH);
-			
-
-			player.render(g);
+			//----TICK----
 			player.tick();
-			
+
 			//Player/Block Collision
 			for(int i = 0; i < l.blocks1.size(); i += 1){
 				player.blockCollision((block)l.blocks1.get(i));
 			}
+			
+			camera.tick(player);
 
+			
 			//Player Input/Buttons
 			player.input(p1);
+			
 
+			//----RENDER----
+
+			g.setColor(new Color(51, 102, 255));
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+			
+			g.translate(camera.getX(), camera.getY());
+			
+			l.level1(g, HEIGHT, WIDTH);
+			
 			g.setColor(Color.BLUE);
 			g.fillRect(100, 100, 100, 100);
 
@@ -68,11 +75,17 @@ public class HGame1 extends Game{
 				testEnemy = new Enemy(200, 100, 50, 50);
 			}
 			testEnemy.update(g, this);
+			
+			player.render(g);
+
+			g.translate(-camera.getX(), -camera.getY());
+
 		}
 	}
 
 	public void startup(Graphics2D g, Input p1){
 		player = new Player();
+		camera = new Camera(0,0);
 
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);

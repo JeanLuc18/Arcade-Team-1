@@ -16,7 +16,7 @@ public abstract class GameObject {
 	protected float x, y; //pixel coordinates for objects top-left corner
 	protected float velX = 0, velY = 0; //velocity of object (if movement added)
 	protected int width, height; //pixel width and height of object 
-	protected float gravity = 0.9f; //gravity applied to object
+	protected float gravity = 1f; //gravity applied to object
 	
 	/**
 	 * Empty constructor. For objects that position and size do not matter. Sets
