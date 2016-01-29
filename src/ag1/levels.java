@@ -185,5 +185,24 @@ public class levels{
 			}
 		}
 	}
+	
+	public LinkedList<GameObject> mikeTestLevel(){
+		LinkedList<GameObject> objects = new LinkedList<GameObject>();
+		
+		for(int i = 0; i < Game.WIDTH/32; i++){
+			objects.add(new block(32*i, Game.HEIGHT - 32, 32, 32, 'b'));
+		}
+		
+		objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
+		objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
+
+		for(int i = 128; i < Game.WIDTH-128; i+=32){
+			if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
+				objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
+			}
+		}
+
+		return objects;
+	}
 }
 

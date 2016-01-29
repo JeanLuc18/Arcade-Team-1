@@ -2,6 +2,7 @@ package ag1;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.LinkedList;
 
 /**
  * Superclass for all physical game objects. Includes parameters and methods for
@@ -17,16 +18,20 @@ public abstract class GameObject {
 	protected float velX = 0, velY = 0; //velocity of object (if movement added)
 	protected int width, height; //pixel width and height of object 
 	protected float gravity = 1f; //gravity applied to object
+	protected GOID id; //enum - for determining object type
 	
 	/**
 	 * Empty constructor. For objects that position and size do not matter. Sets
 	 * x, y, width, and height to 0.
+	 * 
+	 * @param id Object's type.
 	 */
-	public GameObject() {
+	public GameObject(GOID id) {
 		this.x = 0;
 		this.y = 0;
 		this.width = 0;
 		this.height = 0;
+		this.id = id;
 	}
 	
 	/**
@@ -35,12 +40,14 @@ public abstract class GameObject {
 	 * 
 	 * @param x X-coordinate of objects top-left corner.
 	 * @param y Y-coordinate of objects top-left corner.
+	 * @param id Object's type.
 	 */
-	public GameObject(float x, float y) {
+	public GameObject(float x, float y, GOID id) {
 		this.x = x;
 		this.y = y;
 		this.width = 0;
 		this.height = 0;
+		this.id = id;
 	}
 	
 	/**
@@ -51,12 +58,14 @@ public abstract class GameObject {
 	 * @param y Y-coordinate of objects top-left corner.
 	 * @param width Pixel width of object (hitbox - for collision).
 	 * @param height Pixel height of object (hitbox - for collision).
+	 * @param id Object's type.
 	 */
-	public GameObject(float x, float y, int width, int height) {
+	public GameObject(float x, float y, int width, int height, GOID id) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		this.id = id;
 	}
 	
 	public float getX(){
@@ -107,6 +116,14 @@ public abstract class GameObject {
 		this.height = height;
 	}
 	
+	public GOID getId(){
+		return id;
+	}
+	
+	public void setID(GOID id){
+		this.id = id;
+	}
+	
 	/**
 	 * Returns the object's bounds based on its x, y, width, and height. Used
 	 * for collision.
@@ -122,7 +139,7 @@ public abstract class GameObject {
 	 * velocities, collision, etc). Will be called every game tick. Leave empty
 	 * if object is "static" (does not move/change).
 	 */
-	public abstract void tick();
+	public abstract void tick(LinkedList<GameObject> objects);
 	
 	/**
 	 * Put visuals to be redrawn/rendered by Graphics2D in here. Will be called

@@ -1,6 +1,7 @@
 package ag1;
 
 import java.awt.*;
+import java.util.LinkedList;
 
 import arcadia.*;
 import arcadia.Button;
@@ -15,16 +16,22 @@ public class Player extends GameObject {
 	final int bd = 8; //bound dist
 	
 	public Player(){
-		//super(Game.WIDTH/2, Game.HEIGHT-32-96, 64, 96);
-		super(200, 400, 64, 96);
+		super(Game.WIDTH/2, Game.HEIGHT-32-96, 64, 96, GOID.Player);
+		//super(200, 400, 64, 96, GOID.Player);
 	}
 	
-	public void tick() {
+	public void tick(LinkedList<GameObject> objects) {
 		x += velX;
 		y += velY;
 		
 		if(inAir){
 			velY += gravity;
+		}
+		
+		for(GameObject tempObject : objects){
+			if(tempObject.getId() == GOID.Block){
+				blockCollision((block)tempObject);
+			}
 		}
 	}
 	

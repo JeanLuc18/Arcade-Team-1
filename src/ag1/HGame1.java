@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -33,11 +34,13 @@ public class HGame1 extends Game{
 	Image Title;
 	Enemy testEnemy = null;   //delete later
 	int lives = 3;
-	Player player;
 	ArrayList<String> levelNames;
 	boolean hasLevels = false;
-	Camera camera;
 
+	Player player;
+	Camera camera;
+	LinkedList<GameObject> objects;
+	boolean initialized = false;
 
 	public HGame1(){
 		try {
@@ -52,70 +55,59 @@ public class HGame1 extends Game{
 
 	@Override
 	public void tick(Graphics2D g, Input p1, Input p2, Sound s) {
-		if(!levelsLoaded)
-			loadLevels();
-		
-		if(starting == true)
+		if(starting == true){
 			startup(g, p1);
-		
-		else if(hasLevels){
-			if(lives > 0){
-			g.setColor(Color.LIGHT_GRAY);
-			g.setColor(new Color(51, 102, 255));
-			g.fillRect(0, 0, WIDTH, HEIGHT);
+		}else if(!initialized){
+			intialize(g);
+			initialized = true;
+		}else {
+			if(lives <= 0){
+				gameover(g, p2);
+			}
 			
-			l.level1(g, HEIGHT, WIDTH, score);
-			player.render(g);
+			//l.level1(g, HEIGHT, WIDTH, score);
 			
-			//----TICK----
-			player.tick();
+			//-----!!!!TICK!!!!-----
+			player.tick(objects);
+			
+			for(GameObject tempObject : objects){
+				tempObject.tick(objects);
+			}
 
 			//Player/Block Collision
-			for(int i = 0; i < l.blocks1.size(); i += 1){
-				player.blockCollision((block)l.blocks1.get(i));
-			}
-			
+//			for(int i = 0; i < l.blocks1.size(); i += 1){
+//				player.blockCollision((block)l.blocks1.get(i));
+//			}
+
 			camera.tick(player);
 
-			
+
 			//Player Input/Buttons
 			player.input(p1);
-			
 
-			//----RENDER----
+
+			//-----!!!!RENDER!!!!-----
 
 			g.setColor(new Color(51, 102, 255));
 			g.fillRect(0, 0, WIDTH, HEIGHT);
-			
+
 			g.translate(camera.getX(), camera.getY());
 			
-			l.level1(g, HEIGHT, WIDTH, score);
-			
-//			g.setColor(Color.BLUE);  				what is this for?
-//			g.fillRect(100, 100, 100, 100);
+			for(GameObject tempObject : objects){
+				tempObject.render(g);
+			}
+
+//			l.level1(g, HEIGHT, WIDTH, score);
 
 			//Spawn debug enemy
-			if(testEnemy == null){
-				testEnemy = new Enemy(200, 100, 50, 50);
-			}
-			testEnemy.update(g, this);
-			
+//			if(testEnemy == null){
+//				testEnemy = new Enemy(200, 100, 50, 50);
+//			}
+//			testEnemy.update(g, this);
+//
 			player.render(g);
 
 			g.translate(-camera.getX(), -camera.getY());
-			}
-			else{
-				gameover(g, p2);
-			}
-
-		}else{
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, WIDTH, HEIGHT);
-			g.setColor(Color.RED);
-			g.setFont(new Font("Stencil", Font.PLAIN, 50));
-			g.drawString("NO LEVELS FOUND!!!!", 0 + WIDTH/4, HEIGHT/2);
-			g.setFont(new Font("Stencil", Font.PLAIN, 30));
-			g.drawString("Please close and add levels, Thank you.", 0 + WIDTH/6, HEIGHT/2 + 30);
 		}
 	}
 
@@ -126,30 +118,45 @@ public class HGame1 extends Game{
 		g.setFont(new Font("Stencil", Font.PLAIN, 50));
 		g.drawString("Game Over!!!", 0 + WIDTH/4, HEIGHT/2);
 		scoreS = Long.toString(score);
-	    scoreS = ("00000000" + this.score).substring(scoreS.length());
+		scoreS = ("00000000" + this.score).substring(scoreS.length());
 		g.setFont(new Font("Stencil", Font.PLAIN, 30));
 		g.drawString("Score: " + scoreS, 0 + WIDTH/6, HEIGHT/2 + 30);
 		g.drawString("Hit A to go to Menu.", 0 + WIDTH/6, HEIGHT/2 + 30);
 		if(p1.pressed(Button.A)){
-				starting = true;
-				score = 3;
+			starting = true;
+			score = 3;
 			waiting();
 		}
 	}
-
-	private void loadLevels() {
+	
+	/**
+	 * Initialize game objects, load levels, etc. in here.
+	 * 
+	 * @param g Graphics2D Object used for drawing.
+	 */
+	private void intialize(Graphics2D g){
+		//initialize player and camera
+		player = new Player();
+		objects = l.mikeTestLevel();
+		camera = new Camera(0,0);
+		
+		//initialize levels
 		File f = new File("src/ag1/levelsFolder");
 		levelNames = new ArrayList<String>(Arrays.asList(f.list()));
-		// System.out.print(levelNames); delete later;
-		levelsLoaded = true;
-		if(levelNames.size() > 0)
-			hasLevels = true;
+		
+		//if no levels, create error screen
+		if(levelNames.size() <= 0){
+			g.setColor(Color.BLACK);
+			g.fillRect(0, 0, WIDTH, HEIGHT);
+			g.setColor(Color.RED);
+			g.setFont(new Font("Stencil", Font.PLAIN, 50));
+			g.drawString("NO LEVELS FOUND!!!!", 0 + WIDTH/4, HEIGHT/2);
+			g.setFont(new Font("Stencil", Font.PLAIN, 30));
+			g.drawString("Please close and add levels, Thank you.", 0 + WIDTH/6, HEIGHT/2 + 30);
+		}
 	}
-
+	
 	public void startup(Graphics2D g, Input p1){
-		player = new Player();
-		camera = new Camera(0,0);
-
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		g.drawImage(Title, 0, 0, null);
@@ -177,7 +184,7 @@ public class HGame1 extends Game{
 			g.setColor(Color.yellow);
 		}
 
-		
+
 		//Starting Button Mechanics
 		if(p1.pressed(Button.U)){
 			if(startPlace == 0)
@@ -191,7 +198,7 @@ public class HGame1 extends Game{
 				startPlace = 0;
 			else
 				startPlace += 1;
-			
+
 			waiting();
 		}
 		if(p1.pressed(Button.B)){
@@ -205,7 +212,7 @@ public class HGame1 extends Game{
 					sLevel = 20;
 				else 
 					sLevel -= 1;
-			
+
 			waiting();
 		}
 		if(p1.pressed(Button.R)){
@@ -220,13 +227,13 @@ public class HGame1 extends Game{
 
 	public void waiting(){
 		try {
-			Thread.sleep(500);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void reset() {
 		// TODO Auto-generated method stub

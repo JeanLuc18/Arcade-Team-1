@@ -4,6 +4,7 @@ package ag1;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.LinkedList;
 
 import arcadia.Game;
 
@@ -14,7 +15,7 @@ public class Enemy extends GameObject{
 	boolean pushLeft, pushRight;
 
 	public Enemy(float x, float y, int width, int height){
-		super(x, y, width, height);
+		super(x, y, width, height, GOID.Enemy);
 	}
 
 	/**
@@ -107,7 +108,7 @@ public class Enemy extends GameObject{
 		g.fillRect((int)x, (int)y, width, height);
 	}
 
-	public void tick() {}
+	public void tick(LinkedList<GameObject> objects) {}
 	public void render(Graphics2D g) {}
 
 }

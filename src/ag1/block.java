@@ -1,6 +1,8 @@
 package ag1;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.LinkedList;
 
 public class block extends GameObject {
 	
@@ -9,12 +11,12 @@ public class block extends GameObject {
 	private boolean passable; //boolean of whether the player can pass through this block
 	
 	public block(float x, float y, char type){
-		super(x, y, 32, 32);
+		super(x, y, 32, 32, GOID.Block);
 		setType(type);
 	}
 
 	public block(float x, float y, int width, int height, char type){//wall type block
-		super(x, y, width, height);
+		super(x, y, width, height, GOID.Block);
 		setType(type);
 	}
 
@@ -43,7 +45,21 @@ public class block extends GameObject {
 		return type;
 	}
 	
-	public void tick() {}
-	public void render(Graphics2D g) {}
+	public void tick(LinkedList<GameObject> objects) {}
+	public void render(Graphics2D g) {
+		switch(type){
+			case 'b':	g.setColor(Color.CYAN);
+						break;
+			case 's':	g.setColor(Color.LIGHT_GRAY);
+						break;
+			case 'w':	g.setColor(Color.BLUE);
+						break;
+		}
+		
+		g.fillRect((int)x, (int)y, width, height);
+		g.setColor(Color.BLACK);
+		g.drawRect((int)x, (int)y, width, height);
+
+	}
 
 }
