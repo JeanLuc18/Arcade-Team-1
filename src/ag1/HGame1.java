@@ -59,55 +59,35 @@ public class HGame1 extends Game{
 			startup(g, p1);
 		}else if(!initialized){
 			intialize(g);
-			initialized = true;
 		}else {
 			if(lives <= 0){
 				gameover(g, p2);
 			}
-			
-			//l.level1(g, HEIGHT, WIDTH, score);
-			
+						
 			//-----!!!!TICK!!!!-----
-			player.tick(objects);
-			
+			//tick objects
 			for(GameObject tempObject : objects){
 				tempObject.tick(objects);
 			}
-
-			//Player/Block Collision
-//			for(int i = 0; i < l.blocks1.size(); i += 1){
-//				player.blockCollision((block)l.blocks1.get(i));
-//			}
-
-			camera.tick(player);
-
-
-			//Player Input/Buttons
-			player.input(p1);
-
-
+			player.tick(objects);
+			camera.tick(player); //camera
+			player.input(p1); //keyboard input for player
+			
+			
 			//-----!!!!RENDER!!!!-----
-
+			//background
 			g.setColor(new Color(51, 102, 255));
 			g.fillRect(0, 0, WIDTH, HEIGHT);
-
-			g.translate(camera.getX(), camera.getY());
 			
+			g.translate(camera.getX(), camera.getY()); //camera
+			
+			//render objects
 			for(GameObject tempObject : objects){
 				tempObject.render(g);
 			}
-
-//			l.level1(g, HEIGHT, WIDTH, score);
-
-			//Spawn debug enemy
-//			if(testEnemy == null){
-//				testEnemy = new Enemy(200, 100, 50, 50);
-//			}
-//			testEnemy.update(g, this);
-//
 			player.render(g);
-
-			g.translate(-camera.getX(), -camera.getY());
+			
+			g.translate(-camera.getX(), -camera.getY()); //camera
 		}
 	}
 
@@ -137,14 +117,16 @@ public class HGame1 extends Game{
 	private void intialize(Graphics2D g){
 		//initialize player and camera
 		player = new Player();
-		objects = l.mikeTestLevel();
 		camera = new Camera(0,0);
 		
-		//initialize levels
+		//initialize level
+		objects = l.mikeTestLevel();
+		
+		//initialize level files
 		File f = new File("src/ag1/levelsFolder");
 		levelNames = new ArrayList<String>(Arrays.asList(f.list()));
 		
-		//if no levels, create error screen
+		//if no level files, create error screen
 		if(levelNames.size() <= 0){
 			g.setColor(Color.BLACK);
 			g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -154,6 +136,8 @@ public class HGame1 extends Game{
 			g.setFont(new Font("Stencil", Font.PLAIN, 30));
 			g.drawString("Please close and add levels, Thank you.", 0 + WIDTH/6, HEIGHT/2 + 30);
 		}
+		
+		initialized = true;
 	}
 	
 	public void startup(Graphics2D g, Input p1){
@@ -229,23 +213,13 @@ public class HGame1 extends Game{
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Image banner() {
-		// TODO Auto-generated method stub
-		return banner;
-	}
-
+	public void reset() {}
+	public Image banner() {return banner;}
+	
 	public static void main(String[] args){
 		Arcadia.display(new Arcadia(new Game[] {new HGame1(), new Shooter()}));
 	}

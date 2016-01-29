@@ -1,7 +1,7 @@
 package ag1;
 
 /**
- * Enum class for GameObject IDs (hence, GOID). Used for determining a game
+ * Enum class for GameObject IDs (GOID). Used for determining a game
  * object's type.
  * 
  * @author Michael Drogowski (mrdrogow@mtu.edu)

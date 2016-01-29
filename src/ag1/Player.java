@@ -93,29 +93,6 @@ public class Player extends GameObject {
 		}
 	}
 	
-//	public void groundCollision(int groundHeight){
-//		if(y + groundHeight >= Game.HEIGHT){
-//			setVelY(0);
-//			
-//			y = Game.HEIGHT - groundHeight;
-//			canJump = true;
-//			inAir = false;
-//		}
-//	}
-//	
-//	public void blockCollision(block block){
-//		if(collision(block.getBounds())){
-//			if(block.getType() == 1){
-//				//block = i;
-//				//breakb = true;
-//			}
-//			else if(block.getType() == 2)
-//				left = false;
-//			else if(block.getType() == 3)
-//				right = false;
-//		}
-//	}
-	
 	public void input(Input input){
 		if(canJump && input.pressed(Button.A)){
 			setVelY(-20);
