@@ -48,6 +48,7 @@ public class levels{
 		int blocksPerlvl = 0;
 		int lvl = 0;// current level * wallHeight
 		LinkedList<GameObject> level = new LinkedList<>();
+		
 		//Scanner segReader = new Scanner(reader.next());//reads first level segment ie anything before first "X" in level file
 		String token = " ";
 		//reads the level segment assuming the level segment isn't empty
@@ -81,22 +82,23 @@ public class levels{
 			block temp = null;
 			//token = reader.next();//reads the string of blocks
 			
-			for(int i = 1; i < token.length(); i++){
+			for(int i = 0; i < token.length(); i++){
 				
 				char curr = token.charAt(i);
 				if(i == blocksPerlvl){
 					lvl += lvl + wallHeight;
 					temp = new block(lvl + wallHeight, Game.WIDTH-wallWidth,wallWidth,wallHeight,'W');//add right wall
-				}else if(i == 1){
+				}else if(i == 0){
 					temp = new block(lvl + wallHeight, 0, wallWidth, wallHeight,'W');//adds left wall
 				}else if(curr == 'b'){
+					//gets the x coord by getting the block before its x coord and adding that blocks width to its x coord 
 					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow, lvl), 'b');//creates new breakable block 
 				}
 				else if(curr == 's'){
-					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow, lvl), 's');//creates new space block
+					temp = new block(level.get(i-1).getX() + level.get(i-1).getWidth(), calcYCord(i, blocksPerRow, lvl), 's');//creates new space block
 				}
 				else if(curr == 'w'){
-					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow, lvl), 'w');//creates new unbreakable block
+					temp = new block(level.get(i-1).getX() + level.get(i-1).getWidth(), calcYCord(i, blocksPerRow, lvl), 'w');//creates new unbreakable block
 				}
 				
 //				if(i == level.length-3){
@@ -125,8 +127,8 @@ public class levels{
 	 * @return xCoord
 	 */
 	private int calcXCord(int i, int blocksPerRow){
-		i = i % (blocksPerRow);//converts i to the corresponding block number (interms of x)
-		int xCoord = i*32; 
+		i = (i) % (blocksPerRow);//converts i to the corresponding block number (interms of x)
+		int xCoord = (i*32) + wallWidth; 
 			
 		return xCoord;
 	}
@@ -138,7 +140,7 @@ public class levels{
 	 */
 	private int calcYCord(int i, int blocksPerRow,int lvl){
 		i = i/blocksPerRow; //converts i to the corresponding row number
-		int yCoord = i*32 + 32 + lvl;//*32 because a block is 32 pixels tall
+		int yCoord = 32 + lvl;//*32 because a block is 32 pixels tall
 		return yCoord;
 	}
 	
@@ -199,7 +201,7 @@ public class levels{
 
 		//add floor
 		for(int i = 0; i < Game.WIDTH/32; i++){
-			objects.add(new block(32*i, Game.HEIGHT - 32, 32, 32, 'b'));
+			objects.add(new block(32*i, Game.HEIGHT-64, 32, 32, 'b'));
 		}
 		
 		//add walls
