@@ -1,4 +1,4 @@
-W 96 96 bbsbbswssbssbbbbbb X
-                 bbbbbbbsbbbsbbbbbb X
-                 bbbbbbbbbbbbbwwbb X
+W 96 96 bbbbbbwbbbssbbbbbb 
+        bbbbbbbsbbbsbbbbbb
+        bbbbbbbbbbbbbwwbbw
 E 122 23 e 342 738 e 111 212 e X

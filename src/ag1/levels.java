@@ -28,8 +28,8 @@ public class levels{
 	 * level class constructor which opens level text document and scanner to read said document
 	 * @throws FileNotFoundException
 	 */
-	public void level(String levelN) throws FileNotFoundException{
-		level = new File(levelN);
+	public levels(String levelN) throws FileNotFoundException{
+		level = new File(levelN+".txt");
 		reader = new Scanner(level);
 //		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
 //								 //"The" and "Delimiter" with each call to reader.next();
@@ -47,29 +47,40 @@ public class levels{
 		int blocksPerRow = 0;
 		int blocksPerlvl = 0;
 		int lvl = 0;// current level * wallHeight
-		LinkedList<GameObject> level = null;
+		LinkedList<GameObject> level = new LinkedList<>();
 		//Scanner segReader = new Scanner(reader.next());//reads first level segment ie anything before first "X" in level file
 		String token = " ";
 		//reads the level segment assuming the level segment isn't empty
+		System.out.println("did i get here " + reader.hasNext());
 		while(reader.hasNext()){
 			token = reader.next();
-			if(token == "W"){
+			if(token.equals("W")){
 			//Wall type Block
 			
 				wallWidth = reader.nextInt();
 				wallHeight = reader.nextInt();
+				blocksPerRow = usableW / 32;
+				blocksPerlvl = (wallHeight/32)*blocksPerRow;
 				if(wallWidth % 32 > 0 || wallHeight % 32 > 0){  //checks to make sure the wall allows even block distribution 
 					System.err.println("Invalid Wall Deminsions: Must be a divisiable by 32");
 					System.exit(1);
 				}
 				usableH = wallHeight;
 				usableW = usableW - (wallWidth*2);
-			
+			}
 			//level = new block[((usableW/32)*(usableH/32))+2];//creates single level segment array with space for rest of blocks + 2 for the walls
-			blocksPerRow = usableW / 32;
-			blocksPerlvl = wallHeight/blocksPerRow;
+			else if(token.equals("E")){
+				int enemyCount = reader.nextInt();//number of enemies in map
+				block[] enemies = new block[enemyCount];
+				for(int i = 0; i < enemies.length; i+=1){
+					//enemies[i] = new Enemy(segReader.nextFloat(), segReader.nextFloat(), segReader.next());//I would like a new Constructor to be Enemy (x , y , type)
+				}
+				//return enemies;
+			}
+			else{
+			
 			block temp = null;
-			token = reader.next();//reads the string of blocks
+			//token = reader.next();//reads the string of blocks
 			
 			for(int i = 1; i < token.length(); i++){
 				
@@ -95,24 +106,21 @@ public class levels{
 //					System.out.println("No more room!!!");//if the level segment cant fit any more blocks
 //					break;
 //				}
+				//System.out.println(temp.getType());
 				level.add(temp);
+			}
 			}
 			//level[level.length-2] = new block(x, y, width, height, type);//left wall
 			//level[level.length-1] = new block(x, y, width, height, type);//right wall
-			}
+			
 		
-			else if(token == "E"){
-				int enemyCount = reader.nextInt();//number of enemies in map
-				block[] enemies = new block[enemyCount];
-				for(int i = 0; i < enemies.length; i+=1){
-					//enemies[i] = new Enemy(segReader.nextFloat(), segReader.nextFloat(), segReader.next());//I would like a new Constructor to be Enemy (x , y , type)
-				}
-				//return enemies;
-			}
+			
+		}
+			return level;
 		}
 		
-		return level;
-	}
+		
+	
 	/**
 	 * CalcXCord takes the current index of the read block and the blocks per row and uses it to calculate the block's x coordinate 
 	 * @param i
@@ -191,21 +199,21 @@ public class levels{
 		LinkedList<GameObject> objects = new LinkedList<GameObject>();
 		
 		//add floor
-		for(int i = 0; i < Game.WIDTH/32; i++){
-			objects.add(new block(32*i, Game.HEIGHT - 32, 32, 32, 'b'));
-		}
+		//for(int i = 0; i < Game.WIDTH/32; i++){
+			//objects.add(new block(32*i, Game.HEIGHT - 32, 32, 32, 'b'));
+		//}
 		
 		//add walls
-		objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
-		objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
+		//objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
+		//objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
 
 		//add second level with hole in middle
-		for(int i = 128; i < Game.WIDTH-128; i+=32){
-			if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
-				objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
-			}
-		}
-		
+		//for(int i = 128; i < Game.WIDTH-128; i+=32){
+			//if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
+				//objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
+			//}
+		//}
+		objects = this.genLevel(reader);
 		//return the list that will be continuously ticked and rendered
 		return objects;
 	}

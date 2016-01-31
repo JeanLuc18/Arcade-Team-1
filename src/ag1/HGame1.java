@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +43,7 @@ public class HGame1 extends Game{
 	LinkedList<GameObject> objects;
 	boolean initialized = false;
 
-	public HGame1(){
+	public HGame1() throws FileNotFoundException{
 		try {
 			banner = ImageIO.read(HGame1.class.getResource("Banner.gif")); //help from pixabay.com
 			Title = ImageIO.read(HGame1.class.getResource("MenuTitle.gif"));
@@ -50,7 +51,7 @@ public class HGame1 extends Game{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
-		l  = new levels();
+		l  = new levels("src/ag1/levelsFolder/level1");
 	}
 
 	@Override
@@ -220,7 +221,7 @@ public class HGame1 extends Game{
 	public void reset() {}
 	public Image banner() {return banner;}
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws FileNotFoundException{
 		Arcadia.display(new Arcadia(new Game[] {new HGame1(), new Shooter()}));
 	}
 }
