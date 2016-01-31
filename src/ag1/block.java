@@ -59,7 +59,5 @@ public class block extends GameObject {
 		g.fillRect((int)x, (int)y, width, height);
 		g.setColor(Color.BLACK);
 		g.drawRect((int)x, (int)y, width, height);
-
 	}
-
 }

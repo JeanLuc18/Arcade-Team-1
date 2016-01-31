@@ -86,12 +86,10 @@ public class levels{
 				char curr = token.charAt(i);
 				if(i == blocksPerlvl){
 					lvl += lvl + wallHeight;
-					level.add(new block(lvl + wallHeight, Game.WIDTH-wallWidth,wallWidth,wallHeight,'W'));//add right wall
-				}
-				if(i == 1){
-					level.add(new block(lvl + wallHeight, 0, wallWidth, wallHeight,'W'));//adds left wall
-				}
-				if(curr == 'b'){
+					temp = new block(lvl + wallHeight, Game.WIDTH-wallWidth,wallWidth,wallHeight,'W');//add right wall
+				}else if(i == 1){
+					temp = new block(lvl + wallHeight, 0, wallWidth, wallHeight,'W');//adds left wall
+				}else if(curr == 'b'){
 					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow, lvl), 'b');//creates new breakable block 
 				}
 				else if(curr == 's'){
@@ -197,24 +195,43 @@ public class levels{
 		//create new list to be run by HGame1
 		LinkedList<GameObject> objects = new LinkedList<GameObject>();
 		
+		objects = this.genLevel(reader);
+
 		//add floor
-		//for(int i = 0; i < Game.WIDTH/32; i++){
-			//objects.add(new block(32*i, Game.HEIGHT - 32, 32, 32, 'b'));
-		//}
+		for(int i = 0; i < Game.WIDTH/32; i++){
+			objects.add(new block(32*i, Game.HEIGHT - 32, 32, 32, 'b'));
+		}
 		
 		//add walls
-		//objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
-		//objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
-
-		//add second level with hole in middle
-		//for(int i = 128; i < Game.WIDTH-128; i+=32){
-			//if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
-				//objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
-			//}
-		//}
-		objects = this.genLevel(reader);
-		//return the list that will be continuously ticked and rendered
+//		objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
+//		objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
+//
+//		//add second level with hole in middle
+//		for(int i = 128; i < Game.WIDTH-128; i+=32){
+//			if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
+//				objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
+//			}
+//		}
+		
+		//TEST PRINTING
 		System.out.println(objects);
+		block b = (block)objects.get(0);
+		System.out.println(b.getId());
+		System.out.println(b.getX());
+		System.out.println(b.getY());
+		System.out.println(b.getWidth());
+		System.out.println(b.getHeight());
+		System.out.println(b.getType());
+
+		b = (block)objects.get(1);
+		System.out.println(b.getId());
+		System.out.println(b.getX());
+		System.out.println(b.getY());
+		System.out.println(b.getWidth());
+		System.out.println(b.getHeight());
+		System.out.println(b.getType());
+		
+		//return the list that will be continuously ticked and rendered
 		return objects;
 	}
 }
