@@ -70,10 +70,9 @@ public class levels{
 			}
 			//level = new block[((usableW/32)*(usableH/32))+2];//creates single level segment array with space for rest of blocks + 2 for the walls
 			else if(token.equals("E")){
-				int enemyCount = reader.nextInt();//number of enemies in map
-				block[] enemies = new block[enemyCount];
-				for(int i = 0; i < enemies.length; i+=1){
-					//enemies[i] = new Enemy(segReader.nextFloat(), segReader.nextFloat(), segReader.next());//I would like a new Constructor to be Enemy (x , y , type)
+				LinkedList<GameObject> enemies = new LinkedList<>();
+				while(reader.hasNext()){
+					reader.next();
 				}
 				//return enemies;
 			}
