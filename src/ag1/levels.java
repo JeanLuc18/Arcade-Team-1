@@ -51,7 +51,7 @@ public class levels{
 		//Scanner segReader = new Scanner(reader.next());//reads first level segment ie anything before first "X" in level file
 		String token = " ";
 		//reads the level segment assuming the level segment isn't empty
-		System.out.println("did i get here " + reader.hasNext());
+		System.out.println("did i get here ");// + reader.hasNext());
 		while(reader.hasNext()){
 			token = reader.next();
 			if(token.equals("W")){
@@ -215,6 +215,7 @@ public class levels{
 		//}
 		objects = this.genLevel(reader);
 		//return the list that will be continuously ticked and rendered
+		System.out.println(objects);
 		return objects;
 	}
 }

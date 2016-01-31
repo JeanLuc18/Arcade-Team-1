@@ -29,8 +29,10 @@ public class Player extends GameObject {
 		}
 		
 		for(GameObject tempObject : objects){
-			if(tempObject.getId() == GOID.Block){
-				blockCollision((block)tempObject);
+			if(tempObject != null){
+				if(tempObject.getId() == GOID.Block){
+					blockCollision((block)tempObject);
+				}
 			}
 		}
 	}

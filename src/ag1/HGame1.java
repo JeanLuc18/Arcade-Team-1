@@ -68,7 +68,8 @@ public class HGame1 extends Game{
 			//-----!!!!TICK!!!!-----
 			//tick objects
 			for(GameObject tempObject : objects){
-				tempObject.tick(objects);
+				if(tempObject != null)
+					tempObject.tick(objects);
 			}
 			player.tick(objects);
 			camera.tick(player); //camera
@@ -84,7 +85,8 @@ public class HGame1 extends Game{
 			
 			//render objects
 			for(GameObject tempObject : objects){
-				tempObject.render(g);
+				if(tempObject != null)
+					tempObject.render(g);
 			}
 			player.render(g);
 			
