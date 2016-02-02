@@ -31,10 +31,10 @@ public class levels{
 	public levels(String levelN) throws FileNotFoundException{
 		level = new File(levelN+".txt");
 		reader = new Scanner(level);
-//		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
-//								 //"The" and "Delimiter" with each call to reader.next();
+		//		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
+		//								 //"The" and "Delimiter" with each call to reader.next();
 	}
-	
+
 	/**
 	 * genLevel reads a single level segment or enemy list from the level txt and then gives back the array of blocks/enemies for that level with the two wall
 	 * objects in the last two indexes left first right second
@@ -47,8 +47,13 @@ public class levels{
 		int blocksPerRow = 0;
 		int blocksPerlvl = 0;
 		int lvl = 0;// current level * wallHeight
+		int blocksAdded = 0;
+		int idiotAdjust = 0;
+		int wallY = Game.HEIGHT;
+		int blockY = Game.HEIGHT-32;
+		boolean gotNext = false;
 		LinkedList<GameObject> level = new LinkedList<>();
-		
+
 		//Scanner segReader = new Scanner(reader.next());//reads first level segment ie anything before first "X" in level file
 		String token = " ";
 		//reads the level segment assuming the level segment isn't empty
@@ -56,18 +61,23 @@ public class levels{
 		while(reader.hasNext()){
 			token = reader.next();
 			if(token.equals("W")){
-			//Wall type Block
-			
+				//Wall type Block
+
 				wallWidth = reader.nextInt();
 				wallHeight = reader.nextInt();
+				usableW = usableW - (wallWidth*2);
+				usableH = wallHeight;
+				wallY = wallY - wallHeight;
 				blocksPerRow = usableW / 32;
 				blocksPerlvl = (wallHeight/32)*blocksPerRow;
 				if(wallWidth % 32 > 0 || wallHeight % 32 > 0){  //checks to make sure the wall allows even block distribution 
 					System.err.println("Invalid Wall Deminsions: Must be a divisiable by 32");
 					System.exit(1);
 				}
-				usableH = wallHeight;
-				usableW = usableW - (wallWidth*2);
+				
+				
+				level.add(new block(0, wallY, wallWidth, wallHeight, 'w'));//adds left wall
+				level.add(new block(Game.WIDTH- wallWidth, wallY, wallWidth, wallHeight,'w'));//adds right wall
 			}
 			//level = new block[((usableW/32)*(usableH/32))+2];//creates single level segment array with space for rest of blocks + 2 for the walls
 			else if(token.equals("E")){
@@ -78,58 +88,105 @@ public class levels{
 				//return enemies;
 			}
 			else{
-			
-			block temp = null;
-			//token = reader.next();//reads the string of blocks
-			
-			for(int i = 0; i < token.length(); i++){
+				block temp = null;
 				
-				char curr = token.charAt(i);
-				if(i == blocksPerlvl){
-					lvl += lvl + wallHeight;
-					temp = new block(lvl + wallHeight, Game.WIDTH-wallWidth,wallWidth,wallHeight,'W');//add right wall
-				}else if(i == 0){
-					temp = new block(lvl + wallHeight, 0, wallWidth, wallHeight,'W');//adds left wall
-				}else if(curr == 'b'){
-					//gets the x coord by getting the block before its x coord and adding that blocks width to its x coord 
-					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow, lvl), 'b');//creates new breakable block 
+				while(blocksAdded != blocksPerlvl){
+					if(blocksAdded >= token.length()){
+						if(reader.hasNext()){
+							token = reader.next();
+							idiotAdjust += blocksAdded;
+							blocksAdded = 0;
+							
+						}
+						else{
+							if(blocksAdded % blocksPerRow == 0){
+								//System.out.println("Im here block - 32");
+								blockY -= 32;
+							}
+							//System.out.println("no more");
+							//temp = new block(calcXCord(blocksAdded+idiotAdjust, blocksPerRow), blockY, 's');
+							blocksAdded +=1;
+							//level.add(temp);
+						}
+					}
+					else{
+						
+						char curr = token.charAt(blocksAdded);
+						if(((blocksAdded+idiotAdjust) % blocksPerRow) == 0 && blocksAdded+idiotAdjust != 0){
+							System.out.println("Im here block - 32");
+							blockY -= 32;
+						}
+						if(curr == 'b'){
+							//gets the x coord by getting the block before its x coord and adding that blocks width to its x coord 
+							temp = new block(calcXCord(blocksAdded+idiotAdjust, blocksPerRow), blockY, 'b');//creates new breakable block 
+						}
+						else if(curr == 's'){
+							temp = new block(calcXCord(blocksAdded+idiotAdjust, blocksPerRow), blockY, 's');//creates new space block
+						}
+						else if(curr == 'w'){
+							temp = new block(calcXCord(blocksAdded+idiotAdjust, blocksPerRow), blockY, 'w');//creates new unbreakable block
+						}
+						blocksAdded += 1;
+						level.add(temp);
+					}
 				}
-				else if(curr == 's'){
-					temp = new block(level.get(i-1).getX() + level.get(i-1).getWidth(), calcYCord(i, blocksPerRow, lvl), 's');//creates new space block
-				}
-				else if(curr == 'w'){
-					temp = new block(level.get(i-1).getX() + level.get(i-1).getWidth(), calcYCord(i, blocksPerRow, lvl), 'w');//creates new unbreakable block
-				}
-				
-//				if(i == level.length-3){
-//					System.out.println("No more room!!!");//if the level segment cant fit any more blocks
-//					break;
-//				}
+
+
+
+
+				//token = reader.next();//reads the string of blocks
+
+				//			for(int i = 0; i < token.length(); i++){
+				//				
+				//				char curr = token.charAt(i);
+				//				if(i == blocksPerlvl){
+				//					temp = new block(lvl + wallHeight, Game.WIDTH-wallWidth,wallWidth,wallHeight,'W');//add right wall
+				//					lvl += lvl + wallHeight;
+				//				}else if(i == 0){
+				//					temp = new block(0, lvl + wallHeight, wallWidth, wallHeight,'W');//adds left wall
+				//				}else if(curr == 'b'){
+				//					//gets the x coord by getting the block before its x coord and adding that blocks width to its x coord 
+				//					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow, lvl), 'b');//creates new breakable block 
+				//				}
+				//				else if(curr == 's'){
+				//					temp = new block(level.get(i-1).getX() + level.get(i-1).getWidth(), calcYCord(i, blocksPerRow, lvl), 's');//creates new space block
+				//				}
+				//				else if(curr == 'w'){
+				//					temp = new block(level.get(i-1).getX() + level.get(i-1).getWidth(), calcYCord(i, blocksPerRow, lvl), 'w');//creates new unbreakable block
+				//				}
+
+				//				if(i == level.length-3){
+				//					System.out.println("No more room!!!");//if the level segment cant fit any more blocks
+				//					break;
+				//				}
 				//System.out.println(temp.getType());
-				level.add(temp);
-			}
+
+
+				//}
 			}
 			//level[level.length-2] = new block(x, y, width, height, type);//left wall
 			//level[level.length-1] = new block(x, y, width, height, type);//right wall
-			
-		
-			
+
+
+
 		}
-			return level;
-		}
-		
-		
-	
+		System.out.println(level.size()+ "is the number of blocks in level");
+		return level;
+	}
+
+
+
 	/**
 	 * CalcXCord takes the current index of the read block and the blocks per row and uses it to calculate the block's x coordinate 
 	 * @param i
 	 * @param blocksPerRow
 	 * @return xCoord
 	 */
-	private int calcXCord(int i, int blocksPerRow){
-		i = (i) % (blocksPerRow);//converts i to the corresponding block number (interms of x)
-		int xCoord = (i*32) + wallWidth; 
-			
+	private int calcXCord(int blocksAdded, int blocksPerRow){
+
+		int xBlock = (blocksAdded) % (blocksPerRow);//converts i to the corresponding block number (interms of x)
+		int xCoord = (xBlock)*32 + wallWidth;//minus one b/c of the x coordinate being in the left corner 
+
 		return xCoord;
 	}
 	/**
@@ -138,12 +195,12 @@ public class levels{
 	 * @param blocksPerRow
 	 * @return yCoord
 	 */
-	private int calcYCord(int i, int blocksPerRow,int lvl){
-		i = i/blocksPerRow; //converts i to the corresponding row number
-		int yCoord = 32 + lvl;//*32 because a block is 32 pixels tall
+	private int calcYCord(int blocksAdded, int blocksPerRow, int wallY){
+		int lvl = blocksAdded/blocksPerRow; //converts i to the corresponding row number
+		int yCoord = wallY-wallHeight - lvl*32;// because a block is 32 pixels tall
 		return yCoord;
 	}
-	
+
 
 	public void level1(Graphics2D g, int height, int width, long score){
 		block newest;
@@ -163,13 +220,13 @@ public class levels{
 		newest = new block(width - wallWidth, height - wallHeight*2 , 128, wallHeight,'W');
 		blocks1.add(newest);
 		g.setFont(new Font("Stencil", Font.PLAIN, 36));
-		
+
 		this.score = Long.toString(score);
-		
+
 		this.score = ("00000000" + this.score).substring(this.score.length());
-		
+
 		//LSCounter
-		
+
 		g.drawString(this.score, width/2 + 25, 196);
 
 		for(int j = 0; j < 2; j += 1){
@@ -192,29 +249,29 @@ public class levels{
 			}
 		}
 	}
-	
+
 	public LinkedList<GameObject> mikeTestLevel(){
 		//create new list to be run by HGame1
 		LinkedList<GameObject> objects = new LinkedList<GameObject>();
-		
+
 		objects = this.genLevel(reader);
 
 		//add floor
 		for(int i = 0; i < Game.WIDTH/32; i++){
-			objects.add(new block(32*i, Game.HEIGHT-64, 32, 32, 'b'));
+			objects.add(new block(32*i, Game.HEIGHT+32, 32, 32, 'b'));
 		}
-		
+
 		//add walls
-//		objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
-//		objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
-//
-//		//add second level with hole in middle
-//		for(int i = 128; i < Game.WIDTH-128; i+=32){
-//			if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
-//				objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
-//			}
-//		}
-		
+		//		objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
+		//		objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
+		//
+		//		//add second level with hole in middle
+		//		for(int i = 128; i < Game.WIDTH-128; i+=32){
+		//			if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
+		//				objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
+		//			}
+		//		}
+
 		//TEST PRINTING
 		System.out.println(objects);
 		block b = (block)objects.get(0);
@@ -232,7 +289,7 @@ public class levels{
 		System.out.println(b.getWidth());
 		System.out.println(b.getHeight());
 		System.out.println(b.getType());
-		
+
 		//return the list that will be continuously ticked and rendered
 		return objects;
 	}
