@@ -1,17 +1,7 @@
+W 96 160 bbbbbbbbbbbbbbbbbbbbbbbbbbwbbbbbbbbbbbbbbbbbbbbbbbbb
 W 96 160 
+W 32 32
 
-b
-b
-b
-b
-b
-b
-b
-b
-b
-bbbbbbbbbbbbbbbbbwwwwwwwwwwwwwwwwwwwwwbbbbbbbbbbbbssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwsssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssswwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwssssssssssssssssssssssssssssssssssssss
 
-W 96 160
 
 			
-E 122 23 e 342 738 e 111 212 e X

@@ -22,6 +22,7 @@ public class levels{
 	private File level;
 	String score;
 	private Scanner reader;
+	private Scanner segReader;
 
 	ArrayList<block> blocks1 = new ArrayList<block>();
 	/**
@@ -31,8 +32,8 @@ public class levels{
 	public levels(String levelN) throws FileNotFoundException{
 		level = new File(levelN+".txt");
 		reader = new Scanner(level);
-		//		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
-		//								 //"The" and "Delimiter" with each call to reader.next();
+		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
+										 //"The" and "Delimiter" with each call to reader.next();
 	}
 
 	/**
@@ -41,135 +42,80 @@ public class levels{
 	 * @param reader level.txt scanner
 	 * @return block[] which is the level segment block array
 	 */
-	private LinkedList<GameObject> genLevel(Scanner reader){
-		int usableH = Game.HEIGHT;
-		int usableW = Game.WIDTH;
-		int blocksPerRow = 0;
-		int blocksPerlvl = 0;
-		int lvl = 0;// current level * wallHeight
-		int blocksAdded = 0;
-		int idiotAdjust = 0;
+	private LinkedList<GameObject> genLevel(Scanner segReader){
+		segReader = new Scanner(reader.next());
+		LinkedList<GameObject> level = new LinkedList<GameObject>();
+		int blockX = 0;
+		int blockY = Game.HEIGHT - 32;
 		int wallY = Game.HEIGHT;
-		int blockY = Game.HEIGHT-32;
-		boolean gotNext = false;
-		LinkedList<GameObject> level = new LinkedList<>();
-
-		//Scanner segReader = new Scanner(reader.next());//reads first level segment ie anything before first "X" in level file
+		int blocksPerRow = 0;
+		int blocksPerLvl = 0;
+		int blocksAdded = 0;
 		String token = " ";
-		//reads the level segment assuming the level segment isn't empty
-		System.out.println("did i get here ");// + reader.hasNext());
-		while(reader.hasNext()){
-			token = reader.next();
+		
+		while(segReader.hasNext()){
+			token = segReader.next();
 			if(token.equals("W")){
-				//Wall type Block
-
-				wallWidth = reader.nextInt();
-				wallHeight = reader.nextInt();
-				usableW = usableW - (wallWidth*2);
-				usableH = wallHeight;
+				
+				final int wallWidth = segReader.nextInt();
+				final int wallHeight = segReader.nextInt();
 				wallY = wallY - wallHeight;
-				blocksPerRow = usableW / 32;
-				blocksPerlvl = (wallHeight/32)*blocksPerRow;
-				if(wallWidth % 32 > 0 || wallHeight % 32 > 0){  //checks to make sure the wall allows even block distribution 
-					System.err.println("Invalid Wall Deminsions: Must be a divisiable by 32");
+				if(wallWidth % 32 > 0 || wallHeight % 32 > 0){
+					System.err.println("Wall deminsions must be divisable by 32"); 
 					System.exit(1);
 				}
+				blocksPerRow = (Game.WIDTH - (2 * wallWidth)) / 32;
+				blocksPerLvl = (blocksPerRow * (wallHeight/32));
 				
-				
-				level.add(new block(0, wallY, wallWidth, wallHeight, 'w'));//adds left wall
-				level.add(new block(Game.WIDTH- wallWidth, wallY, wallWidth, wallHeight,'w'));//adds right wall
+				level.add(new block(0, wallY, wallWidth, wallHeight,'w'));//adds left wall
+				level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w'));//adds Right wall
+				blockX = blockX + wallWidth;
 			}
-			//level = new block[((usableW/32)*(usableH/32))+2];//creates single level segment array with space for rest of blocks + 2 for the walls
-			else if(token.equals("E")){
-				LinkedList<GameObject> enemies = new LinkedList<>();
-				while(reader.hasNext()){
-					reader.next();
-				}
-				//return enemies;
-			}
+			//else if(token.equals("E")){
+				//need to talk about this before I try to implement
+			//}
 			else{
-				block temp = null;
-				
-				while(blocksAdded != blocksPerlvl){
-					if(blocksAdded >= token.length()){
-						if(reader.hasNext()){
-							token = reader.next();
-							idiotAdjust += blocksAdded;
-							blocksAdded = 0;
-							
-						}
-						else{
-							if(blocksAdded % blocksPerRow == 0){
-								//System.out.println("Im here block - 32");
-								blockY -= 32;
-							}
-							//System.out.println("no more");
-							//temp = new block(calcXCord(blocksAdded+idiotAdjust, blocksPerRow), blockY, 's');
-							blocksAdded +=1;
-							//level.add(temp);
-						}
+				while(blocksAdded < token.length()){
+					if(blockX == Game.WIDTH - wallWidth+32){
+						blockY = blockY - 32;//adjusts Y level if current block starts new row
+						blockX =  wallWidth -32;
 					}
-					else{
-						
-						char curr = token.charAt(blocksAdded);
-						if(((blocksAdded+idiotAdjust) % blocksPerRow) == 0 && blocksAdded+idiotAdjust != 0){
-							System.out.println("Im here block - 32");
-							blockY -= 32;
-						}
-						if(curr == 'b'){
-							//gets the x coord by getting the block before its x coord and adding that blocks width to its x coord 
-							temp = new block(calcXCord(blocksAdded+idiotAdjust, blocksPerRow), blockY, 'b');//creates new breakable block 
-						}
-						else if(curr == 's'){
-							temp = new block(calcXCord(blocksAdded+idiotAdjust, blocksPerRow), blockY, 's');//creates new space block
-						}
-						else if(curr == 'w'){
-							temp = new block(calcXCord(blocksAdded+idiotAdjust, blocksPerRow), blockY, 'w');//creates new unbreakable block
-						}
+					if(blocksAdded >= blocksPerLvl){
+						break;//the level is filled and no more blocks need to be read into current level segment
+					}
+					if(token.charAt(blocksAdded) == 'b'){
+						level.add(new block(blockX, blockY, 'b'));
+						blockX += 32;
 						blocksAdded += 1;
-						level.add(temp);
+					}
+					else if(token.charAt(blocksAdded) == 'w'){
+						level.add(new block(blockX, blockY, 'w'));
+						blockX += 32;
+						blocksAdded += 1;
+					}
+					else if(token.charAt(blocksAdded) == 's'){
+						level.add(new block(blockX, blockY, 's'));
+						blockX += 32;
+						blocksAdded += 1;
 					}
 				}
-
-
-
-
-				//token = reader.next();//reads the string of blocks
-
-				//			for(int i = 0; i < token.length(); i++){
-				//				
-				//				char curr = token.charAt(i);
-				//				if(i == blocksPerlvl){
-				//					temp = new block(lvl + wallHeight, Game.WIDTH-wallWidth,wallWidth,wallHeight,'W');//add right wall
-				//					lvl += lvl + wallHeight;
-				//				}else if(i == 0){
-				//					temp = new block(0, lvl + wallHeight, wallWidth, wallHeight,'W');//adds left wall
-				//				}else if(curr == 'b'){
-				//					//gets the x coord by getting the block before its x coord and adding that blocks width to its x coord 
-				//					temp = new block(calcXCord(i, blocksPerRow), calcYCord(i, blocksPerRow, lvl), 'b');//creates new breakable block 
-				//				}
-				//				else if(curr == 's'){
-				//					temp = new block(level.get(i-1).getX() + level.get(i-1).getWidth(), calcYCord(i, blocksPerRow, lvl), 's');//creates new space block
-				//				}
-				//				else if(curr == 'w'){
-				//					temp = new block(level.get(i-1).getX() + level.get(i-1).getWidth(), calcYCord(i, blocksPerRow, lvl), 'w');//creates new unbreakable block
-				//				}
-
-				//				if(i == level.length-3){
-				//					System.out.println("No more room!!!");//if the level segment cant fit any more blocks
-				//					break;
-				//				}
-				//System.out.println(temp.getType());
-
-
-				//}
+				//adds filler blocks if level segment isn't full
+				if(blocksAdded >= token.length() && !segReader.hasNext()){
+					while(blocksAdded < blocksPerLvl){
+						if(blockX == Game.WIDTH - wallWidth+32){
+							blockY = blockY - 32;//adjusts Y level if current block starts new row
+							blockX =  wallWidth -32;
+						}
+						
+						level.add(new block(blockX, blockY, 's'));
+						blockX += 32;
+						blocksAdded += 1;
+					}
+				}
 			}
-			//level[level.length-2] = new block(x, y, width, height, type);//left wall
-			//level[level.length-1] = new block(x, y, width, height, type);//right wall
-
-
-
+			
 		}
+			
 		System.out.println(level.size()+ "is the number of blocks in level");
 		return level;
 	}
