@@ -1,6 +1,8 @@
-W 96 160 bbbbbbbbbbbbbbbbbbbbbbbbbbwbbbbbbbbbbbbbbbbbbbbbbbbb
-W 96 160 
-W 32 32
+W 32 320 wbbbbbbbbbbbbbbbbbbw
+		 wbbbbbbbbbbbbbbbbbbw
+		 wbbbbbbbbbbbbbbbbbbw X
+W 160 192 X
+W 32 32  X
 
 
 

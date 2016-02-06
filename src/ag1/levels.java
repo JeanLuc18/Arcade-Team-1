@@ -42,22 +42,27 @@ public class levels{
 	 * @param reader level.txt scanner
 	 * @return block[] which is the level segment block array
 	 */
+	@SuppressWarnings("unused")
 	private LinkedList<GameObject> genLevel(Scanner segReader){
-		segReader = new Scanner(reader.next());
+		
 		LinkedList<GameObject> level = new LinkedList<GameObject>();
 		int blockX = 0;
 		int blockY = Game.HEIGHT - 32;
 		int wallY = Game.HEIGHT;
+		int shiftX = 0;
 		int blocksPerRow = 0;
 		int blocksPerLvl = 0;
 		int blocksAdded = 0;
 		String token = " ";
 		
-		while(segReader.hasNext()){
+		while(reader.hasNext()){
+			segReader = new Scanner(reader.next());
+			while(segReader.hasNext()){
 			token = segReader.next();
 			if(token.equals("W")){
-				
+				blocksAdded = 0;
 				final int wallWidth = segReader.nextInt();
+				System.out.println(Game.WIDTH-wallWidth);
 				final int wallHeight = segReader.nextInt();
 				wallY = wallY - wallHeight;
 				if(wallWidth % 32 > 0 || wallHeight % 32 > 0){
@@ -69,16 +74,38 @@ public class levels{
 				
 				level.add(new block(0, wallY, wallWidth, wallHeight,'w'));//adds left wall
 				level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w'));//adds Right wall
-				blockX = blockX + wallWidth;
+				System.out.println("Shift X = "+ (Game.WIDTH - wallWidth));
+				shiftX = Game.WIDTH - wallWidth;
+				blockX = 0 + wallWidth;
+				
+//				if(!segReader.hasNext()){
+//					System.out.println("Entered If");
+//					while(blocksAdded < blocksPerLvl){
+//						System.out.println("blocksAdded = "+blocksAdded);
+//						if(blockX == Game.WIDTH - wallWidth+32){
+//							blockY = blockY - 32;//adjusts Y level if current block starts new row
+//							blockX =  wallWidth -32;
+//						}
+//						
+//						level.add(new block(blockX, blockY, 's'));
+//						blockX += 32;
+//						blocksAdded += 1;
+//					}
+//				}
 			}
 			//else if(token.equals("E")){
 				//need to talk about this before I try to implement
 			//}
 			else{
+				
+				
 				while(blocksAdded < token.length()){
-					if(blockX == Game.WIDTH - wallWidth+32){
+					char curr = token.charAt(blocksAdded);
+					if(blockX == shiftX){
+						System.out.println(Game.WIDTH - wallWidth);
+						System.out.println("SHIFT!!!!!!!!!!!!!!!!!!!!!!" + blockX);
 						blockY = blockY - 32;//adjusts Y level if current block starts new row
-						blockX =  wallWidth -32;
+						blockX = -1*(shiftX - Game.WIDTH);
 					}
 					if(blocksAdded >= blocksPerLvl){
 						break;//the level is filled and no more blocks need to be read into current level segment
@@ -100,28 +127,35 @@ public class levels{
 					}
 				}
 				//adds filler blocks if level segment isn't full
-				if(blocksAdded >= token.length() && !segReader.hasNext()){
-					while(blocksAdded < blocksPerLvl){
-						if(blockX == Game.WIDTH - wallWidth+32){
-							blockY = blockY - 32;//adjusts Y level if current block starts new row
-							blockX =  wallWidth -32;
-						}
-						
-						level.add(new block(blockX, blockY, 's'));
-						blockX += 32;
-						blocksAdded += 1;
-					}
-				}
+//				if(blocksAdded >= token.length() || !segReader.hasNext()){
+//					System.out.println("Entered If");
+//					while(blocksAdded < blocksPerLvl){
+//						if(blockX == shiftX){
+//							System.out.println(Game.WIDTH - wallWidth);
+//							System.out.println("SHIFT!!!!!!!!!!!!!!!!!!!!!!" + blockX);
+//							blockY = blockY - 32;//adjusts Y level if current block starts new row
+//							blockX = -1*(shiftX - Game.WIDTH);
+//						}
+//						
+//						level.add(new block(blockX, blockY, 's'));
+//						blockX += 32;
+//						blocksAdded += 1;
+//					}
+//				}
+			}
 			}
 			
 		}
 			
-		System.out.println(level.size()+ "is the number of blocks in level");
+		System.out.println(level.size()+ " is the number of blocks in level");
+		
 		return level;
 	}
 
 
-
+	private static void fillSpace(LinkedList<GameObject> level, int blocksAdded, int blocksPerLvl, int wallWidth, int blockY, int blockX){
+		
+	}
 	/**
 	 * CalcXCord takes the current index of the read block and the blocks per row and uses it to calculate the block's x coordinate 
 	 * @param i
