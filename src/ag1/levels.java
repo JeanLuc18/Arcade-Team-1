@@ -65,6 +65,7 @@ public class levels{
 				System.out.println(Game.WIDTH-wallWidth);
 				final int wallHeight = segReader.nextInt();
 				wallY = wallY - wallHeight;
+				blockY = wallY + wallHeight - 32;
 				if(wallWidth % 32 > 0 || wallHeight % 32 > 0){
 					System.err.println("Wall deminsions must be divisable by 32"); 
 					System.exit(1);
