@@ -141,6 +141,7 @@ public class HGame1 extends Game{
 		}
 		
 		initialized = true;
+		
 	}
 	
 	public void startup(Graphics2D g, Input p1){

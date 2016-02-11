@@ -236,6 +236,11 @@ public class levels{
 		LinkedList<GameObject> objects = new LinkedList<GameObject>();
 
 		objects = this.genLevel(reader);
+		
+		//add enemy
+				Enemy testRepairer = new Repairer(200, 463, 50, 50);
+				
+				objects.add(testRepairer);
 
 		//add floor
 		for(int i = 0; i < Game.WIDTH/32; i++){
