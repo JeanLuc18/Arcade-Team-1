@@ -7,6 +7,16 @@ import java.util.LinkedList;
 
 import arcadia.Game;
 
+
+/**
+ * 
+ * @author Steve Amatangelo
+ *
+ * This is a subclass of the enemy class. This object creates enemies that will
+ * walk back and forth to repair any space blocks with breakable ones
+ *
+ */
+
 public class Repairer  extends Enemy{
 	boolean repair;
 	boolean pushLeft, pushRight;
@@ -22,6 +32,7 @@ public class Repairer  extends Enemy{
 		if(x >= (Game.WIDTH - width) || x <= 0){
 			speed *= -1;
 			System.out.println(repair + " " + pushLeft + " " + pushRight);
+			//Sets block in front of enemy showing that it is ready to repair a space
 			if(repair){
 				if(speed > 0){
 					pushRight = true;

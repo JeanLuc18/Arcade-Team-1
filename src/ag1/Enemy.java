@@ -4,6 +4,13 @@ package ag1;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
 
+/**
+ * 
+ * @author Steve Amatangelo
+ *
+ * Enemy superclass. All enemies are derived from this class.
+ */
+
 public class Enemy extends GameObject{
 	
 	float speed = 2;        //Speed in horizontal direction, constant
