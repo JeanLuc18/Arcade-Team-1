@@ -7,7 +7,7 @@ import arcadia.*;
 import arcadia.Button;
 
 public class Player extends GameObject {
-	
+	int lives = 3;
 	boolean canJump = false;
 	boolean inAir = true;
 	boolean faceing = true; //true - player facing right , false - player facing left 
@@ -69,31 +69,63 @@ public class Player extends GameObject {
 		return new Rectangle((int)x+bd, (int)y+height-bd, (int)width-bd*2, bd);
 	}
 	
-	public void blockCollision(block block){
+	public void blockCollision(GameObject block){
 		Rectangle blockBounds = block.getBounds();
-		
-		if(blockBounds.intersects(topBound())){
+	
+		if(block.getId() == GOID.Block){
+			block temp = (block)block;
+			if(temp.getType() == 's'){
 				
-			y = block.getY() + block.getHeight();
-			velY = 0;
-		}
-		if(blockBounds.intersects(bottomBound())){
-			y = block.getY() - this.height;
-			velY = 0;
+			}
+			else{
+				if(blockBounds.intersects(topBound())){
+					y = block.getY() + block.getHeight();
+					velY = 0;
+				}
+				if(blockBounds.intersects(bottomBound())){
+					y = block.getY() - this.height;
+					velY = 0;
+				
+					canJump = true;
+					inAir = false;
+				}
+				else{
+					inAir = true;
+				}
 			
-			canJump = true;
-			inAir = false;
+				if(blockBounds.intersects(leftBound())){
+					x = block.getX() + block.getWidth();
+				}
+				if(blockBounds.intersects(rightBound())){
+					x = block.getX() - width;
+				}
+			}
 		}
-		else{
-			inAir = true;
+			
+		
+		if(block.getId() == GOID.Enemy){
+			//System.out.println("I died");
+			Enemy temp = (Enemy)block;
+			if(blockBounds.intersects(topBound())){
+				//System.out.println(lives);
+				temp.collided(this);
+			}
+			if(blockBounds.intersects(bottomBound())){
+				//System.out.println(lives);
+				temp.collided(this);
+			}
+			
+		
+			if(blockBounds.intersects(leftBound())){
+				//System.out.println(lives);
+				temp.collided(this);
+			}
+			if(blockBounds.intersects(rightBound())){
+				//System.out.println(lives);
+				temp.collided(this);
+			}
 		}
 		
-		if(blockBounds.intersects(leftBound())){
-			x = block.getX() + block.getWidth();
-		}
-		if(blockBounds.intersects(rightBound())){
-			x = block.getX() - width;
-		}
 	}
 	
 	public void input(Input input){

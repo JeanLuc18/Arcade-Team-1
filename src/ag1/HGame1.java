@@ -34,7 +34,7 @@ public class HGame1 extends Game{
 	Image banner;
 	Image Title;
 	Enemy testEnemy = null;   //delete later
-	int lives = 3;
+	//int lives = 3;
 	ArrayList<String> levelNames;
 	boolean hasLevels = false;
 
@@ -59,7 +59,7 @@ public class HGame1 extends Game{
 			intialize(g);
 		if(starting == true)
 			startup(g, p1);
-		if(lives <= 0)
+		if(player.lives <= 0)
 				gameover(g, p2);
 			
 		
