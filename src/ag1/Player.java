@@ -1,7 +1,10 @@
 package ag1;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
 
 import arcadia.*;
 import arcadia.Button;
@@ -14,10 +17,24 @@ public class Player extends GameObject {
 	boolean attacking = false;
 	Color color = Color.BLACK;
 	final int bd = 8; //bound dist
+	Image left1;
+	Image left2;
+	Image right1;
+	Image right2;
+	
 	
 	public Player(){
 		super(Game.WIDTH/2, Game.HEIGHT-32-96, 64, 96, GOID.Player);
 		//super(200, 400, 64, 96, GOID.Player);
+//		try {
+//			left1 = ImageIO.read(HGame1.class.getResource("Graphics/Knight_Walking8.png")); //help from pixabay.com
+//			left2 = ImageIO.read(HGame1.class.getResource("Graphics/Knight_Walking9.png"));
+//			right1 = ImageIO.read(HGame1.class.getResource("Graphics/Knight_Walking1.png"));
+//			right2 = ImageIO.read(HGame1.class.getResource("Graphics/Knight_Walking2.png"));
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}	
 	}
 	
 	public void tick(LinkedList<GameObject> objects, Player player) {

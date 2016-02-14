@@ -59,6 +59,7 @@ public class HGame1 extends Game{
 			intialize(g);
 		if(starting == true)
 			startup(g, p1);
+		else{
 		if(player.lives <= 0)
 				gameover(g, p2);
 			
@@ -90,6 +91,7 @@ public class HGame1 extends Game{
 			player.render(g);
 			
 			g.translate(-camera.getX(), -camera.getY()); //camera
+		}
 		}
 	
 

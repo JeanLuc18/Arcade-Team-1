@@ -110,7 +110,7 @@ public class Repairer  extends Enemy{
 	public void render(Graphics2D g){
 		g.setColor(Color.RED);
 		g.fillRect((int)x, (int)y, width, height);
-		g.
+		
 		
 		if(pushLeft){
 			int blockX = (int)x;
