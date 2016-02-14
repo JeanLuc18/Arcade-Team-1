@@ -88,7 +88,7 @@ public class Player extends GameObject {
 	
 	public void blockCollision(GameObject block){
 		Rectangle blockBounds = block.getBounds();
-	
+		//System.out.println(block.getId());
 		if(block.getId() == GOID.Block){
 			block temp = (block)block;
 			if(temp.getType() == 's'){
@@ -128,7 +128,7 @@ public class Player extends GameObject {
 				temp.collided(this);
 			}
 			if(blockBounds.intersects(bottomBound())){
-				//System.out.println(lives);
+				//System.out.println("You suck");
 				temp.collided(this);
 			}
 			

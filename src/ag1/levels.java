@@ -147,7 +147,7 @@ public class levels{
 			}
 			
 		}
-			
+		level.add(new FallingBlock(Game.WIDTH/2, -10, 64,64));	
 		System.out.println(level.size()+ " is the number of blocks in level");
 		
 		return level;

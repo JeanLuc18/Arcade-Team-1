@@ -12,7 +12,8 @@ public class FallingBlock extends Enemy{
 	
 	public FallingBlock(float x, float y, int width, int height) {
 		super(x, y, width, height);
-		this.setVelY(0);
+		this.setVelY(2);
+		
 	}
 	
 	public boolean canFall(){
@@ -22,16 +23,19 @@ public class FallingBlock extends Enemy{
 			return true;
 	}
 	
-	public void tick(LinkedList<GameObject> objects) {
+	public void tick(LinkedList<GameObject> objects, Player player) {
 		
-		if(!canFall()){
-			this.setVelY(0);
-		}
-		else if(canFall()){
-			x += velX;
-			y += velY;
-			velY += gravity/1000;
-		}
+//		if(!canFall()){
+//			this.setVelY(0);
+//		}
+		
+		//else if(canFall()){
+			this.x += velX;
+			this.y += velY;
+			//System.out.println(y);
+			this.velY += gravity;
+			this.setVelY(velY);
+		//}
 		
 	}
 	public void render(Graphics2D g){
