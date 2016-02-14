@@ -139,7 +139,7 @@ public abstract class GameObject {
 	 * velocities, collision, etc). Will be called every game tick. Leave empty
 	 * if object is "static" (does not move/change).
 	 */
-	public abstract void tick(LinkedList<GameObject> objects);
+	public abstract void tick(LinkedList<GameObject> objects, Player player);
 	
 	/**
 	 * Put visuals to be redrawn/rendered by Graphics2D in here. Will be called

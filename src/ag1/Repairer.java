@@ -25,7 +25,7 @@ public class Repairer  extends Enemy{
 		super(x, y, width, height);
 	}
 
-	public void tick(LinkedList<GameObject> objects){
+	public void tick(LinkedList<GameObject> objects, Player player){
 		x+=speed;
 		
 		//change direction an edges of screen 

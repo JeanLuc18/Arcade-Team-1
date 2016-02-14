@@ -51,27 +51,26 @@ public class HGame1 extends Game{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
-		l  = new levels("src/ag1/levelsFolder/level1");
 	}
 
 	@Override
 	public void tick(Graphics2D g, Input p1, Input p2, Sound s) {
-		if(starting == true){
-			startup(g, p1);
-		}else if(!initialized){
+		if(!initialized)
 			intialize(g);
-		}else {
-			if(lives <= 0){
+		if(starting == true)
+			startup(g, p1);
+		if(lives <= 0)
 				gameover(g, p2);
-			}
+			
+		
 						
 			//-----!!!!TICK!!!!-----
 			//tick objects
 			for(GameObject tempObject : objects){
 				if(tempObject != null)
-					tempObject.tick(objects);
+					tempObject.tick(objects, player);
 			}
-			player.tick(objects);
+			player.tick(objects, player);
 			camera.tick(player); //camera
 			player.input(p1); //keyboard input for player
 			
@@ -92,7 +91,7 @@ public class HGame1 extends Game{
 			
 			g.translate(-camera.getX(), -camera.getY()); //camera
 		}
-	}
+	
 
 	private void gameover(Graphics2D g, Input p1) {
 		g.setColor(Color.BLACK);
@@ -123,7 +122,7 @@ public class HGame1 extends Game{
 		camera = new Camera(0,0);
 		
 		//initialize level
-		objects = l.mikeTestLevel();
+		
 		
 		//initialize level files
 		File f = new File("src/ag1/levelsFolder");
@@ -139,6 +138,14 @@ public class HGame1 extends Game{
 			g.setFont(new Font("Stencil", Font.PLAIN, 30));
 			g.drawString("Please close and add levels, Thank you.", 0 + WIDTH/6, HEIGHT/2 + 30);
 		}
+		
+		try {
+			l = new levels("src/ag1/levelsFolder/" + levelNames.get(sLevel - 1));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		objects = l.genLevel();
 		
 		initialized = true;
 		
@@ -190,8 +197,10 @@ public class HGame1 extends Game{
 			waiting();
 		}
 		if(p1.pressed(Button.B)){
-			if(startPlace == 0)
+			if(startPlace == 0){
 				starting = false;
+				intialize(g);
+			}
 			waiting();
 		}
 		if(p1.pressed(Button.L)){

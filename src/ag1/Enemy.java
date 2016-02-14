@@ -30,7 +30,7 @@ public class Enemy extends GameObject{
 		
 	}
 
-	public void tick(LinkedList<GameObject> objects) {}
+	public void tick(LinkedList<GameObject> objects, Player player) {}
 	public void render(Graphics2D g) {}
 
 }

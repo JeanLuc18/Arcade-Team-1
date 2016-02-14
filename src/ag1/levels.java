@@ -30,7 +30,7 @@ public class levels{
 	 * @throws FileNotFoundException
 	 */
 	public levels(String levelN) throws FileNotFoundException{
-		level = new File(levelN+".txt");
+		level = new File(levelN);
 		reader = new Scanner(level);
 		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
 										 //"The" and "Delimiter" with each call to reader.next();
@@ -43,7 +43,7 @@ public class levels{
 	 * @return block[] which is the level segment block array
 	 */
 	@SuppressWarnings("unused")
-	private LinkedList<GameObject> genLevel(Scanner segReader){
+	public LinkedList<GameObject> genLevel(){
 		
 		LinkedList<GameObject> level = new LinkedList<GameObject>();
 		int blockX = 0;
@@ -231,53 +231,53 @@ public class levels{
 		}
 	}
 
-	public LinkedList<GameObject> mikeTestLevel(){
-		//create new list to be run by HGame1
-		LinkedList<GameObject> objects = new LinkedList<GameObject>();
-
-		objects = this.genLevel(reader);
-		
-		//add enemy
-				Enemy testRepairer = new Repairer(200, 463, 50, 50);
-				
-				objects.add(testRepairer);
-
-		//add floor
-		for(int i = 0; i < Game.WIDTH/32; i++){
-			objects.add(new block(32*i, Game.HEIGHT+32, 32, 32, 'b'));
-		}
-
-		//add walls
-		//		objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
-		//		objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
-		//
-		//		//add second level with hole in middle
-		//		for(int i = 128; i < Game.WIDTH-128; i+=32){
-		//			if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
-		//				objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
-		//			}
-		//		}
-
-		//TEST PRINTING
-		System.out.println(objects);
-		block b = (block)objects.get(0);
-		System.out.println(b.getId());
-		System.out.println(b.getX());
-		System.out.println(b.getY());
-		System.out.println(b.getWidth());
-		System.out.println(b.getHeight());
-		System.out.println(b.getType());
-
-		b = (block)objects.get(1);
-		System.out.println(b.getId());
-		System.out.println(b.getX());
-		System.out.println(b.getY());
-		System.out.println(b.getWidth());
-		System.out.println(b.getHeight());
-		System.out.println(b.getType());
-
-		//return the list that will be continuously ticked and rendered
-		return objects;
-	}
+//	public LinkedList<GameObject> mikeTestLevel(){
+//		//create new list to be run by HGame1
+//		LinkedList<GameObject> objects = new LinkedList<GameObject>();
+//
+//		objects = this.genLevel(reader);
+//		
+//		//add enemy
+//				Enemy testRepairer = new Repairer(200, 463, 50, 50);
+//				
+//				objects.add(testRepairer);
+//
+//		//add floor
+//		for(int i = 0; i < Game.WIDTH/32; i++){
+//			objects.add(new block(32*i, Game.HEIGHT+32, 32, 32, 'b'));
+//		}
+//
+//		//add walls
+//		//		objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
+//		//		objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
+//		//
+//		//		//add second level with hole in middle
+//		//		for(int i = 128; i < Game.WIDTH-128; i+=32){
+//		//			if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
+//		//				objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
+//		//			}
+//		//		}
+//
+//		//TEST PRINTING
+//		System.out.println(objects);
+//		block b = (block)objects.get(0);
+//		System.out.println(b.getId());
+//		System.out.println(b.getX());
+//		System.out.println(b.getY());
+//		System.out.println(b.getWidth());
+//		System.out.println(b.getHeight());
+//		System.out.println(b.getType());
+//
+//		b = (block)objects.get(1);
+//		System.out.println(b.getId());
+//		System.out.println(b.getX());
+//		System.out.println(b.getY());
+//		System.out.println(b.getWidth());
+//		System.out.println(b.getHeight());
+//		System.out.println(b.getType());
+//
+//		//return the list that will be continuously ticked and rendered
+//		return objects;
+//	}
 }
 

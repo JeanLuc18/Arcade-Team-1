@@ -13,7 +13,7 @@ public class LSCounter extends GameObject {
 	}
 	
 	@Override
-	public void tick(LinkedList<GameObject> objects) {
+	public void tick(LinkedList<GameObject> objects, Player player) {
 		x += velX;
 		y += velY;
 	}

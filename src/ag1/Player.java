@@ -20,7 +20,7 @@ public class Player extends GameObject {
 		//super(200, 400, 64, 96, GOID.Player);
 	}
 	
-	public void tick(LinkedList<GameObject> objects) {
+	public void tick(LinkedList<GameObject> objects, Player player) {
 		x += velX;
 		y += velY;
 		
@@ -73,6 +73,7 @@ public class Player extends GameObject {
 		Rectangle blockBounds = block.getBounds();
 		
 		if(blockBounds.intersects(topBound())){
+				
 			y = block.getY() + block.getHeight();
 			velY = 0;
 		}
@@ -111,5 +112,6 @@ public class Player extends GameObject {
 			velX = 0;
 		}
 	}
+
 
 }

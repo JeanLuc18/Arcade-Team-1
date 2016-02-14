@@ -2,6 +2,7 @@ package ag1;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 public class block extends GameObject {
@@ -9,6 +10,7 @@ public class block extends GameObject {
 	private char type = 'w';// block type can be 's' (space), 'b' (breakable block), or 'w' (unbreakable block)
 	private boolean breakable;//boolean of whether the player can break this block
 	private boolean passable; //boolean of whether the player can pass through this block
+	final int bd = 8;
 	
 	public block(float x, float y, char type){
 		super(x, y, 32, 32, GOID.Block);
@@ -45,8 +47,28 @@ public class block extends GameObject {
 		return type;
 	}
 	
-	public void tick(LinkedList<GameObject> objects) {}
+	public Rectangle bottomBound(){
+		return new Rectangle((int)x, (int)y+height-bd, (int)width, bd);
+	}
+	
+	
+	
+	public void tick(LinkedList<GameObject> objects, Player player) {
+		if(this.breakable)
+			if(player.topBound().intersects(bottomBound())){
+				System.out.println("BOUNDS");
+				for(int i = 0; i < objects.size(); i += 1){
+					System.out.println("HIT");
+					if(this == objects.get(i)){
+						objects.remove(i);
+					System.out.println("here");
+					}
+				}
+			}
+	}
+	
 	public void render(Graphics2D g) {
+		
 		switch(type){
 			case 'b':	g.setColor(Color.CYAN);
 						break;
@@ -59,5 +81,7 @@ public class block extends GameObject {
 		g.fillRect((int)x, (int)y, width, height);
 		g.setColor(Color.BLACK);
 		g.drawRect((int)x, (int)y, width, height);
+		g.setColor(Color.GREEN);
+		g.draw(bottomBound());
 	}
 }
