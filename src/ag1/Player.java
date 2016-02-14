@@ -72,7 +72,7 @@ public class Player extends GameObject {
 		g.draw(topBound());
 		g.draw(bottomBound());
 	}
-	
+	//test
 	public Rectangle leftBound(){
 		return new Rectangle((int)x, (int)y+bd, bd, height-bd*2);
 	}
