@@ -23,14 +23,25 @@ public class FallingBlock extends Enemy{
 	}
 	
 	public void tick(LinkedList<GameObject> objects) {
-		x += velX;
-		y += velY;
-		velY += gravity/1000;
+		
+		if(!canFall()){
+			this.setVelY(0);
+		}
+		else if(canFall()){
+			x += velX;
+			y += velY;
+			velY += gravity/1000;
+		}
 		
 	}
 	public void render(Graphics2D g){
 		g.setColor(Color.RED);
 		g.fillRect((int)x, (int)y, width, height);
+		
+		if(!canFall()){
+			//g.setColor(new Color(128,128,128,128));
+		}
+		
 		
 	}
 	public void collided(Player p){
