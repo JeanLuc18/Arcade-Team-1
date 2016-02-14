@@ -2,8 +2,12 @@ package ag1;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
 
 import arcadia.Game;
 
@@ -20,9 +24,22 @@ import arcadia.Game;
 public class Repairer  extends Enemy{
 	boolean repair;
 	boolean pushLeft, pushRight;
-
+	Image left1;
+	Image left2;
+	Image right1;
+	Image right2;
+	
 	public Repairer(float x, float y, int width, int height) {
 		super(x, y, width, height);
+		try {
+			left1 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking1.gif")); //help from pixabay.com
+			left2 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking2.gif"));
+			right1 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking3.gif"));
+			right2 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking4.gif"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 
 	public void tick(LinkedList<GameObject> objects, Player player){
@@ -93,6 +110,7 @@ public class Repairer  extends Enemy{
 	public void render(Graphics2D g){
 		g.setColor(Color.RED);
 		g.fillRect((int)x, (int)y, width, height);
+		g.
 		
 		if(pushLeft){
 			int blockX = (int)x;
