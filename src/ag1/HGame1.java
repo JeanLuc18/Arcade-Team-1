@@ -32,9 +32,9 @@ public class HGame1 extends Game{
 	String scoreS;
 	boolean levelsLoaded = false;
 	Image banner;
-	Image Title;
+	Image Title, background;
 	Enemy testEnemy = null;   //delete later
-	int lives = 3;
+	//int lives = 3;
 	ArrayList<String> levelNames;
 	boolean hasLevels = false;
 
@@ -47,6 +47,7 @@ public class HGame1 extends Game{
 		try {
 			banner = ImageIO.read(HGame1.class.getResource("Banner.gif")); //help from pixabay.com
 			Title = ImageIO.read(HGame1.class.getResource("MenuTitle.gif"));
+			background = ImageIO.read(HGame1.class.getResource("Graphics/background.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,8 +60,11 @@ public class HGame1 extends Game{
 			intialize(g);
 		if(starting == true)
 			startup(g, p1);
-		if(lives <= 0)
-				gameover(g, p2);
+		else if(player.lives <= 0)
+			gameover(g, p2);
+		else{
+		
+			
 			
 		
 						
@@ -68,17 +72,18 @@ public class HGame1 extends Game{
 			//tick objects
 			for(GameObject tempObject : objects){
 				if(tempObject != null)
-					tempObject.tick(objects, player);
+					tempObject.tick(objects, player);	
 			}
+			
 			player.tick(objects, player);
 			camera.tick(player); //camera
-			player.input(p1); //keyboard input for player
+			player.input(objects, p1); //keyboard input for player
 			
 			
 			//-----!!!!RENDER!!!!-----
 			//background
 			g.setColor(new Color(51, 102, 255));
-			g.fillRect(0, 0, WIDTH, HEIGHT);
+			g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
 			
 			g.translate(camera.getX(), camera.getY()); //camera
 			
@@ -91,24 +96,28 @@ public class HGame1 extends Game{
 			
 			g.translate(-camera.getX(), -camera.getY()); //camera
 		}
+		}
 	
 
 	private void gameover(Graphics2D g, Input p1) {
+		
+		
+			starting = true;
+			player.lives = 3;
+		
+		System.out.println("test");
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
 		g.setColor(Color.RED);
 		g.setFont(new Font("Stencil", Font.PLAIN, 50));
-		g.drawString("Game Over!!!", 0 + WIDTH/4, HEIGHT/2);
-		scoreS = Long.toString(score);
-		scoreS = ("00000000" + this.score).substring(scoreS.length());
+		g.drawString("Game Over!!!", 0 + WIDTH/2 - 150, HEIGHT/2 - 50);
+		scoreS = Long.toString(player.score);
+		scoreS = ("00000000" + scoreS).substring(scoreS.length());
 		g.setFont(new Font("Stencil", Font.PLAIN, 30));
-		g.drawString("Score: " + scoreS, 0 + WIDTH/6, HEIGHT/2 + 30);
-		g.drawString("Hit A to go to Menu.", 0 + WIDTH/6, HEIGHT/2 + 30);
-		if(p1.pressed(Button.A)){
-			starting = true;
-			score = 3;
-			waiting();
-		}
+		g.drawString("Score: " + scoreS, 0 + WIDTH/2 - 150, HEIGHT/2 - 20);
+		g.drawString("Hit A to go to Menu.", 0 + WIDTH/2 - 150, HEIGHT/2 + 10);
+		
 	}
 	
 	/**
@@ -146,6 +155,8 @@ public class HGame1 extends Game{
 			e.printStackTrace();
 		}
 		objects = l.genLevel();
+		
+		objects.add(new LSCounter(player));
 		
 		initialized = true;
 		
@@ -206,7 +217,7 @@ public class HGame1 extends Game{
 		if(p1.pressed(Button.L)){
 			if(startPlace == 1)
 				if(sLevel == 1)
-					sLevel = 20;
+					sLevel = levelNames.size() - 1;
 				else 
 					sLevel -= 1;
 
@@ -214,7 +225,7 @@ public class HGame1 extends Game{
 		}
 		if(p1.pressed(Button.R)){
 			if(startPlace == 1)
-				if(sLevel == 20)
+				if(sLevel == levelNames.size() - 1)
 					sLevel = 1;
 				else 
 					sLevel += 1;
@@ -237,4 +248,5 @@ public class HGame1 extends Game{
 		Arcadia.display(new Arcadia(new Game[] {new HGame1(), new Shooter()}));
 	}
 }
+
 

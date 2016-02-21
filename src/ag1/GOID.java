@@ -9,5 +9,6 @@ package ag1;
 public enum GOID {
 	Player,
 	Block,
-	Enemy
+	Enemy,
+	Counter
 }

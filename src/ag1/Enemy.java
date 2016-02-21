@@ -1,4 +1,3 @@
-
 package ag1;
 
 import java.awt.Graphics2D;
@@ -29,8 +28,9 @@ public class Enemy extends GameObject{
 	public void update(Graphics2D g, HGame1 game){
 		
 	}
-
+	public void collided(Player p){}
 	public void tick(LinkedList<GameObject> objects, Player player) {}
 	public void render(Graphics2D g) {}
 
 }
+

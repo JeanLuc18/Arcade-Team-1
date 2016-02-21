@@ -1,23 +1,43 @@
 package ag1;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
 
 import arcadia.*;
 import arcadia.Button;
 
 public class Player extends GameObject {
-	
+	int lives = 3;
+	long score = 0;
+	static int startingX = Game.WIDTH/2;
+	static int startingY = Game.HEIGHT-32-96;
 	boolean canJump = false;
 	boolean inAir = true;
 	boolean faceing = true; //true - player facing right , false - player facing left 
 	boolean attacking = false;
 	Color color = Color.BLACK;
 	final int bd = 8; //bound dist
+	Image left1;
+	Image left2;
+	Image right1;
+	Image right2;
+	
 	
 	public Player(){
-		super(Game.WIDTH/2, Game.HEIGHT-32-96, 64, 96, GOID.Player);
+		super(startingX, startingY, 64, 96, GOID.Player);
 		//super(200, 400, 64, 96, GOID.Player);
+		try {
+			left1 = ImageIO.read(HGame1.class.getResource("Graphics/Left_Knight_Walking1.png")); //help from pixabay.com
+			left2 = ImageIO.read(HGame1.class.getResource("Graphics/Knight_Walking9.png"));
+			right1 = ImageIO.read(HGame1.class.getResource("Graphics/Right_Knight_Walking1.png"));
+			right2 = ImageIO.read(HGame1.class.getResource("Graphics/Knight_Walking2.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 	
 	public void tick(LinkedList<GameObject> objects, Player player) {
@@ -30,9 +50,7 @@ public class Player extends GameObject {
 		
 		for(GameObject tempObject : objects){
 			if(tempObject != null){
-				if(tempObject.getId() == GOID.Block){
-					blockCollision((block)tempObject);
-				}
+					blockCollision(tempObject);
 			}
 		}
 	}
@@ -41,21 +59,21 @@ public class Player extends GameObject {
 		g.setColor(color);
 		//for the graphics
 		if(faceing && attacking)
-			g.fillRect((int)x, (int)y, width, height);
+			g.drawImage(right1,(int)x, (int)y, width, height, null);
 		else if(!faceing && attacking)
-			g.fillRect((int)x, (int)y, width, height);
+			g.drawImage(left1,(int)x, (int)y, width, height, null);
 		else if(faceing && !attacking)
-			g.fillRect((int)x, (int)y, width, height);
+			g.drawImage(right1,(int)x, (int)y, width, height, null);
 		else
-			g.fillRect((int)x, (int)y, width, height);
+			g.drawImage(left1,(int)x, (int)y, width, height, null);
 			
-		g.setColor(Color.GREEN);
-		g.draw(leftBound());
-		g.draw(rightBound());
-		g.draw(topBound());
-		g.draw(bottomBound());
+//		g.setColor(Color.GREEN);
+//		g.draw(leftBound());
+//		g.draw(rightBound());
+//		g.draw(topBound());
+//		g.draw(bottomBound());
 	}
-	
+	//test
 	public Rectangle leftBound(){
 		return new Rectangle((int)x, (int)y+bd, bd, height-bd*2);
 	}
@@ -69,45 +87,106 @@ public class Player extends GameObject {
 		return new Rectangle((int)x+bd, (int)y+height-bd, (int)width-bd*2, bd);
 	}
 	
-	public void blockCollision(block block){
-		Rectangle blockBounds = block.getBounds();
-		
-		if(blockBounds.intersects(topBound())){
-				
-			y = block.getY() + block.getHeight();
-			velY = 0;
-		}
-		if(blockBounds.intersects(bottomBound())){
-			y = block.getY() - this.height;
-			velY = 0;
-			
-			canJump = true;
-			inAir = false;
-		}
-		else{
-			inAir = true;
-		}
-		
-		if(blockBounds.intersects(leftBound())){
-			x = block.getX() + block.getWidth();
-		}
-		if(blockBounds.intersects(rightBound())){
-			x = block.getX() - width;
-		}
+	public Rectangle rightAttackBounds(){
+		return new Rectangle(((int)this.x + this.width), (int)this.y - 86, 10, 10);
 	}
 	
-	public void input(Input input){
+	public Rectangle leftAttackBounds(){
+		return new Rectangle(((int)this.x - 50), (int)this.y - 86, 50, 50);
+	}
+	public void blockCollision(GameObject block){
+		Rectangle blockBounds = block.getBounds();
+		//System.out.println(block.getId());
+		if(block.getId().equals(GOID.Enemy)){
+			
+			Enemy temp = (Enemy)block;
+			if(blockBounds.intersects(topBound())){
+				temp.collided(this);
+			}
+			if(blockBounds.intersects(bottomBound())){
+				temp.collided(this);
+			}
+			
+		
+			if(blockBounds.intersects(leftBound())){
+				temp.collided(this);
+			}
+			if(blockBounds.intersects(rightBound())){
+				temp.collided(this);
+			}
+		}
+		
+		if(block.getId().equals(GOID.Block)){
+			block temp = (block)block;
+			if(temp.getType() == 's'){
+				
+			}
+			else{
+				if(blockBounds.intersects(topBound())){
+					y = block.getY() + block.getHeight();
+					velY = 0;
+					if(temp.isBreakable()){
+						temp.setType('s');
+						score += 1;
+					}
+				}
+				if(blockBounds.intersects(bottomBound())){
+					y = block.getY() - this.height;
+					velY = 0;
+				
+					canJump = true;
+					inAir = false;
+				}
+				else{
+					inAir = true;
+				}
+			
+				if(blockBounds.intersects(leftBound())){
+					x = block.getX() + block.getWidth();
+				}
+				if(blockBounds.intersects(rightBound())){
+					x = block.getX() - width;
+				}
+			}
+		}
+		
+		
+	}
+	
+	public void input(LinkedList<GameObject> objects, Input input){
 		if(canJump && input.pressed(Button.A)){
 			setVelY(-20);
 			canJump = false;
+		}
+		
+		if(input.pressed(Button.B)){
+			
+				for(GameObject tempObject : objects){
+					if(tempObject != null){
+						if(tempObject.getId().equals(GOID.Enemy))
+						if(faceing){
+						if(tempObject.getBounds().intersects(rightAttackBounds())){
+							objects.remove(tempObject);
+						} 
+						}
+						else{
+							if(tempObject.getBounds().intersects(leftAttackBounds())){
+								objects.remove(tempObject);
+							} 
+						}
+					}
+				}
+			
 		}
 		
 		if(input.pressed(Button.R) && input.pressed(Button.L)){
 			velX = 0;
 		}else if(input.pressed(Button.R)){
 			velX = 8;
+			faceing = true;
 		}else if(input.pressed(Button.L)){
 			velX = -8;
+			faceing = false;
 		}else{
 			velX = 0;
 		}
@@ -115,3 +194,4 @@ public class Player extends GameObject {
 
 
 }
+

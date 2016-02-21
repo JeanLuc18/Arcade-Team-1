@@ -59,10 +59,13 @@ public class levels{
 			segReader = new Scanner(reader.next());
 			while(segReader.hasNext()){
 			token = segReader.next();
-			if(token.equals("W")){
+			if(token.equals("R")){
+				level.add(new Repairer(segReader.nextInt(), segReader.nextInt(), 32, 32));
+			}
+			else if(token.equals("W")){
 				blocksAdded = 0;
 				final int wallWidth = segReader.nextInt();
-				System.out.println(Game.WIDTH-wallWidth);
+				//System.out.println(Game.WIDTH-wallWidth);
 				final int wallHeight = segReader.nextInt();
 				wallY = wallY - wallHeight;
 				blockY = wallY + wallHeight - 32;
@@ -75,7 +78,7 @@ public class levels{
 				
 				level.add(new block(0, wallY, wallWidth, wallHeight,'w'));//adds left wall
 				level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w'));//adds Right wall
-				System.out.println("Shift X = "+ (Game.WIDTH - wallWidth));
+				//System.out.println("Shift X = "+ (Game.WIDTH - wallWidth));
 				shiftX = Game.WIDTH - wallWidth;
 				blockX = 0 + wallWidth;
 				
@@ -147,7 +150,7 @@ public class levels{
 			}
 			
 		}
-			
+		level.add(new FallingBlock(Game.WIDTH/2, -10, 64,64));	
 		System.out.println(level.size()+ " is the number of blocks in level");
 		
 		return level;

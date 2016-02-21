@@ -2,8 +2,12 @@ package ag1;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
 
 public class block extends GameObject {
 	
@@ -11,15 +15,34 @@ public class block extends GameObject {
 	private boolean breakable;//boolean of whether the player can break this block
 	private boolean passable; //boolean of whether the player can pass through this block
 	final int bd = 8;
+	Image brick, brickWallLeft, brickWallRight;
+	Player player;
 	
 	public block(float x, float y, char type){
 		super(x, y, 32, 32, GOID.Block);
 		setType(type);
+		try {
+			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
+			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
+			brickWallRight = ImageIO.read(HGame1.class.getResource("Graphics/RightWall.png"));//help from pixabay.com
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 
 	public block(float x, float y, int width, int height, char type){//wall type block
 		super(x, y, width, height, GOID.Block);
 		setType(type);
+		try {
+			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png")); 
+			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
+			brickWallRight = ImageIO.read(HGame1.class.getResource("Graphics/RightWall.png"));//help from pixabay.com
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 
 	public void setType(char t){
@@ -39,6 +62,10 @@ public class block extends GameObject {
 		}
 	}
 
+	
+	public boolean isBreakable(){
+		return breakable;
+	}
 	/**
 	 * returns type of block 's','b', or 'w'
 	 * @return block type
@@ -65,23 +92,24 @@ public class block extends GameObject {
 					}
 				}
 			}
+		this.player = player;
 	}
 	
 	public void render(Graphics2D g) {
 		
 		switch(type){
-			case 'b':	g.setColor(Color.CYAN);
+			case 'b':	g.drawImage(brick,(int)x, (int)y, width, height, null);						
 						break;
-			case 's':	g.setColor(Color.LIGHT_GRAY);
+			case 's':	
 						break;
-			case 'w':	g.setColor(Color.BLUE);
+			case 'w':	if(x > player.getX())
+							g.drawImage(brickWallRight,(int)x, (int)y, width, height, null);
+						else
+							g.drawImage(brickWallLeft,(int)x, (int)y, width, height, null);
 						break;
 		}
 		
-		g.fillRect((int)x, (int)y, width, height);
-		g.setColor(Color.BLACK);
-		g.drawRect((int)x, (int)y, width, height);
-		g.setColor(Color.GREEN);
-		g.draw(bottomBound());
+		
+		
 	}
 }

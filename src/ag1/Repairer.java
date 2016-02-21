@@ -2,8 +2,12 @@ package ag1;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
+import java.io.IOException;
 import java.util.LinkedList;
+
+import javax.imageio.ImageIO;
 
 import arcadia.Game;
 
@@ -19,19 +23,57 @@ import arcadia.Game;
 
 public class Repairer  extends Enemy{
 	boolean repair;
+	boolean faceing = true;
 	boolean pushLeft, pushRight;
-
+	boolean inAir = false;
+	Image left1, left2, right1, right2, brick;
+	
 	public Repairer(float x, float y, int width, int height) {
 		super(x, y, width, height);
+		try {
+			left1 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking1_L.png")); //help from pixabay.com
+			left2 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking2.png"));
+			right1 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking3.png"));
+			right2 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking4.png"));
+			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 
 	public void tick(LinkedList<GameObject> objects, Player player){
-		x+=speed;
 		
+		if(inAir){
+			velY += gravity;
+		}
+		x += speed;
+		y += velY;
 		//change direction an edges of screen 
-		if(x >= (Game.WIDTH - width) || x <= 0){
+		
+		
+		for(GameObject object : objects){
+			if(object != null){
+				if(object.getId() == GOID.Block){
+					blockCollision((block)object);
+				}
+			}
+		}
+		
+	}
+	
+	private void blockCollision(block block){
+		Rectangle feet = new Rectangle((int)x, (int)y, width, height + 2);
+		Rectangle blockBounds = block.getBounds();
+		
+		if(block.getType() == 'w'){
+			if(feet.intersects(blockBounds)){
+				if(speed > 0)
+					faceing = false;
+				else
+					faceing = true;
 			speed *= -1;
-			System.out.println(repair + " " + pushLeft + " " + pushRight);
+			//System.out.println(repair + " " + pushLeft + " " + pushRight);
 			//Sets block in front of enemy showing that it is ready to repair a space
 			if(repair){
 				if(speed > 0){
@@ -55,26 +97,27 @@ public class Repairer  extends Enemy{
 				pushLeft = false;
 				pushRight = false;
 			}
-			
-		}
-		
-		for(GameObject object : objects){
-			if(object != null){
-				if(object.getId() == GOID.Block){
-					blockCollision((block)object);
-				}
 			}
 		}
-		
-	}
-	
-	private void blockCollision(block block){
-		Rectangle feet = new Rectangle((int)x, (int)y, width, height + 2);
-		Rectangle blockBounds = block.getBounds();
+			
+		if(block.getType() == 'b'){
+			if(feet.intersects(blockBounds)){
+				y = block.getY() - this.height;
+				velY = 0;
+				inAir = false;
+			}
+			else
+				inAir = true;
+		}
 		
 		//space block next
 		if(block.getType() == 's'){
 			if(feet.intersects(blockBounds)){
+				if(speed > 0)
+					faceing = false;
+				else
+					faceing = true;
+				
 				speed *= -1;
 				x += 2 * speed;
 				if(pushLeft || pushRight){
@@ -92,7 +135,12 @@ public class Repairer  extends Enemy{
 	}
 	public void render(Graphics2D g){
 		g.setColor(Color.RED);
-		g.fillRect((int)x, (int)y, width, height);
+		if(faceing == false)
+			g.drawImage(right1,(int)x, (int)y, width, height,null);
+		else
+			g.drawImage(left1,(int)x, (int)y, width, height,null);
+		
+		
 		
 		if(pushLeft){
 			int blockX = (int)x;
@@ -101,7 +149,7 @@ public class Repairer  extends Enemy{
 			int blockHeight = 25;
 			
 			g.setColor(Color.GRAY);
-			g.fillRect(blockX, blockY, blockWidth, blockHeight);
+			g.drawImage(brick,blockX, blockY, blockWidth, blockHeight, null);
 		}
 		if(pushRight){
 			int blockX = ((int)x + width);
@@ -110,7 +158,14 @@ public class Repairer  extends Enemy{
 			int blockHeight = 25;
 			
 			g.setColor(Color.GRAY);
-			g.fillRect(blockX, blockY, blockWidth, blockHeight);
+			g.drawImage(brick,blockX, blockY, blockWidth, blockHeight, null);
 		}
 	}
+	
+	public void collided(Player p){
+		p.lives -= 1;
+		p.x = p.startingX;
+		p.y = p.startingY;
+	}
 }
+
