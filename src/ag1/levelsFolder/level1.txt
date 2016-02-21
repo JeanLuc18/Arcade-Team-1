@@ -1,4 +1,4 @@
-W 160 192 bbbbbRbbbbbbbbbRbbbbbbbb X
+W 160 192 bbbbbbbbbbbbbbbbbbbbbb X
 W 160 192 bbbbbbbbbbbbbbbbbbbbbb X
 W 160 192 bbbbbbbbbbbbbbbbbbbbbb X
 W 160 192 bbbbbbbbbbbbbbbbbbbbbb X

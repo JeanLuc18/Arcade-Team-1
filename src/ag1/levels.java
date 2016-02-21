@@ -104,6 +104,11 @@ public class levels{
 						blocksAdded += 1;
 						blocksPerLvl += 1;
 					}
+					else if(curr == 'F'){
+						level.add(new FallingBlock(8000,8000,64,64));
+						FallingBlock temp = (FallingBlock) level.get(level.size()-1);
+						temp.setFallInt(blocksAdded%10);
+					}
 					else if(token.charAt(blocksAdded) == 'b'){
 						level.add(new block(blockX, blockY, 'b'));
 						blockX += 32;

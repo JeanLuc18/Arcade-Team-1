@@ -96,6 +96,7 @@ public class Player extends GameObject {
 	}
 	public void blockCollision(GameObject block){
 		Rectangle blockBounds = block.getBounds();
+		
 		//System.out.println(block.getId());
 		if(block.getId().equals(GOID.Enemy)){
 			
@@ -103,17 +104,18 @@ public class Player extends GameObject {
 			if(blockBounds.intersects(topBound())){
 				temp.collided(this);
 			}
-			if(blockBounds.intersects(bottomBound())){
+			else if(blockBounds.intersects(bottomBound())){
 				temp.collided(this);
 			}
 			
 		
-			if(blockBounds.intersects(leftBound())){
+			else if(blockBounds.intersects(leftBound())){
 				temp.collided(this);
 			}
-			if(blockBounds.intersects(rightBound())){
+			else if(blockBounds.intersects(rightBound())){
 				temp.collided(this);
 			}
+			
 		}
 		
 		if(block.getId().equals(GOID.Block)){
