@@ -4,7 +4,6 @@ W 160 192 bbbbbbbbbbbbbbbbbbbbbb X
 W 160 192 bbbbbbbbbbbbbbbbbbbbbb X
 W 160 192 bbbbbbbbbbbbbbbbbbbbbb X
 W 160 192 bbbbbbbbbbbbbbbbbbbbbb X
-R 200 200 R 300 200
 W 32 32 bbbbb X
 
 

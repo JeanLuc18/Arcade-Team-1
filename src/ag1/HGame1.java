@@ -101,11 +101,6 @@ public class HGame1 extends Game{
 
 	private void gameover(Graphics2D g, Input p1) {
 		
-		
-			starting = true;
-			player.lives = 3;
-		
-		System.out.println("test");
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
@@ -117,6 +112,11 @@ public class HGame1 extends Game{
 		g.setFont(new Font("Stencil", Font.PLAIN, 30));
 		g.drawString("Score: " + scoreS, 0 + WIDTH/2 - 150, HEIGHT/2 - 20);
 		g.drawString("Hit A to go to Menu.", 0 + WIDTH/2 - 150, HEIGHT/2 + 10);
+		
+		if(p1.pressed(Button.A)){
+			starting = true;
+			player.lives = 3;
+		}
 		
 	}
 	
@@ -154,12 +154,13 @@ public class HGame1 extends Game{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		objects = l.genLevel();
-		
-		objects.add(new LSCounter(player));
-		
 		initialized = true;
 		
+	}
+	
+	public void setLevel(){
+		objects = l.genLevel();
+		objects.add(new LSCounter(player));
 	}
 	
 	public void startup(Graphics2D g, Input p1){
@@ -210,7 +211,7 @@ public class HGame1 extends Game{
 		if(p1.pressed(Button.B)){
 			if(startPlace == 0){
 				starting = false;
-				intialize(g);
+				setLevel();
 			}
 			waiting();
 		}
