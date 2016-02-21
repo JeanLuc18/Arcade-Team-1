@@ -61,7 +61,7 @@ public class HGame1 extends Game{
 		if(starting == true)
 			startup(g, p1);
 		else if(player.lives <= 0)
-			gameover(g, p2);
+			gameover(g, p1);
 		else{
 		
 			
@@ -149,7 +149,7 @@ public class HGame1 extends Game{
 		}
 		
 		try {
-			l = new levels("src/ag1/levelsFolder/" + levelNames.get(sLevel));
+			l = new levels("src/ag1/levelsFolder/" + levelNames.get(sLevel - 1));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

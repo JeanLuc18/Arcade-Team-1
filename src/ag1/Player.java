@@ -20,10 +20,7 @@ public class Player extends GameObject {
 	boolean attacking = false;
 	Color color = Color.BLACK;
 	final int bd = 8; //bound dist
-	Image left1;
-	Image left2;
-	Image right1;
-	Image right2;
+	Image left1, leftattack, right1, rightattack;
 	
 	
 	public Player(){
@@ -31,9 +28,9 @@ public class Player extends GameObject {
 		//super(200, 400, 64, 96, GOID.Player);
 		try {
 			left1 = ImageIO.read(HGame1.class.getResource("Graphics/Left_Knight_Walking1.png")); //help from pixabay.com
-			left2 = ImageIO.read(HGame1.class.getResource("Graphics/Knight_Walking9.png"));
+			leftattack = ImageIO.read(HGame1.class.getResource("Graphics/attackleft.png"));
 			right1 = ImageIO.read(HGame1.class.getResource("Graphics/Right_Knight_Walking1.png"));
-			right2 = ImageIO.read(HGame1.class.getResource("Graphics/Knight_Walking2.png"));
+			rightattack = ImageIO.read(HGame1.class.getResource("Graphics/attackright.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -59,15 +56,19 @@ public class Player extends GameObject {
 		g.setColor(color);
 		//for the graphics
 		if(faceing && attacking)
-			g.drawImage(right1,(int)x, (int)y, width, height, null);
+			g.drawImage(rightattack,(int)x, (int)y, width + 32, height, null);
 		else if(!faceing && attacking)
-			g.drawImage(left1,(int)x, (int)y, width, height, null);
+			g.drawImage(leftattack,(int)x - 32, (int)y , width + 32, height, null);
 		else if(faceing && !attacking)
 			g.drawImage(right1,(int)x, (int)y, width, height, null);
 		else
 			g.drawImage(left1,(int)x, (int)y, width, height, null);
 			
-//		g.setColor(Color.GREEN);
+		g.setColor(Color.GREEN);
+		g.draw(rightAttackBounds());
+		g.setColor(Color.RED);
+		g.draw(leftAttackBounds());
+		attacking = false;
 //		g.draw(leftBound());
 //		g.draw(rightBound());
 //		g.draw(topBound());
@@ -88,11 +89,11 @@ public class Player extends GameObject {
 	}
 	
 	public Rectangle rightAttackBounds(){
-		return new Rectangle(((int)this.x + this.width), (int)this.y - 86, 10, 10);
+		return new Rectangle(((int)this.x + this.width), (int)this.y + 61, 35, 35);
 	}
 	
 	public Rectangle leftAttackBounds(){
-		return new Rectangle(((int)this.x - 50), (int)this.y - 86, 50, 50);
+		return new Rectangle(((int)this.x - 50), (int)this.y + 61, 35, 35);
 	}
 	public void blockCollision(GameObject block){
 		Rectangle blockBounds = block.getBounds();
@@ -160,18 +161,22 @@ public class Player extends GameObject {
 		}
 		
 		if(input.pressed(Button.B)){
-			
+			attacking = true;
 				for(GameObject tempObject : objects){
 					if(tempObject != null){
 						if(tempObject.getId().equals(GOID.Enemy))
 						if(faceing){
 						if(tempObject.getBounds().intersects(rightAttackBounds())){
 							objects.remove(tempObject);
+							score += 100;
+							break;
 						} 
 						}
 						else{
 							if(tempObject.getBounds().intersects(leftAttackBounds())){
 								objects.remove(tempObject);
+								score += 100;
+								break;
 							} 
 						}
 					}
