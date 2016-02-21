@@ -149,7 +149,7 @@ public class HGame1 extends Game{
 		}
 		
 		try {
-			l = new levels("src/ag1/levelsFolder/" + levelNames.get(sLevel - 1));
+			l = new levels("src/ag1/levelsFolder/" + levelNames.get(sLevel));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

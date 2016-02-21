@@ -59,10 +59,12 @@ public class levels{
 			segReader = new Scanner(reader.next());
 			while(segReader.hasNext()){
 			token = segReader.next();
-			if(token.equals("R")){
-				level.add(new Repairer(segReader.nextInt(), segReader.nextInt(), 32, 32));
-			}
-			else if(token.equals("W")){
+//			if(token.equals("R")){
+//				//level.add(new Repairer(segReader.nextInt(), segReader.nextInt(), 32, 32));
+//				
+//			
+//			}
+			if(token.equals("W")){
 				blocksAdded = 0;
 				final int wallWidth = segReader.nextInt();
 				//System.out.println(Game.WIDTH-wallWidth);
@@ -78,28 +80,11 @@ public class levels{
 				
 				level.add(new block(0, wallY, wallWidth, wallHeight,'w'));//adds left wall
 				level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w'));//adds Right wall
-				//System.out.println("Shift X = "+ (Game.WIDTH - wallWidth));
-				shiftX = Game.WIDTH - wallWidth;
+				shiftX = Game.WIDTH - wallWidth;//records where the blocks need to shift to when they hit the right wall
 				blockX = 0 + wallWidth;
 				
-//				if(!segReader.hasNext()){
-//					System.out.println("Entered If");
-//					while(blocksAdded < blocksPerLvl){
-//						System.out.println("blocksAdded = "+blocksAdded);
-//						if(blockX == Game.WIDTH - wallWidth+32){
-//							blockY = blockY - 32;//adjusts Y level if current block starts new row
-//							blockX =  wallWidth -32;
-//						}
-//						
-//						level.add(new block(blockX, blockY, 's'));
-//						blockX += 32;
-//						blocksAdded += 1;
-//					}
-//				}
 			}
-			//else if(token.equals("E")){
-				//need to talk about this before I try to implement
-			//}
+
 			else{
 				
 				
@@ -114,7 +99,12 @@ public class levels{
 					if(blocksAdded >= blocksPerLvl){
 						break;//the level is filled and no more blocks need to be read into current level segment
 					}
-					if(token.charAt(blocksAdded) == 'b'){
+					if(curr == 'R'){
+						level.add(new Repairer(blockX, blockY-32,32,32));
+						blocksAdded += 1;
+						blocksPerLvl += 1;
+					}
+					else if(token.charAt(blocksAdded) == 'b'){
 						level.add(new block(blockX, blockY, 'b'));
 						blockX += 32;
 						blocksAdded += 1;
@@ -130,22 +120,7 @@ public class levels{
 						blocksAdded += 1;
 					}
 				}
-				//adds filler blocks if level segment isn't full
-//				if(blocksAdded >= token.length() || !segReader.hasNext()){
-//					System.out.println("Entered If");
-//					while(blocksAdded < blocksPerLvl){
-//						if(blockX == shiftX){
-//							System.out.println(Game.WIDTH - wallWidth);
-//							System.out.println("SHIFT!!!!!!!!!!!!!!!!!!!!!!" + blockX);
-//							blockY = blockY - 32;//adjusts Y level if current block starts new row
-//							blockX = -1*(shiftX - Game.WIDTH);
-//						}
-//						
-//						level.add(new block(blockX, blockY, 's'));
-//						blockX += 32;
-//						blocksAdded += 1;
-//					}
-//				}
+			
 			}
 			}
 			
@@ -158,7 +133,22 @@ public class levels{
 
 
 	private static void fillSpace(LinkedList<GameObject> level, int blocksAdded, int blocksPerLvl, int wallWidth, int blockY, int blockX){
-		
+		//adds filler blocks if level segment isn't full
+//		if(blocksAdded >= token.length() || !segReader.hasNext()){
+//			System.out.println("Entered If");
+//			while(blocksAdded < blocksPerLvl){
+//				if(blockX == shiftX){
+//					System.out.println(Game.WIDTH - wallWidth);
+//					System.out.println("SHIFT!!!!!!!!!!!!!!!!!!!!!!" + blockX);
+//					blockY = blockY - 32;//adjusts Y level if current block starts new row
+//					blockX = -1*(shiftX - Game.WIDTH);
+//				}
+//				
+//				level.add(new block(blockX, blockY, 's'));
+//				blockX += 32;
+//				blocksAdded += 1;
+//			}
+//		}
 	}
 	/**
 	 * CalcXCord takes the current index of the read block and the blocks per row and uses it to calculate the block's x coordinate 
@@ -166,24 +156,6 @@ public class levels{
 	 * @param blocksPerRow
 	 * @return xCoord
 	 */
-	private int calcXCord(int blocksAdded, int blocksPerRow){
-
-		int xBlock = (blocksAdded) % (blocksPerRow);//converts i to the corresponding block number (interms of x)
-		int xCoord = (xBlock)*32 + wallWidth;//minus one b/c of the x coordinate being in the left corner 
-
-		return xCoord;
-	}
-	/**
-	 * CalcYCord takes the current index of the read block and the blocks per row and uses it to calculate the block's y coordinate 
-	 * @param i
-	 * @param blocksPerRow
-	 * @return yCoord
-	 */
-	private int calcYCord(int blocksAdded, int blocksPerRow, int wallY){
-		int lvl = blocksAdded/blocksPerRow; //converts i to the corresponding row number
-		int yCoord = wallY-wallHeight - lvl*32;// because a block is 32 pixels tall
-		return yCoord;
-	}
 
 
 	public void level1(Graphics2D g, int height, int width, long score){
