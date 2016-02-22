@@ -19,6 +19,7 @@ public class levels{
 	private int wallWidth = 128;
 	private int wallHeight = 192;
 	private int blockType;
+	int platform = 0;
 	private File level;
 	String score;
 	private Scanner reader;
@@ -66,6 +67,8 @@ public class levels{
 //			}
 			if(token.equals("W")){
 				blocksAdded = 0;
+				platform += 1;
+				
 				final int wallWidth = segReader.nextInt();
 				//System.out.println(Game.WIDTH-wallWidth);
 				final int wallHeight = segReader.nextInt();
@@ -78,8 +81,8 @@ public class levels{
 				blocksPerRow = (Game.WIDTH - (2 * wallWidth)) / 32;
 				blocksPerLvl = (blocksPerRow * (wallHeight/32));
 				
-				level.add(new block(0, wallY, wallWidth, wallHeight,'w'));//adds left wall
-				level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w'));//adds Right wall
+				level.add(new block(0, wallY, wallWidth, wallHeight,'w', platform));//adds left wall
+				level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w', platform));//adds Right wall
 				shiftX = Game.WIDTH - wallWidth;//records where the blocks need to shift to when they hit the right wall
 				blockX = 0 + wallWidth;
 				
@@ -110,17 +113,17 @@ public class levels{
 						temp.setFallInt(blocksAdded%10);
 					}
 					else if(token.charAt(blocksAdded) == 'b'){
-						level.add(new block(blockX, blockY, 'b'));
+						level.add(new block(blockX, blockY, 'b', platform));
 						blockX += 32;
 						blocksAdded += 1;
 					}
 					else if(token.charAt(blocksAdded) == 'w'){
-						level.add(new block(blockX, blockY, 'w'));
+						level.add(new block(blockX, blockY, 'w', platform));
 						blockX += 32;
 						blocksAdded += 1;
 					}
 					else if(token.charAt(blocksAdded) == 's'){
-						level.add(new block(blockX, blockY, 's'));
+						level.add(new block(blockX, blockY, 's', platform));
 						blockX += 32;
 						blocksAdded += 1;
 					}
@@ -130,134 +133,14 @@ public class levels{
 			}
 			
 		}
-		level.add(new FallingBlock(Game.WIDTH/2, -10, 64,64));	
+		//level.add(new FallingBlock(Game.WIDTH/2, -10, 64,64));	
 		System.out.println(level.size()+ " is the number of blocks in level");
 		
 		return level;
 	}
-
-
-	private static void fillSpace(LinkedList<GameObject> level, int blocksAdded, int blocksPerLvl, int wallWidth, int blockY, int blockX){
-		//adds filler blocks if level segment isn't full
-//		if(blocksAdded >= token.length() || !segReader.hasNext()){
-//			System.out.println("Entered If");
-//			while(blocksAdded < blocksPerLvl){
-//				if(blockX == shiftX){
-//					System.out.println(Game.WIDTH - wallWidth);
-//					System.out.println("SHIFT!!!!!!!!!!!!!!!!!!!!!!" + blockX);
-//					blockY = blockY - 32;//adjusts Y level if current block starts new row
-//					blockX = -1*(shiftX - Game.WIDTH);
-//				}
-//				
-//				level.add(new block(blockX, blockY, 's'));
-//				blockX += 32;
-//				blocksAdded += 1;
-//			}
-//		}
+	
+	public int getMaxPlatform(){
+		return platform;
 	}
-	/**
-	 * CalcXCord takes the current index of the read block and the blocks per row and uses it to calculate the block's x coordinate 
-	 * @param i
-	 * @param blocksPerRow
-	 * @return xCoord
-	 */
-
-
-	public void level1(Graphics2D g, int height, int width, long score){
-		block newest;
-
-		g.setColor(Color.YELLOW);
-		g.fillRect(0, height - wallHeight, 128, 192);
-		newest = new block(0, height - wallHeight , 128, 192, 'W');
-		blocks1.add(newest);
-		g.fillRect(width - wallWidth, height - wallHeight, 128, wallHeight);
-		newest = new block(width - wallWidth, height - wallHeight , 128, wallHeight, 'W');
-		blocks1.add(newest);
-		g.setColor(Color.CYAN);
-		g.fillRect(0, height - wallHeight*2, wallWidth, wallHeight);
-		newest = new block(0, height - wallHeight*2 , 128, wallHeight,'W');
-		blocks1.add(newest);
-		g.fillRect(width - wallWidth, height - wallHeight*2, wallWidth, wallHeight);
-		newest = new block(width - wallWidth, height - wallHeight*2 , 128, wallHeight,'W');
-		blocks1.add(newest);
-		g.setFont(new Font("Stencil", Font.PLAIN, 36));
-
-		this.score = Long.toString(score);
-
-		this.score = ("00000000" + this.score).substring(this.score.length());
-
-		//LSCounter
-
-		g.drawString(this.score, width/2 + 25, 196);
-
-		for(int j = 0; j < 2; j += 1){
-			for(int i = 0; i < (width / 32 ); i += 1){
-
-				if(i == 12 || i == 13 || i == 14){
-					newest = new block(0 + 32 * i, height - 34, 's');
-					blocks1.add(newest);
-					g.setColor(Color.BLACK);
-					g.drawRect(0 + 32 * i, (height - 34) - wallHeight*j , 32, 32);
-					continue;
-				}
-
-				g.setColor(Color.CYAN);
-				g.fillRect(0 + 32 * i, (height - 32) - wallHeight*j  , 32, 32);
-				newest = new block(0 + 32 * i, (height - 32) - wallHeight*j, 'b');
-				blocks1.add(newest);
-				g.setColor(Color.BLACK);
-				g.drawRect(0 + 32 * i, (height - 32) - wallHeight*j , 32, 32);
-			}
-		}
-	}
-
-//	public LinkedList<GameObject> mikeTestLevel(){
-//		//create new list to be run by HGame1
-//		LinkedList<GameObject> objects = new LinkedList<GameObject>();
-//
-//		objects = this.genLevel(reader);
-//		
-//		//add enemy
-//				Enemy testRepairer = new Repairer(200, 463, 50, 50);
-//				
-//				objects.add(testRepairer);
-//
-//		//add floor
-//		for(int i = 0; i < Game.WIDTH/32; i++){
-//			objects.add(new block(32*i, Game.HEIGHT+32, 32, 32, 'b'));
-//		}
-//
-//		//add walls
-//		//		objects.add(new block(0, Game.HEIGHT-232, 128, 200, 'w'));
-//		//		objects.add(new block(Game.WIDTH-128, Game.HEIGHT-232, 128, 200, 'w'));
-//		//
-//		//		//add second level with hole in middle
-//		//		for(int i = 128; i < Game.WIDTH-128; i+=32){
-//		//			if(i < Game.WIDTH/2 - 64 || i > Game.WIDTH/2 + 32){
-//		//				objects.add(new block(i, Game.HEIGHT-200-32, 32, 32, 's'));
-//		//			}
-//		//		}
-//
-//		//TEST PRINTING
-//		System.out.println(objects);
-//		block b = (block)objects.get(0);
-//		System.out.println(b.getId());
-//		System.out.println(b.getX());
-//		System.out.println(b.getY());
-//		System.out.println(b.getWidth());
-//		System.out.println(b.getHeight());
-//		System.out.println(b.getType());
-//
-//		b = (block)objects.get(1);
-//		System.out.println(b.getId());
-//		System.out.println(b.getX());
-//		System.out.println(b.getY());
-//		System.out.println(b.getWidth());
-//		System.out.println(b.getHeight());
-//		System.out.println(b.getType());
-//
-//		//return the list that will be continuously ticked and rendered
-//		return objects;
-//	}
 }
 

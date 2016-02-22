@@ -1,5 +1,6 @@
 package ag1;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
@@ -26,6 +27,7 @@ public class LSCounter extends GameObject {
 
 	@Override
 	public void render(Graphics2D g) {
+		g.setColor(Color.RED);
 		g.setFont(new Font("Stencil", Font.PLAIN, 36));
 		g.drawString(Score, x , y);
 		

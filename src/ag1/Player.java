@@ -1,6 +1,7 @@
 package ag1;
 
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -14,6 +15,7 @@ public class Player extends GameObject {
 	long score = 0;
 	static int startingX = Game.WIDTH/2;
 	static int startingY = Game.HEIGHT-32-96;
+	int currentplatform = 1;
 	boolean canJump = false;
 	boolean inAir = true;
 	boolean faceing = true; //true - player facing right , false - player facing left 
@@ -37,7 +39,7 @@ public class Player extends GameObject {
 		}	
 	}
 	
-	public void tick(LinkedList<GameObject> objects, Player player) {
+	public void tick(LinkedList<GameObject> objects, Player player, levels l, HGame1 m, Graphics2D g) {
 		x += velX;
 		y += velY;
 		
@@ -47,7 +49,7 @@ public class Player extends GameObject {
 		
 		for(GameObject tempObject : objects){
 			if(tempObject != null){
-					blockCollision(tempObject);
+					blockCollision(tempObject, l, m, g);
 			}
 		}
 	}
@@ -65,9 +67,9 @@ public class Player extends GameObject {
 			g.drawImage(left1,(int)x, (int)y, width, height, null);
 			
 		g.setColor(Color.GREEN);
-		g.draw(rightAttackBounds());
-		g.setColor(Color.RED);
-		g.draw(leftAttackBounds());
+//		g.draw(rightAttackBounds());
+//		g.setColor(Color.RED);
+//		g.draw(leftAttackBounds());
 		attacking = false;
 //		g.draw(leftBound());
 //		g.draw(rightBound());
@@ -95,7 +97,7 @@ public class Player extends GameObject {
 	public Rectangle leftAttackBounds(){
 		return new Rectangle(((int)this.x - 50), (int)this.y + 61, 35, 35);
 	}
-	public void blockCollision(GameObject block){
+	public void blockCollision(GameObject block, levels l, HGame1 m, Graphics2D g){
 		Rectangle blockBounds = block.getBounds();
 		
 		//System.out.println(block.getId());
@@ -136,7 +138,17 @@ public class Player extends GameObject {
 				if(blockBounds.intersects(bottomBound())){
 					y = block.getY() - this.height;
 					velY = 0;
-				
+					if(temp.getPlatform() > currentplatform){
+						score += 100;
+						currentplatform = temp.getPlatform();
+					}
+					if((int)m.levelEnders.get(m.sLevel - 1) - 1 == temp.getPlatform()){
+						m.sLevel += 1;
+						x = startingX;
+						y = startingY;
+						m.setLevel();
+					}
+						
 					canJump = true;
 					inAir = false;
 				}
@@ -163,6 +175,7 @@ public class Player extends GameObject {
 		}
 		
 		if(input.pressed(Button.B)){
+			if(!input.pressed(Button.R) && !input.pressed(Button.L)){
 			attacking = true;
 				for(GameObject tempObject : objects){
 					if(tempObject != null){
@@ -183,7 +196,7 @@ public class Player extends GameObject {
 						}
 					}
 				}
-			
+		}
 		}
 		
 		if(input.pressed(Button.R) && input.pressed(Button.L)){
@@ -197,6 +210,12 @@ public class Player extends GameObject {
 		}else{
 			velX = 0;
 		}
+	}
+
+	@Override
+	public void tick(LinkedList<GameObject> objects, Player player) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

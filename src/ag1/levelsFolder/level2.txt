@@ -1,2 +1,13 @@
 W 160 192 bbbbbbbbbbbbbbbbbbbbbb X
-W 32 32 bbbbb X
+W 160 192 bbbbbRbbbbbbbbbbbbbbbbb X
+W 160 192 bbbbbbbbRbbbbbbRbbbbbbbb X
+W 160 192 bbbbbRbbbbbbbRbbbbRbbbbbb X
+W 160 192 bbbbRbbbbRbbbbbRbbbRbbbbbb X
+W 160 192 bbbbbRbbbbRbbbbRbbbRbbbbRbb X
+W 160 192 bbbRbbbRbbbbRbbbRbbbRbbRbbbb X
+W 160 192 bbRbbRbbbRbbbRbbbRbbbRbbbRbbb X
+W 160 192 bbbRbbbbRbbbbRbbbbRbbbbRbbb X
+W 160 192 bbbbbRbbRbbbRbbbRbbbRbbRbbRbb X
+W 160 192 bbRbbbRbbRbbRbbbRbbbRbbbRbbbRb X
+W 160 192 bbbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRb X
+W 32 32  X

@@ -15,12 +15,14 @@ public class block extends GameObject {
 	private boolean breakable;//boolean of whether the player can break this block
 	private boolean passable; //boolean of whether the player can pass through this block
 	final int bd = 8;
+	int platform = 0;
 	Image brick, brickWallLeft, brickWallRight;
 	Player player;
 	
-	public block(float x, float y, char type){
+	public block(float x, float y, char type, int p){
 		super(x, y, 32, 32, GOID.Block);
 		setType(type);
+		platform = p;
 		try {
 			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
 			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
@@ -31,9 +33,10 @@ public class block extends GameObject {
 		}	
 	}
 
-	public block(float x, float y, int width, int height, char type){//wall type block
+	public block(float x, float y, int width, int height, char type, int p){//wall type block
 		super(x, y, width, height, GOID.Block);
 		setType(type);
+		platform = p;
 		try {
 			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png")); 
 			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
@@ -45,6 +48,10 @@ public class block extends GameObject {
 		}	
 	}
 
+	public int getPlatform(){
+		return platform;
+	}
+	
 	public void setType(char t){
 		type = t;
 		
@@ -102,7 +109,7 @@ public class block extends GameObject {
 						break;
 			case 's':	
 						break;
-			case 'w':	if(x > player.getX())
+			case 'w':	if(x > 512)
 							g.drawImage(brickWallRight,(int)x, (int)y, width, height, null);
 						else
 							g.drawImage(brickWallLeft,(int)x, (int)y, width, height, null);

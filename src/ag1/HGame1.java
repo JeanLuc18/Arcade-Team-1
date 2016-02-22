@@ -30,16 +30,19 @@ public class HGame1 extends Game{
 	int numOLevels = 0;
 	long score = 0;
 	String scoreS;
+	int intstopper = 0;
 	boolean levelsLoaded = false;
 	Image banner;
-	Image Title, background;
+	Image Title, background, brick, brickWallLeft, brickWallRight;
 	Enemy testEnemy = null;   //delete later
 	//int lives = 3;
 	ArrayList<String> levelNames;
+	ArrayList levelEnders = new ArrayList();
 	boolean hasLevels = false;
 
 	Player player;
 	Camera camera;
+	ArrayList<LinkedList<GameObject>> loadedlevels = new ArrayList<LinkedList<GameObject>>();
 	LinkedList<GameObject> objects;
 	boolean initialized = false;
 
@@ -48,6 +51,9 @@ public class HGame1 extends Game{
 			banner = ImageIO.read(HGame1.class.getResource("Banner.gif")); //help from pixabay.com
 			Title = ImageIO.read(HGame1.class.getResource("MenuTitle.gif"));
 			background = ImageIO.read(HGame1.class.getResource("Graphics/background.png"));
+			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
+			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
+			brickWallRight = ImageIO.read(HGame1.class.getResource("Graphics/RightWall.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,7 +64,7 @@ public class HGame1 extends Game{
 	public void tick(Graphics2D g, Input p1, Input p2, Sound s) {
 		if(!initialized)
 			intialize(g);
-		if(starting == true)
+		else if(starting == true)
 			startup(g, p1);
 		else if(player.lives <= 0)
 			gameover(g, p1);
@@ -75,7 +81,7 @@ public class HGame1 extends Game{
 					tempObject.tick(objects, player);	
 			}
 			
-			player.tick(objects, player);
+			player.tick(objects, player, l, this,  g);
 			camera.tick(player); //camera
 			player.input(objects, p1); //keyboard input for player
 			
@@ -116,6 +122,7 @@ public class HGame1 extends Game{
 		if(p1.pressed(Button.A)){
 			starting = true;
 			player.lives = 3;
+			setLevel();
 		}
 		
 	}
@@ -125,18 +132,20 @@ public class HGame1 extends Game{
 	 * 
 	 * @param g Graphics2D Object used for drawing.
 	 */
-	private void intialize(Graphics2D g){
+	public void intialize(Graphics2D g){
 		//initialize player and camera
+		if(intstopper == 0){
 		player = new Player();
 		camera = new Camera(0,0);
-		
+		}
 		//initialize level
 		
 		
 		//initialize level files
+		if(intstopper == 0){
 		File f = new File("src/ag1/levelsFolder");
 		levelNames = new ArrayList<String>(Arrays.asList(f.list()));
-		
+		}
 		//if no level files, create error screen
 		if(levelNames.size() <= 0){
 			g.setColor(Color.BLACK);
@@ -148,24 +157,46 @@ public class HGame1 extends Game{
 			g.drawString("Please close and add levels, Thank you.", 0 + WIDTH/6, HEIGHT/2 + 30);
 		}
 		
-		try {
-			l = new levels("src/ag1/levelsFolder/" + levelNames.get(sLevel - 1));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(intstopper == 0){
+		g.setColor(Color.RED);
+		g.setFont(new Font("Stencil", Font.PLAIN, 50));
+		g.drawImage(background, 0, 0 , WIDTH, HEIGHT, null);
+		g.drawString("Loading...", WIDTH/2 - 150, HEIGHT/2);
+		g.drawImage(brickWallLeft, 0, HEIGHT - 192 , 160, 192, null);
+		g.drawImage(brickWallRight, WIDTH - 160, HEIGHT - 192 , 160, 192, null);
+		g.drawImage(brickWallLeft, 0, HEIGHT - 192*2 , 160, 192, null);
+		g.drawImage(brickWallRight, WIDTH - 160, HEIGHT - 192*2 , 160, 192, null);
 		}
-		initialized = true;
+		int brickWidth = (WIDTH - 320)/levelNames.size() ;
+		LinkedList<GameObject> newest;
 		
+		if(intstopper < levelNames.size() - 1){
+			g.drawImage(brick, 160 + brickWidth*intstopper , HEIGHT - (192+32), brickWidth, 32, null);
+			try {
+				l = new levels("src/ag1/levelsFolder/" + levelNames.get(intstopper));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			newest = l.genLevel();
+			levelEnders.add(l.getMaxPlatform());
+			loadedlevels.add(newest);
+			intstopper += 1;
+		}
+		else{
+			initialized = true;
+		}
 	}
 	
 	public void setLevel(){
-		objects = l.genLevel();
+		objects = loadedlevels.get(sLevel - 1);
 		objects.add(new LSCounter(player));
 	}
 	
 	public void startup(Graphics2D g, Input p1){
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.drawImage(background, 0, 0 , WIDTH, HEIGHT, null);
 		g.drawImage(Title, 0, 0, null);
 		g.setColor(Color.YELLOW);
 		g.setFont(new Font("Stencil", Font.PLAIN, 36));
