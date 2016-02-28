@@ -47,6 +47,7 @@ public class Player extends GameObject {
 			velY += gravity;
 		}
 		
+		// DIES IF UNDER CAMERA VEIW
 		if(y > -(m.camera.getY() - m.HEIGHT + height)){
 			m.camera.setX(0);
 			m.camera.setY(0);

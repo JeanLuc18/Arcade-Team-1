@@ -109,8 +109,9 @@ public class levels{
 						blocksPerLvl += 1;
 					}
 					else if(curr == 'M'){
-						level.add(new fallingEnemy(blockX, blockY-32,32,32));
-						
+						level.add(new movingblock(blockX, blockY-32, 'b' , platform));
+						blocksAdded += 1;
+						blocksPerLvl += 1;
 					}
 					else if(curr == 'F'){
 						level.add(new fallingEnemy(blockX, blockY-32-500,64,64));
@@ -130,7 +131,7 @@ public class levels{
 					}
 					else if(token.charAt(blocksAdded) == 's'){
 
-						level.add(new block(blockX, blockY, 's', platform));
+						//level.add(new block(blockX, blockY, 's', platform));
 
 						//level.add(new block(blockX, blockY, 's'));
 						blockX += 32;
