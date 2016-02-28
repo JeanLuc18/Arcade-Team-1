@@ -47,7 +47,7 @@ public class levels{
 	public LinkedList<GameObject> genLevel(){
 		
 		LinkedList<GameObject> level = new LinkedList<GameObject>();
-		FallingBlock TheOne = new FallingBlock(Player.startingX, Player.startingY-600, 64,64);//initializes the one falling block that will repeatedly fall
+		//FallingBlock TheOne = new FallingBlock(Player.startingX, Player.startingY-600, 64,64);//initializes the one falling block that will repeatedly fall
 		int blockX = 0;
 		int blockY = Game.HEIGHT - 32;
 		int wallY = Game.HEIGHT;
