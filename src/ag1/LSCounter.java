@@ -5,12 +5,16 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.util.LinkedList;
 
+import arcadia.Game;
+
 public class LSCounter extends GameObject {
 
 	String Score;
+	Camera camera;
 	
-	public LSCounter(Player player){
-		super(player.getX() + 500, player.getY() - 225, GOID.Counter);
+	public LSCounter(Player player, Camera camera){
+		super(camera.getX()+500, camera.getY()+500, GOID.Counter);
+		this.camera = camera;
 		Score = Long.toString(player.score);
 		Score = ("00000000" + Score).substring(Score.length());
 		Score = Score + " Lives: " + player.lives;
@@ -18,8 +22,8 @@ public class LSCounter extends GameObject {
 	
 	@Override
 	public void tick(LinkedList<GameObject> objects, Player player) {
-		x = player.getX() + 200;
-		y = player.getY() - 250;
+		x = camera.getX() + Game.WIDTH - 300;
+		y = -camera.getY() + 40;
 		Score = Long.toString(player.score);
 		Score = ("00000000" + Score).substring(Score.length());
 		Score = Score + " Lives: " + player.lives;
