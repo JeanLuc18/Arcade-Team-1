@@ -77,14 +77,14 @@ public class Player extends GameObject {
 			g.drawImage(left1,(int)x, (int)y, width, height, null);
 			
 		g.setColor(Color.GREEN);
-//		g.draw(rightAttackBounds());
-//		g.setColor(Color.RED);
-//		g.draw(leftAttackBounds());
+		g.draw(rightAttackBounds());
+		g.setColor(Color.RED);
+		g.draw(leftAttackBounds());
 		attacking = false;
-//		g.draw(leftBound());
-//		g.draw(rightBound());
-//		g.draw(topBound());
-//		g.draw(bottomBound());
+		g.draw(leftBound());
+		g.draw(rightBound());
+		g.draw(topBound());
+		g.draw(bottomBound());
 	}
 	//test
 	public Rectangle leftBound(){
