@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Timer;
 
 import javax.imageio.ImageIO;
 
@@ -13,6 +14,8 @@ import arcadia.Button;
 public class Player extends GameObject {
 	int lives = 3;
 	long score = 0;
+	long start = 0;
+	long stop = 0;
 	static int startingX = Game.WIDTH/2;
 	static int startingY = Game.HEIGHT-32-96;
 	int currentplatform = 1;
@@ -199,6 +202,24 @@ public class Player extends GameObject {
 		
 		
 	}
+	
+	public long startTime(){
+		start = System.currentTimeMillis();
+		
+		return start;
+	}
+	
+	public long getCurrentTime(){
+		return (System.currentTimeMillis() - start)/1000;
+	}
+	
+	public long stopTime(){
+		stop = System.currentTimeMillis();
+		return (stop - start)/1000;
+		
+	}
+	
+	
 	
 	public void input(LinkedList<GameObject> objects, Input input){
 		if(canJump && input.pressed(Button.A)){

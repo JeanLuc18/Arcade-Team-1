@@ -193,6 +193,7 @@ public class HGame1 extends Game{
 		objects = new LinkedList<GameObject>();
 		objects = (LinkedList<GameObject>) loadedlevels.get(sLevel - 1);
 		objects.add(new LSCounter(player, camera));
+		player.startTime();
 	}
 	
 	public void startup(Graphics2D g, Input p1){

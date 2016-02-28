@@ -114,8 +114,8 @@ public class levels{
 						blocksPerLvl += 1;
 					}
 					else if(curr == 'F'){
-						level.add(new fallingEnemy(blockX, blockY-32-500,64,64));
-						level.get(level.size() - 1).setID(GOID.Faller);
+						level.add(new FallingBlock(blockX, blockY-32-500,64,64));
+						level.get(level.size() - 1).setID(GOID.Enemy);
 						blocksAdded += 1;
 						blocksPerLvl +=1;
 					}
