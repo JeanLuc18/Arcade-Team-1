@@ -10,5 +10,6 @@ public enum GOID {
 	Player,
 	Block,
 	Enemy,
-	Counter
+	Counter,
+	Faller
 }

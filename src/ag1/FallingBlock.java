@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -16,7 +17,10 @@ import arcadia.Game;
 public class FallingBlock extends Enemy{
 	private int fallInt;
 	private boolean canFall;
+
 	Image fallingblock;
+
+	public ArrayList<Integer> fallYs = new ArrayList<>();
 	public FallingBlock(float x, float y, int width, int height) {
 		super(x, y, width, height);
 		this.setVelY(2);
@@ -29,8 +33,15 @@ public class FallingBlock extends Enemy{
 		
 	}
 	
-	public void setFallInt(int n){fallInt = n;}
-	public boolean canFall(){
+	public void setFallInt(){fallInt = 7;}
+	public boolean canFall(Player player){
+		if(fallYs.isEmpty()){
+			canFall = false;
+		}
+		if((player.score) % 2 == fallInt && (player.getY() <= fallYs.get(0))){
+			canFall = true;
+			fallYs.remove(0);
+		}
 		if(this.getY() <= Game.HEIGHT)
 			return (canFall = true);
 		else
@@ -41,11 +52,12 @@ public class FallingBlock extends Enemy{
 		if((player.score) % 6 == 0){
 			canFall = true;
 		}
-		
+
 		if(!canFall){
 			this.setVelY(0);
 			this.setX(player.getX());
 			this.setY(player.getY() - 600);
+			canFall(player);
 		}
 		
 		else{
@@ -54,18 +66,17 @@ public class FallingBlock extends Enemy{
 			this.y += velY;
 			this.velY += gravity;
 			this.setVelY(velY);
-			canFall();
+			canFall(player);
 		
 		}
+		System.out.println(canFall);
 		
 	}
 	public void render(Graphics2D g){
 		g.setColor(Color.RED);
 		g.drawImage(fallingblock,(int)x, (int)y, width, height, null);
 		
-		if(!canFall()){
-			//g.setColor(new Color(128,128,128,128));
-		}
+		
 		
 		
 	}

@@ -47,6 +47,15 @@ public class Player extends GameObject {
 			velY += gravity;
 		}
 		
+		if(y > -(m.camera.getY() - m.HEIGHT + height)){
+			m.camera.setX(0);
+			m.camera.setY(0);
+			x = startingX;
+			y = startingY;
+			lives -= 1;
+			
+		}
+		
 		for(GameObject tempObject : objects){
 			if(tempObject != null){
 					blockCollision(tempObject, l, m, g);
@@ -99,9 +108,13 @@ public class Player extends GameObject {
 	}
 	public void blockCollision(GameObject block, levels l, HGame1 m, Graphics2D g){
 		Rectangle blockBounds = block.getBounds();
+		Rectangle falltrigger = null;
+		
+		if(block.getId().equals(GOID.Faller))
+			 falltrigger = ((fallingEnemy)block).trigger();
 		
 		//System.out.println(block.getId());
-		if(block.getId().equals(GOID.Enemy)){
+		if(block.getId().equals(GOID.Enemy) || block.getId().equals(GOID.Faller)){
 			
 			Enemy temp = (Enemy)block;
 			if(blockBounds.intersects(topBound())){
@@ -117,6 +130,22 @@ public class Player extends GameObject {
 			}
 			else if(blockBounds.intersects(rightBound())){
 				temp.collided(this);
+			}
+
+			if(block.getId().equals(GOID.Faller) && ((fallingEnemy)temp).canfall == false)
+			if(falltrigger.intersects(topBound())){
+				((fallingEnemy)temp).fallStart();
+			}
+			else if(falltrigger.intersects(bottomBound())){
+				((fallingEnemy)temp).fallStart();
+			}
+			
+		
+			else if(falltrigger.intersects(leftBound())){
+				((fallingEnemy)temp).fallStart();
+			}
+			else if(falltrigger.intersects(rightBound())){
+				((fallingEnemy)temp).fallStart();
 			}
 			
 		}
@@ -144,6 +173,8 @@ public class Player extends GameObject {
 					}
 					if((int)m.levelEnders.get(m.sLevel - 1) - 1 == temp.getPlatform()){
 						m.sLevel += 1;
+						m.camera.setX(0);
+						m.camera.setY(0);
 						x = startingX;
 						y = startingY;
 						m.setLevel();

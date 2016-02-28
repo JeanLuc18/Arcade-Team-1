@@ -73,12 +73,13 @@ public class HGame1 extends Game{
 			
 			
 		
-						
+			GameObject temp;	
 			//-----!!!!TICK!!!!-----
 			//tick objects
-			for(GameObject tempObject : objects){
-				if(tempObject != null)
-					tempObject.tick(objects, player);	
+			for(int i = 0; i < objects.size(); i += 1){
+				temp = objects.get(i);
+				if(temp != null)
+					temp.tick(objects, player);	
 			}
 			
 			player.tick(objects, player, l, this,  g);
@@ -90,7 +91,7 @@ public class HGame1 extends Game{
 			//background
 			g.setColor(new Color(51, 102, 255));
 			g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
-			
+
 			g.translate(camera.getX(), camera.getY()); //camera
 			
 			//render objects
@@ -100,7 +101,7 @@ public class HGame1 extends Game{
 			}
 			player.render(g);
 			
-			g.translate(-camera.getX(), -camera.getY()); //camera
+			//g.translate(-camera.getX(), -camera.getY()); //camera
 		}
 		}
 	
@@ -189,7 +190,8 @@ public class HGame1 extends Game{
 	}
 	
 	public void setLevel(){
-		objects = loadedlevels.get(sLevel - 1);
+		objects = new LinkedList<GameObject>();
+		objects = (LinkedList<GameObject>) loadedlevels.get(sLevel - 1);
 		objects.add(new LSCounter(player));
 	}
 	

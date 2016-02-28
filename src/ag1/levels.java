@@ -47,6 +47,7 @@ public class levels{
 	public LinkedList<GameObject> genLevel(){
 		
 		LinkedList<GameObject> level = new LinkedList<GameObject>();
+		FallingBlock TheOne = new FallingBlock(Player.startingX, Player.startingY-600, 64,64);//initializes the one falling block that will repeatedly fall
 		int blockX = 0;
 		int blockY = Game.HEIGHT - 32;
 		int wallY = Game.HEIGHT;
@@ -107,10 +108,15 @@ public class levels{
 						blocksAdded += 1;
 						blocksPerLvl += 1;
 					}
+					else if(curr == 'M'){
+						level.add(new fallingEnemy(blockX, blockY-32,32,32));
+						
+					}
 					else if(curr == 'F'){
-						level.add(new FallingBlock(8000,8000,64,64));
-						FallingBlock temp = (FallingBlock) level.get(level.size()-1);
-						temp.setFallInt(blocksAdded%10);
+						level.add(new fallingEnemy(blockX, blockY-32-500,64,64));
+						level.get(level.size() - 1).setID(GOID.Faller);
+						blocksAdded += 1;
+						blocksPerLvl +=1;
 					}
 					else if(token.charAt(blocksAdded) == 'b'){
 						level.add(new block(blockX, blockY, 'b', platform));
@@ -123,7 +129,10 @@ public class levels{
 						blocksAdded += 1;
 					}
 					else if(token.charAt(blocksAdded) == 's'){
+
 						level.add(new block(blockX, blockY, 's', platform));
+
+						//level.add(new block(blockX, blockY, 's'));
 						blockX += 32;
 						blocksAdded += 1;
 					}
@@ -133,7 +142,10 @@ public class levels{
 			}
 			
 		}
+
 		//level.add(new FallingBlock(Game.WIDTH/2, -10, 64,64));	
+
+		//level.add(TheOne);	
 		System.out.println(level.size()+ " is the number of blocks in level");
 		
 		return level;

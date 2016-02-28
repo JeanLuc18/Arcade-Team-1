@@ -67,6 +67,10 @@ public class block extends GameObject {
 			breakable = false;
 			passable = false;
 		}
+		else if(type == 'm'){
+			breakable = false;
+			passable = false;
+		}
 	}
 
 	
@@ -87,20 +91,7 @@ public class block extends GameObject {
 	
 	
 	
-	public void tick(LinkedList<GameObject> objects, Player player) {
-		if(this.breakable)
-			if(player.topBound().intersects(bottomBound())){
-				System.out.println("BOUNDS");
-				for(int i = 0; i < objects.size(); i += 1){
-					System.out.println("HIT");
-					if(this == objects.get(i)){
-						objects.remove(i);
-					System.out.println("here");
-					}
-				}
-			}
-		this.player = player;
-	}
+	public void tick(LinkedList<GameObject> objects, Player player) {}
 	
 	public void render(Graphics2D g) {
 		
