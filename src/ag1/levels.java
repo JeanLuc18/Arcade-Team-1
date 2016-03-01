@@ -16,9 +16,6 @@ import arcadia.Game;
 
 public class levels{
 
-	private int wallWidth = 128;
-	private int wallHeight = 192;
-	private int blockType;
 	int platform = 0;
 	private File level;
 	String score;
@@ -34,124 +31,120 @@ public class levels{
 		level = new File(levelN);
 		reader = new Scanner(level);
 		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
-										 //"The" and "Delimiter" with each call to reader.next();
+								 //"The" and "Delimiter" with each call to reader.next();
 	}
 
 	/**
-	 * genLevel reads a single level segment or enemy list from the level txt and then gives back the array of blocks/enemies for that level with the two wall
-	 * objects in the last two indexes left first right second
+	 * genLevel reads a level text file and builds the level from the bottom left up 
+	 * *******NOTE: As of now each sub level must be on one line otherwise the level will not read correctly********
 	 * @param reader level.txt scanner
 	 * @return block[] which is the level segment block array
 	 */
-	@SuppressWarnings("unused")
-	public LinkedList<GameObject> genLevel(){
-		
-		LinkedList<GameObject> level = new LinkedList<GameObject>();
-		//FallingBlock TheOne = new FallingBlock(Player.startingX, Player.startingY-600, 64,64);//initializes the one falling block that will repeatedly fall
-		int blockX = 0;
-		int blockY = Game.HEIGHT - 32;
-		int wallY = Game.HEIGHT;
-		int shiftX = 0;
-		int blocksPerRow = 0;
-		int blocksPerLvl = 0;
-		int blocksAdded = 0;
-		String token = " ";
-		
-		while(reader.hasNext()){
-			segReader = new Scanner(reader.next());
-			while(segReader.hasNext()){
-			token = segReader.next();
-//			if(token.equals("R")){
-//				//level.add(new Repairer(segReader.nextInt(), segReader.nextInt(), 32, 32));
-//				
-//			
-//			}
-			if(token.equals("W")){
-				blocksAdded = 0;
-				platform += 1;
-				
-				final int wallWidth = segReader.nextInt();
-				//System.out.println(Game.WIDTH-wallWidth);
-				final int wallHeight = segReader.nextInt();
-				wallY = wallY - wallHeight;
-				blockY = wallY + wallHeight - 32;
-				if(wallWidth % 32 > 0 || wallHeight % 32 > 0){
-					System.err.println("Wall deminsions must be divisable by 32"); 
-					System.exit(1);
-				}
-				blocksPerRow = (Game.WIDTH - (2 * wallWidth)) / 32;
-				blocksPerLvl = (blocksPerRow * (wallHeight/32));
-				
-				level.add(new block(0, wallY, wallWidth, wallHeight,'w', platform));//adds left wall
-				level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w', platform));//adds Right wall
-				shiftX = Game.WIDTH - wallWidth;//records where the blocks need to shift to when they hit the right wall
-				blockX = 0 + wallWidth;
-				
-			}
-
-			else{
-				
-				
-				while(blocksAdded < token.length()){
-					char curr = token.charAt(blocksAdded);
-					if(blockX == shiftX){
-						System.out.println(Game.WIDTH - wallWidth);
-						System.out.println("SHIFT!!!!!!!!!!!!!!!!!!!!!!" + blockX);
-						blockY = blockY - 32;//adjusts Y level if current block starts new row
-						blockX = -1*(shiftX - Game.WIDTH);
-					}
-					if(blocksAdded >= blocksPerLvl){
-						break;//the level is filled and no more blocks need to be read into current level segment
-					}
-					if(curr == 'R'){
-						level.add(new Repairer(blockX, blockY-32,32,32));
-						blocksAdded += 1;
-						blocksPerLvl += 1;
-					}
-					else if(curr == 'M'){
-						level.add(new movingblock(blockX, blockY-32, 'b' , platform));
-						blocksAdded += 1;
-						blocksPerLvl += 1;
-					}
-					else if(curr == 'F'){
-						level.add(new FallingBlock(blockX, blockY-32-500,64,64));
-						level.get(level.size() - 1).setID(GOID.Enemy);
-						blocksAdded += 1;
-						blocksPerLvl +=1;
-					}
-					else if(token.charAt(blocksAdded) == 'b'){
-						level.add(new block(blockX, blockY, 'b', platform));
-						blockX += 32;
-						blocksAdded += 1;
-					}
-					else if(token.charAt(blocksAdded) == 'w'){
-						level.add(new block(blockX, blockY, 'w', platform));
-						blockX += 32;
-						blocksAdded += 1;
-					}
-					else if(token.charAt(blocksAdded) == 's'){
-
-						//level.add(new block(blockX, blockY, 's', platform));
-
-						//level.add(new block(blockX, blockY, 's'));
-						blockX += 32;
-						blocksAdded += 1;
-					}
-				}
-			
-			}
-			}
-			
-		}
-
-		//level.add(new FallingBlock(Game.WIDTH/2, -10, 64,64));	
-
-		//level.add(TheOne);	
-		System.out.println(level.size()+ " is the number of blocks in level");
-		
-		return level;
-	}
 	
+	public LinkedList<GameObject> genLevel(){
+
+		LinkedList<GameObject> level = new LinkedList<GameObject>();//creates level array
+		
+		int blockX = 0;//x coordinate for blocks in level
+		int blockY = Game.HEIGHT - 32;//y coordinate for blocks in level
+		int wallY = Game.HEIGHT;//wall y coordinate for blocks in level
+		int shiftX = 0;//variable used to tell the blocks to shift back to the far left when a row has been completed 
+		int blocksPerRow = 0;//
+		int blocksPerLvl = 0;// blocks___ are variables used for maintaining level structure ie knowing when a sub level is filled 
+		int blocksAdded = 0; // or if the current row is filled
+		String token = " ";//Initializes the sub level block segment string that will be read
+		
+		//loops through text file as long as there are things left to read
+		while(reader.hasNext()){
+			segReader = new Scanner(reader.next());//creates sublevel reader
+			while(segReader.hasNext()){//reads through to the end of the sub level
+				token = segReader.next();//sets the token string to be the first element of the sub level 
+										 //which should be a 'W' to signify wall dimensions	
+				//********Wall Element********
+				if(token.equals("W")){
+					blocksAdded = 0;//initializes the number of blocks added to sublevel
+					platform += 1;//adds one to platform number
+
+					int wallWidth = segReader.nextInt();
+					int wallHeight = segReader.nextInt();
+					//Checks to make sure that wall dimensions are valid
+					if(wallWidth % 32 > 0 || wallHeight % 32 > 0){
+						System.err.println("Wall deminsions must be divisable by 32"); 
+						System.exit(1);
+					}
+					
+					wallY = wallY - wallHeight;//calculates the current wall's y coordinate (top left corner)
+					blockY = wallY + wallHeight - 32;//initializes the block's y coordinates
+				
+					blocksPerRow = (Game.WIDTH - (2 * wallWidth)) / 32;
+					blocksPerLvl = (blocksPerRow * (wallHeight/32));
+
+					level.add(new block(0, wallY, wallWidth, wallHeight,'w', platform));//adds left wall
+					level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w', platform));//adds Right wall
+					shiftX = Game.WIDTH - wallWidth;//records where the blocks need to shift to when they hit the right wall
+					blockX = 0 + wallWidth;
+
+				}
+				//********non Wall elements********
+				else{
+					//reads through "token" which contains block information 
+					while(blocksAdded < token.length()){
+						char curr = token.charAt(blocksAdded);//reads current block
+						//checks to see if the row is filled 
+						if(blockX == shiftX){
+							blockY = blockY - 32;//adjusts Y level if current block starts new row
+							blockX = -1*(shiftX - Game.WIDTH);//resets blockX to be leftmost acceptable x 
+						}
+						//checks to see if the sublevel is filled
+						if(blocksAdded >= blocksPerLvl){
+							break;//the level is filled and no more blocks need to be read into current level segment
+						}
+						//Repairer enemy 
+						if(curr == 'R'){
+							level.add(new Repairer(blockX, blockY-32,32,32));
+							blocksAdded += 1;
+							blocksPerLvl += 1;
+						}
+						//Moving block
+						else if(curr == 'M'){
+							level.add(new movingblock(blockX, blockY-32, 'b' , platform));
+							blocksAdded += 1;
+							blocksPerLvl += 1;
+						}
+						//Falling block
+						else if(curr == 'F'){
+							level.add(new FallingBlock(blockX, blockY-32-500,64,64));
+							level.get(level.size() - 1).setID(GOID.Enemy);
+							blocksAdded += 1;
+							blocksPerLvl +=1;
+						}
+						//breakable block
+						else if(token.charAt(blocksAdded) == 'b'){
+							level.add(new block(blockX, blockY, 'b', platform));
+							blockX += 32;
+							blocksAdded += 1;
+						}
+						//un-breakable block
+						else if(token.charAt(blocksAdded) == 'w'){
+							level.add(new block(blockX, blockY, 'w', platform));
+							blockX += 32;
+							blocksAdded += 1;
+						}
+						//space "block" (not really a block but moving block uses these to map out path)
+						else if(token.charAt(blocksAdded) == 's'){
+							blockX += 32;
+							blocksAdded += 1;
+						}
+					}
+				}
+			}
+		}
+		return level;//returns the filled level
+	}
+	/**
+	 * getMaxPlatform returns the "max platform" which is used to signal end of level
+	 * @return
+	 */
 	public int getMaxPlatform(){
 		return platform;
 	}
