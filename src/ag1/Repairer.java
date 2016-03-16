@@ -24,6 +24,7 @@ import arcadia.Game;
 public class Repairer  extends Enemy{
 	boolean repair;
 	boolean faceing = true;
+	boolean there = true;
 	boolean pushLeft, pushRight;
 	boolean inAir = false;
 	Image left1, left2, right1, right2, brick;
@@ -43,7 +44,7 @@ public class Repairer  extends Enemy{
 	}
 
 	public void tick(LinkedList<GameObject> objects, Player player){
-		
+		if(there){
 		if(inAir){
 			velY += gravity;
 		}
@@ -59,7 +60,7 @@ public class Repairer  extends Enemy{
 				}
 			}
 		}
-		
+	}
 	}
 	
 	private void blockCollision(block block){
@@ -134,6 +135,7 @@ public class Repairer  extends Enemy{
 		}
 	}
 	public void render(Graphics2D g){
+		if(there){
 		g.setColor(Color.RED);
 		if(faceing == false)
 			g.drawImage(right1,(int)x, (int)y, width, height,null);
@@ -160,12 +162,27 @@ public class Repairer  extends Enemy{
 			g.setColor(Color.GRAY);
 			g.drawImage(brick,blockX, blockY, blockWidth, blockHeight, null);
 		}
+		}
+	}
+	
+	public void setThere(){
+		there = true;
+	}
+	
+	public void setNotThere(){
+		there = false;
+	}
+	
+	public boolean isThere(){
+		return there;
 	}
 	
 	public void collided(Player p){
+		if(there){
 		p.lives -= 1;
 		p.x = p.startingX;
 		p.y = p.startingY;
+		}
 	}
 }
 

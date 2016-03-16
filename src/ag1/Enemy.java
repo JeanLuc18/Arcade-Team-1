@@ -29,6 +29,9 @@ public class Enemy extends GameObject{
 		
 	}
 	public void collided(Player p){}
+	public void setThere(){}
+	public void setNotThere(){};
+	public boolean isThere(){ return false;};
 	public void tick(LinkedList<GameObject> objects, Player player) {}
 	public void render(Graphics2D g) {}
 

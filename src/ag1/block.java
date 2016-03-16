@@ -52,6 +52,10 @@ public class block extends GameObject {
 		return platform;
 	}
 	
+	public void setbreakable(boolean b){
+		breakable = b;
+	}
+	
 	public void setType(char t){
 		type = t;
 		

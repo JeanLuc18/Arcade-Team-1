@@ -10,7 +10,6 @@ W 160 192 bbbRbbbbRbbbbRbbbbRbbbbRbbb X
 W 160 192 bbbbbRbbRbbbRbbbRbbbRbbRbbRbb X
 W 160 192 bbRbbbRbbRbbRbbbRbbbRbbbRbbbRb X
 W 160 192 bbbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRbRb X
-W 32 32  X
-W 160 192 bbbbbbbbbbbbbbbbbbbbbbssssssssssssssssssssssssssssssssssssssssssssbbbbbswwsbbbbwsbbwwwwwwwwwwwwwwwwwwwsbbbbbbRb X
+W 160 192 bbbbbbbbbbbbbbbbbbbbbb X
 W 32 32 bbbbb X
 

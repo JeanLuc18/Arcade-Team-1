@@ -110,12 +110,12 @@ public class levels{
 					}
 					else if(curr == 'M'){
 						level.add(new movingblock(blockX, blockY-32, 'b' , platform));
+						((block)level.get(level.size() - 1)).setbreakable(false);
 						blocksAdded += 1;
 						blocksPerLvl += 1;
 					}
 					else if(curr == 'F'){
-						level.add(new FallingBlock(blockX, blockY-32-500,64,64));
-						level.get(level.size() - 1).setID(GOID.Enemy);
+						level.add(new FallingBlock(blockX, blockY-32,64,64));
 						blocksAdded += 1;
 						blocksPerLvl +=1;
 					}

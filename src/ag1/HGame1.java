@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 
 import arcadia.Arcadia;
 import arcadia.Button;
@@ -33,17 +34,20 @@ public class HGame1 extends Game{
 	int intstopper = 0;
 	boolean levelsLoaded = false;
 	Image banner;
-	Image Title, background, brick, brickWallLeft, brickWallRight;
+	Image Title, background, brick, brickWallLeft, brickWallRight, lava;
 	Enemy testEnemy = null;   //delete later
 	//int lives = 3;
 	ArrayList<String> levelNames;
 	ArrayList levelEnders = new ArrayList();
 	boolean hasLevels = false;
-
+	boolean gameoverPassed = true;
+	long tempScore = 0;
 	Player player;
 	Camera camera;
 	ArrayList<LinkedList<GameObject>> loadedlevels = new ArrayList<LinkedList<GameObject>>();
 	LinkedList<GameObject> objects;
+	LinkedList<GameObject> tempRemoved;
+	Clip clip;
 	boolean initialized = false;
 
 	public HGame1() throws FileNotFoundException{
@@ -52,12 +56,23 @@ public class HGame1 extends Game{
 			Title = ImageIO.read(HGame1.class.getResource("MenuTitle.gif"));
 			background = ImageIO.read(HGame1.class.getResource("Graphics/background.png"));
 			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
+			lava = ImageIO.read(HGame1.class.getResource("Graphics/Lava_Underground.png"));
 			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
 			brickWallRight = ImageIO.read(HGame1.class.getResource("Graphics/RightWall.png"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	
+		
+		 try {
+		        clip  = AudioSystem.getClip();
+		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
+		          HGame1.class.getResourceAsStream("Sounds/Arcade_1_Theme.wav"));
+		        clip.open(inputStream);
+		        
+		      } catch (Exception e) {
+		        System.err.println(e.getMessage());
+		      }
 	}
 
 	@Override
@@ -91,7 +106,7 @@ public class HGame1 extends Game{
 			//background
 			g.setColor(new Color(51, 102, 255));
 			g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
-
+			g.drawImage(lava, 0, HEIGHT-32, WIDTH, 32, null);
 			g.translate(camera.getX(), camera.getY()); //camera
 			
 			//render objects
@@ -108,13 +123,28 @@ public class HGame1 extends Game{
 
 	private void gameover(Graphics2D g, Input p1) {
 		
+		
+		for(GameObject object: objects){
+			if(object.getId().equals(GOID.Enemy))
+				((Enemy)object).setThere();
+			else if(object.getId().equals(GOID.Block))
+				if(((block)object).getType() == 's')
+					((block)object).setType('b');
+		}
+		
+		if(gameoverPassed){
+			player.Tscore += player.Lscore/player.stopTime();
+			tempScore = player.Tscore;
+			gameoverPassed = false;
+		}
+		
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
 		g.setColor(Color.RED);
 		g.setFont(new Font("Stencil", Font.PLAIN, 50));
 		g.drawString("Game Over!!!", 0 + WIDTH/2 - 150, HEIGHT/2 - 50);
-		scoreS = Long.toString(player.score);
+		scoreS = Long.toString(tempScore);
 		scoreS = ("00000000" + scoreS).substring(scoreS.length());
 		g.setFont(new Font("Stencil", Font.PLAIN, 30));
 		g.drawString("Score: " + scoreS, 0 + WIDTH/2 - 150, HEIGHT/2 - 20);
@@ -123,6 +153,8 @@ public class HGame1 extends Game{
 		if(p1.pressed(Button.A)){
 			starting = true;
 			player.lives = 3;
+			player.Tscore = 0;
+			player.Lscore = 0;
 			setLevel();
 		}
 		
@@ -186,14 +218,17 @@ public class HGame1 extends Game{
 		}
 		else{
 			initialized = true;
+			clip.start(); 
 		}
 	}
 	
 	public void setLevel(){
-		objects = new LinkedList<GameObject>();
-		objects = (LinkedList<GameObject>) loadedlevels.get(sLevel - 1);
+		tempRemoved = new LinkedList<GameObject>();
+		objects = (LinkedList<GameObject>) loadedlevels.get(sLevel- 1).clone();
 		objects.add(new LSCounter(player, camera));
 		player.startTime();
+		player.currentplatform = 1;
+		gameoverPassed = true;
 	}
 	
 	public void startup(Graphics2D g, Input p1){
@@ -276,7 +311,16 @@ public class HGame1 extends Game{
 		}
 	}
 
-	public void reset() {}
+	public void reset() {
+		starting = true;
+		if(player != null){
+		player.lives = 3;
+		player.Lscore = 0;
+		player.Tscore =0;
+		}
+		if(initialized)
+		setLevel();
+	}
 	public Image banner() {return banner;}
 	
 	public static void main(String[] args) throws FileNotFoundException{
