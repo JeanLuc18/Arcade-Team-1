@@ -6,7 +6,6 @@ import java.awt.Image;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.concurrent.ThreadLocalRandom;
 
 import javax.imageio.ImageIO;
 
@@ -15,7 +14,7 @@ import arcadia.Game;
 
 
 public class FallingBlock extends Enemy{
-	private int fallInt;
+
 	private boolean Fall = false;
 	float startingX = 0;
 	float startingY = 0;
