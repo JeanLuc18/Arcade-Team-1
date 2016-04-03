@@ -49,6 +49,7 @@ public class HGame1 extends Game{
 	LinkedList<GameObject> tempRemoved;
 	Clip clip;
 	boolean initialized = false;
+	protected ImageClass image = new ImageClass();
 
 	public HGame1() throws FileNotFoundException{
 		try {

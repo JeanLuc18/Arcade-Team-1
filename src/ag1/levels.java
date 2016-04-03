@@ -21,17 +21,18 @@ public class levels{
 	String score;
 	private Scanner reader;
 	private Scanner segReader;
-
-	ArrayList<block> blocks1 = new ArrayList<block>();
+	ImageClass images;
+	//ArrayList<block> blocks1 = new ArrayList<block>(1000);
 	/**
 	 * level class constructor which opens level text document and scanner to read said document
 	 * @throws FileNotFoundException
 	 */
 	public levels(String levelN) throws FileNotFoundException{
 		level = new File(levelN);
+		images = new ImageClass();
 		reader = new Scanner(level);
 		reader.useDelimiter("X");//tells scanner to parse text input by every "X" EX: TheXDelimiter would be broken up
-								 //"The" and "Delimiter" with each call to reader.next();
+		//"The" and "Delimiter" with each call to reader.next();
 	}
 
 	/**
@@ -40,11 +41,11 @@ public class levels{
 	 * @param reader level.txt scanner
 	 * @return block[] which is the level segment block array
 	 */
-	
+
 	public LinkedList<GameObject> genLevel(){
 
-		LinkedList<GameObject> level = new LinkedList<GameObject>();//creates level array
-		
+		LinkedList<GameObject> level = new LinkedList<GameObject>();//creates level list
+
 		int blockX = 0;//x coordinate for blocks in level
 		int blockY = Game.HEIGHT - 32;//y coordinate for blocks in level
 		int wallY = Game.HEIGHT;//wall y coordinate for blocks in level
@@ -53,26 +54,27 @@ public class levels{
 		int blocksPerLvl = 0;// blocks___ are variables used for maintaining level structure ie knowing when a sub level is filled 
 		int blocksAdded = 0; // or if the current row is filled
 		int wallHeight;
-	    int wallWidth;
-	    char curr;
+		int wallWidth;
+		char curr;
 		String token = " ";//Initializes the sub level block segment string that will be read
-		
+
 		//loops through text file as long as there are things left to read
 		while(reader.hasNext()){
+			System.out.println("New level Segment");
 			segReader = new Scanner(reader.next());//creates sublevel reader
 			while(segReader.hasNext()){//reads through to the end of the sub level
 				token = segReader.next();//sets the token string to be the first element of the sub level 
-										 //which should be a 'W' to signify wall dimensions	
+				//which should be a 'W' to signify wall dimensions	
 				//********Wall Element********
 				if(token.equals("W")){
 					blocksAdded = 0;//initializes the number of blocks added to sublevel
 					platform += 1;//adds one to platform number
-				
-					  wallHeight = segReader.nextInt();
-				      wallWidth = segReader.nextInt();
+
+					wallHeight = segReader.nextInt();
+					wallWidth = segReader.nextInt();
 					wallY = wallY - wallHeight;//calculates the current wall's y coordinate (top left corner)
 					blockY = wallY + wallHeight - 32;//initializes the block's y coordinates
-				
+
 					blocksPerRow = (Game.WIDTH - (2 * wallWidth)) / 32;
 					blocksPerLvl = (blocksPerRow * (wallHeight/32));
 

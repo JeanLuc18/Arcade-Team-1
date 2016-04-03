@@ -23,29 +23,18 @@ public class block extends GameObject {
 		super(x, y, 32, 32, GOID.Block);
 		setType(type);
 		platform = p;
-		try {
-			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
-			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
-			brickWallRight = ImageIO.read(HGame1.class.getResource("Graphics/RightWall.png"));//help from pixabay.com
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+//		brick = gameImages.brick;
+//		brickWallLeft = gameImages.brickWallLeft;
+//		brickWallRight = gameImages.brickWallRight;	
 	}
 
 	public block(float x, float y, int width, int height, char type, int p){//wall type block
 		super(x, y, width, height, GOID.Block);
 		setType(type);
 		platform = p;
-		try {
-			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png")); 
-			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
-			brickWallRight = ImageIO.read(HGame1.class.getResource("Graphics/RightWall.png"));//help from pixabay.com
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+//		brick = gameImages.brick;
+//		brickWallLeft = gameImages.brickWallLeft;
+//		brickWallRight = gameImages.brickWallRight;	
 	}
 
 	public int getPlatform(){
@@ -100,14 +89,14 @@ public class block extends GameObject {
 	public void render(Graphics2D g) {
 		
 		switch(type){
-			case 'b':	g.drawImage(brick,(int)x, (int)y, width, height, null);						
+			case 'b':	g.drawImage(gameImages.brick,(int)x, (int)y, width, height, null);						
 						break;
 			case 's':	
 						break;
 			case 'w':	if(x > 512)
-							g.drawImage(brickWallRight,(int)x, (int)y, width, height, null);
+							g.drawImage(gameImages.brickWallRight,(int)x, (int)y, width, height, null);
 						else
-							g.drawImage(brickWallLeft,(int)x, (int)y, width, height, null);
+							g.drawImage(gameImages.brickWallLeft,(int)x, (int)y, width, height, null);
 						break;
 		}
 		

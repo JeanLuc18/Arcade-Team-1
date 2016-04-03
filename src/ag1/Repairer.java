@@ -31,16 +31,11 @@ public class Repairer  extends Enemy{
 	
 	public Repairer(float x, float y, int width, int height) {
 		super(x, y, width, height);
-		try {
-			left1 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking1_L.png")); //help from pixabay.com
-			left2 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking2.png"));
-			right1 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking3.png"));
-			right2 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking4.png"));
-			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+//		left1 = gameImages.repairerLeft1; //help from pixabay.com
+//		left2 = gameImages.repairerLeft2;
+//		right1 = gameImages.repairerRight1;
+//		right2 = gameImages.repairerRight2;
+//		brick = gameImages.heldBrick;	
 	}
 
 	public void tick(LinkedList<GameObject> objects, Player player){
@@ -138,9 +133,9 @@ public class Repairer  extends Enemy{
 		if(there){
 		g.setColor(Color.RED);
 		if(faceing == false)
-			g.drawImage(right1,(int)x, (int)y, width, height,null);
+			g.drawImage(gameImages.repairerRight1,(int)x, (int)y, width, height,null);
 		else
-			g.drawImage(left1,(int)x, (int)y, width, height,null);
+			g.drawImage(gameImages.repairerLeft1,(int)x, (int)y, width, height,null);
 		
 		
 		
@@ -151,7 +146,7 @@ public class Repairer  extends Enemy{
 			int blockHeight = 25;
 			
 			g.setColor(Color.GRAY);
-			g.drawImage(brick,blockX, blockY, blockWidth, blockHeight, null);
+			g.drawImage(gameImages.heldBrick,blockX, blockY, blockWidth, blockHeight, null);
 		}
 		if(pushRight){
 			int blockX = ((int)x + width);
@@ -160,7 +155,7 @@ public class Repairer  extends Enemy{
 			int blockHeight = 25;
 			
 			g.setColor(Color.GRAY);
-			g.drawImage(brick,blockX, blockY, blockWidth, blockHeight, null);
+			g.drawImage(gameImages.heldBrick,blockX, blockY, blockWidth, blockHeight, null);
 		}
 		}
 	}

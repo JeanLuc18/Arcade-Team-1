@@ -74,20 +74,12 @@ public class FallingBlock extends Enemy{
 	public void collided(Player p){
 		//checks to see if the falling block hasn't been triggered 
 		if(!Fall){
-			//sets the falling blocks texture
-			try {
-				fallingblock = ImageIO.read(HGame1.class.getResource("Graphics/fallingblock.gif")); //help from pixabay.com
-				this.setX(p.getX());//sets the block to fall right above the player
-				this.setY(p.getY()-300);//sets the block above the player
-				
-				this.setVelY(1);//begins its downward journey 
-				Fall = true;//sets that it has been triggered 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			fallingblock = gameImages.fallingblock; //help from pixabay.com
+			this.setX(p.getX());//sets the block to fall right above the player
+			this.setY(p.getY()-300);//sets the block above the player
 			
-			
+			this.setVelY(1);//begins its downward journey 
+			Fall = true;//sets that it has been triggered 
 		}
 		
 		else{

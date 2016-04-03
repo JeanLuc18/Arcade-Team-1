@@ -13,12 +13,7 @@ public class movingblock extends block{
 	
 	public movingblock(float x, float y, char type, int p) {
 		super(x, y, 64, 32, type, p);
-		try {
-			cloud = ImageIO.read(HGame1.class.getResource("Graphics/cloud.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+//		cloud = gameImages.cloud;	
 	}
 
 	public void tick(LinkedList<GameObject> objects, Player player) {
@@ -33,7 +28,7 @@ public class movingblock extends block{
 	}
 	
 	public void render(Graphics2D g){
-		g.drawImage(cloud,(int)x, (int)y, width, height,null);
+		g.drawImage(gameImages.cloud,(int)x, (int)y, width, height,null);
 	}
 	
 }

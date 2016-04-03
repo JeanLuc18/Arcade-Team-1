@@ -28,19 +28,12 @@ public class Player extends GameObject {
 	final int bd = 8; //bound dist
 	Image left1, leftattack, right1, rightattack;
 	
-	
 	public Player(){
 		super(startingX, startingY, 64, 96, GOID.Player);
-		//super(200, 400, 64, 96, GOID.Player);
-		try {
-			left1 = ImageIO.read(HGame1.class.getResource("Graphics/Left_Knight_Walking1.png")); //help from pixabay.com
-			leftattack = ImageIO.read(HGame1.class.getResource("Graphics/attackleft.png"));
-			right1 = ImageIO.read(HGame1.class.getResource("Graphics/Right_Knight_Walking1.png"));
-			rightattack = ImageIO.read(HGame1.class.getResource("Graphics/attackright.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+//		left1 = PlayerImage.playerLeft1;//help from pixabay.com
+//		leftattack = gameImages.playerLeftAttack;
+//		right1 = gameImages.playerRight1;
+//		rightattack = gameImages.playerRightAttack;	
 	}
 	
 	public void tick(LinkedList<GameObject> objects, Player player, levels l, HGame1 m, Graphics2D g) {
@@ -72,13 +65,13 @@ public class Player extends GameObject {
 		g.setColor(color);
 		//for the graphics
 		if(faceing && attacking)
-			g.drawImage(rightattack,(int)x, (int)y, width + 32, height, null);
+			g.drawImage(gameImages.playerRightAttack,(int)x, (int)y, width + 32, height, null);
 		else if(!faceing && attacking)
-			g.drawImage(leftattack,(int)x - 32, (int)y , width + 32, height, null);
+			g.drawImage(gameImages.playerLeftAttack,(int)x - 32, (int)y , width + 32, height, null);
 		else if(faceing && !attacking)
-			g.drawImage(right1,(int)x, (int)y, width, height, null);
+			g.drawImage(gameImages.playerRight1,(int)x, (int)y, width, height, null);
 		else
-			g.drawImage(left1,(int)x, (int)y, width, height, null);
+			g.drawImage(gameImages.playerLeft1,(int)x, (int)y, width, height, null);
 			
 		g.setColor(Color.GREEN);
 //		g.draw(rightAttackBounds());
