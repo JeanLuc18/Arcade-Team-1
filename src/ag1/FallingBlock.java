@@ -20,10 +20,13 @@ public class FallingBlock extends Enemy{
 	float startingY = 0;
 	
 	Image fallingblock;
+	Image faller;
+
 
 	public ArrayList<Integer> fallYs = new ArrayList<>();
-	public FallingBlock(float x, float y, int width, int height) {
+	public FallingBlock(float x, float y, int width, int height, Image f) {
 		super(x, y, width, height);
+		faller = f;
 		startingX = x;
 		startingY = y;
  	}
@@ -74,7 +77,7 @@ public class FallingBlock extends Enemy{
 	public void collided(Player p){
 		//checks to see if the falling block hasn't been triggered 
 		if(!Fall){
-			fallingblock = gameImages.fallingblock; //help from pixabay.com
+			fallingblock = faller; //help from pixabay.com
 			this.setX(p.getX());//sets the block to fall right above the player
 			this.setY(p.getY()-300);//sets the block above the player
 			

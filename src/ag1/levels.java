@@ -21,6 +21,7 @@ public class levels{
 	String score;
 	private Scanner reader;
 	private Scanner segReader;
+	ImageClass I = new ImageClass();
 	ImageClass images;
 	//ArrayList<block> blocks1 = new ArrayList<block>(1000);
 	/**
@@ -79,8 +80,8 @@ public class levels{
 					blocksPerLvl = (blocksPerRow * (wallHeight/32));
 
 
-					level.add(new block(0, wallY, wallWidth, wallHeight,'w', platform));//adds left wall
-					level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w', platform));//adds Right wall
+					level.add(new block(0, wallY, wallWidth, wallHeight,'w', platform, I.brick, I.brickWallLeft, I.brickWallRight));//adds left wall
+					level.add(new block(Game.WIDTH-wallWidth, wallY, wallWidth, wallHeight, 'w', platform, I.brick, I.brickWallLeft, I.brickWallRight));//adds Right wall
 					shiftX = Game.WIDTH - wallWidth;//records where the blocks need to shift to when they hit the right wall
 					blockX = 0 + wallWidth;
 
@@ -101,32 +102,32 @@ public class levels{
 						}
 						//Repairer enemy 
 						if(curr == 'R'){
-							level.add(new Repairer(blockX, blockY-32,32,32));
+							level.add(new Repairer(blockX, blockY-32,32,32, I.repairerLeft1, I.repairerRight1, I.brick));
 							blocksAdded += 1;
 							blocksPerLvl += 1;
 						}
 						//Moving block
 						else if(curr == 'M'){
-							level.add(new movingblock(blockX, blockY-32, 'b' , platform));
+							level.add(new movingblock(blockX, blockY-32, 'b' , platform, I.cloud, I.brick, I.brickWallLeft, I.brickWallRight));
 							blocksAdded += 1;
 							blocksPerLvl += 1;
 						}
 						//Falling block
 						else if(curr == 'F'){
-							level.add(new FallingBlock(blockX, blockY-32-500,64,64));
+							level.add(new FallingBlock(blockX, blockY-32-500,64,64, I.fallingblock));
 							level.get(level.size() - 1).setID(GOID.Enemy);
 							blocksAdded += 1;
 							blocksPerLvl +=1;
 						}
 						//breakable block
 						else if(token.charAt(blocksAdded) == 'b'){
-							level.add(new block(blockX, blockY, 'b', platform));
+							level.add(new block(blockX, blockY, 'b', platform, I.brick, I.brickWallLeft, I.brickWallRight));
 							blockX += 32;
 							blocksAdded += 1;
 						}
 						//un-breakable block
 						else if(token.charAt(blocksAdded) == 'w'){
-							level.add(new block(blockX, blockY, 'w', platform));
+							level.add(new block(blockX, blockY, 'w', platform, I.brick, I.brickWallLeft, I.brickWallRight));
 							blockX += 32;
 							blocksAdded += 1;
 						}

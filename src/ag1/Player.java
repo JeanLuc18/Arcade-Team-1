@@ -30,10 +30,11 @@ public class Player extends GameObject {
 	
 	public Player(){
 		super(startingX, startingY, 64, 96, GOID.Player);
-//		left1 = PlayerImage.playerLeft1;//help from pixabay.com
-//		leftattack = gameImages.playerLeftAttack;
-//		right1 = gameImages.playerRight1;
-//		rightattack = gameImages.playerRightAttack;	
+		ImageClass I = new ImageClass();
+		left1 = I.playerLeft1;//help from pixabay.com
+		leftattack = I.playerLeftAttack;
+		right1 = I.playerRight1;
+		rightattack = I.playerRightAttack;	
 	}
 	
 	public void tick(LinkedList<GameObject> objects, Player player, levels l, HGame1 m, Graphics2D g) {
@@ -65,13 +66,13 @@ public class Player extends GameObject {
 		g.setColor(color);
 		//for the graphics
 		if(faceing && attacking)
-			g.drawImage(gameImages.playerRightAttack,(int)x, (int)y, width + 32, height, null);
+			g.drawImage(rightattack,(int)x, (int)y, width + 32, height, null);
 		else if(!faceing && attacking)
-			g.drawImage(gameImages.playerLeftAttack,(int)x - 32, (int)y , width + 32, height, null);
+			g.drawImage(leftattack,(int)x - 32, (int)y , width + 32, height, null);
 		else if(faceing && !attacking)
-			g.drawImage(gameImages.playerRight1,(int)x, (int)y, width, height, null);
+			g.drawImage(right1,(int)x, (int)y, width, height, null);
 		else
-			g.drawImage(gameImages.playerLeft1,(int)x, (int)y, width, height, null);
+			g.drawImage(left1,(int)x, (int)y, width, height, null);
 			
 		g.setColor(Color.GREEN);
 //		g.draw(rightAttackBounds());

@@ -11,9 +11,9 @@ public class movingblock extends block{
 	private int speed = 2;
 	Image cloud;
 	
-	public movingblock(float x, float y, char type, int p) {
-		super(x, y, 64, 32, type, p);
-//		cloud = gameImages.cloud;	
+	public movingblock(float x, float y, char type, int p, Image c, Image b, Image bwl, Image bwr) {
+		super(x, y, 64, 32, type, p, b, bwl, bwr);
+		cloud = c;	
 	}
 
 	public void tick(LinkedList<GameObject> objects, Player player) {
@@ -28,7 +28,7 @@ public class movingblock extends block{
 	}
 	
 	public void render(Graphics2D g){
-		g.drawImage(gameImages.cloud,(int)x, (int)y, width, height,null);
+		g.drawImage(cloud,(int)x, (int)y, width, height,null);
 	}
 	
 }

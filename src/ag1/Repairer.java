@@ -29,13 +29,12 @@ public class Repairer  extends Enemy{
 	boolean inAir = false;
 	Image left1, left2, right1, right2, brick;
 	
-	public Repairer(float x, float y, int width, int height) {
+	public Repairer(float x, float y, int width, int height, Image l, Image r, Image b ) {
 		super(x, y, width, height);
-//		left1 = gameImages.repairerLeft1; //help from pixabay.com
-//		left2 = gameImages.repairerLeft2;
-//		right1 = gameImages.repairerRight1;
-//		right2 = gameImages.repairerRight2;
-//		brick = gameImages.heldBrick;	
+		
+		left1 = l; //help from pixabay.com
+		right1 = r;
+		brick = b;	
 	}
 
 	public void tick(LinkedList<GameObject> objects, Player player){
@@ -133,9 +132,9 @@ public class Repairer  extends Enemy{
 		if(there){
 		g.setColor(Color.RED);
 		if(faceing == false)
-			g.drawImage(gameImages.repairerRight1,(int)x, (int)y, width, height,null);
+			g.drawImage(right1,(int)x, (int)y, width, height,null);
 		else
-			g.drawImage(gameImages.repairerLeft1,(int)x, (int)y, width, height,null);
+			g.drawImage(left1,(int)x, (int)y, width, height,null);
 		
 		
 		
@@ -146,7 +145,7 @@ public class Repairer  extends Enemy{
 			int blockHeight = 25;
 			
 			g.setColor(Color.GRAY);
-			g.drawImage(gameImages.heldBrick,blockX, blockY, blockWidth, blockHeight, null);
+			g.drawImage(brick,blockX, blockY, blockWidth, blockHeight, null);
 		}
 		if(pushRight){
 			int blockX = ((int)x + width);
@@ -155,7 +154,7 @@ public class Repairer  extends Enemy{
 			int blockHeight = 25;
 			
 			g.setColor(Color.GRAY);
-			g.drawImage(gameImages.heldBrick,blockX, blockY, blockWidth, blockHeight, null);
+			g.drawImage(brick,blockX, blockY, blockWidth, blockHeight, null);
 		}
 		}
 	}

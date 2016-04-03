@@ -110,6 +110,7 @@ public class HGame1 extends Game{
 			g.drawImage(lava, 0, HEIGHT-32, WIDTH, 32, null);
 			g.translate(camera.getX(), camera.getY()); //camera
 			
+			
 			//render objects
 			for(GameObject tempObject : objects){
 				if(tempObject != null)

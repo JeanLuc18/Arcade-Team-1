@@ -16,25 +16,25 @@ public class block extends GameObject {
 	private boolean passable; //boolean of whether the player can pass through this block
 	final int bd = 8;
 	int platform = 0;
-	Image brick, brickWallLeft, brickWallRight;
+	Image brick, brickWallRight, brickWallLeft;
 	Player player;
 	
-	public block(float x, float y, char type, int p){
+	public block(float x, float y, char type, int p, Image b, Image bwl, Image bwr){
 		super(x, y, 32, 32, GOID.Block);
 		setType(type);
 		platform = p;
-//		brick = gameImages.brick;
-//		brickWallLeft = gameImages.brickWallLeft;
-//		brickWallRight = gameImages.brickWallRight;	
+		brick = b;
+		brickWallLeft = bwl;
+		brickWallRight = bwr;
 	}
 
-	public block(float x, float y, int width, int height, char type, int p){//wall type block
+	public block(float x, float y, int width, int height, char type, int p, Image b, Image bwl, Image bwr){//wall type block
 		super(x, y, width, height, GOID.Block);
 		setType(type);
 		platform = p;
-//		brick = gameImages.brick;
-//		brickWallLeft = gameImages.brickWallLeft;
-//		brickWallRight = gameImages.brickWallRight;	
+		brick = b;
+		brickWallLeft = bwl;
+		brickWallRight = bwr;
 	}
 
 	public int getPlatform(){
@@ -89,14 +89,14 @@ public class block extends GameObject {
 	public void render(Graphics2D g) {
 		
 		switch(type){
-			case 'b':	g.drawImage(gameImages.brick,(int)x, (int)y, width, height, null);						
+			case 'b':	g.drawImage(brick,(int)x, (int)y, width, height, null);						
 						break;
 			case 's':	
 						break;
 			case 'w':	if(x > 512)
-							g.drawImage(gameImages.brickWallRight,(int)x, (int)y, width, height, null);
+							g.drawImage(brickWallRight,(int)x, (int)y, width, height, null);
 						else
-							g.drawImage(gameImages.brickWallLeft,(int)x, (int)y, width, height, null);
+							g.drawImage(brickWallLeft,(int)x, (int)y, width, height, null);
 						break;
 		}
 		
