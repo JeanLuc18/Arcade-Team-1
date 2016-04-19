@@ -106,6 +106,12 @@ public class levels{
 							blocksAdded += 1;
 							blocksPerLvl += 1;
 						}
+						//Bomber enemy
+						if(curr == 'B'){
+							level.add(new Bomber(blockY-32,32,32));
+							blocksAdded += 1;
+							blocksPerLvl += 1;
+						}
 						//Moving block
 						else if(curr == 'M'){
 							level.add(new movingblock(blockX, blockY-32, 'b' , platform, I.cloud, I.brick, I.brickWallLeft, I.brickWallRight));
