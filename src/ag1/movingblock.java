@@ -11,14 +11,9 @@ public class movingblock extends block{
 	private int speed = 2;
 	Image cloud;
 	
-	public movingblock(float x, float y, char type, int p) {
-		super(x, y, 64, 32, type, p);
-		try {
-			cloud = ImageIO.read(HGame1.class.getResource("Graphics/cloud.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+	public movingblock(float x, float y, char type, int p, Image c, Image b, Image bwl, Image bwr) {
+		super(x, y, 64, 32, type, p, b, bwl, bwr);
+		cloud = c;	
 	}
 
 	public void tick(LinkedList<GameObject> objects, Player player) {

@@ -19,7 +19,7 @@ public abstract class GameObject {
 	protected int width, height; //pixel width and height of object 
 	protected float gravity = 1f; //gravity applied to object
 	protected GOID id; //enum - for determining object type
-	
+	protected ImageClass gameImages;
 	/**
 	 * Empty constructor. For objects that position and size do not matter. Sets
 	 * x, y, width, and height to 0.
@@ -32,6 +32,7 @@ public abstract class GameObject {
 		this.width = 0;
 		this.height = 0;
 		this.id = id;
+		gameImages = new ImageClass();
 	}
 	
 	/**
@@ -48,6 +49,7 @@ public abstract class GameObject {
 		this.width = 0;
 		this.height = 0;
 		this.id = id;
+		gameImages = new ImageClass();
 	}
 	
 	/**

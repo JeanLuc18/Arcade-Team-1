@@ -16,40 +16,33 @@ public class block extends GameObject {
 	private boolean passable; //boolean of whether the player can pass through this block
 	final int bd = 8;
 	int platform = 0;
-	Image brick, brickWallLeft, brickWallRight;
+	Image brick, brickWallRight, brickWallLeft;
 	Player player;
 	
-	public block(float x, float y, char type, int p){
+	public block(float x, float y, char type, int p, Image b, Image bwl, Image bwr){
 		super(x, y, 32, 32, GOID.Block);
 		setType(type);
 		platform = p;
-		try {
-			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
-			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
-			brickWallRight = ImageIO.read(HGame1.class.getResource("Graphics/RightWall.png"));//help from pixabay.com
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+		brick = b;
+		brickWallLeft = bwl;
+		brickWallRight = bwr;
 	}
 
-	public block(float x, float y, int width, int height, char type, int p){//wall type block
+	public block(float x, float y, int width, int height, char type, int p, Image b, Image bwl, Image bwr){//wall type block
 		super(x, y, width, height, GOID.Block);
 		setType(type);
 		platform = p;
-		try {
-			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png")); 
-			brickWallLeft = ImageIO.read(HGame1.class.getResource("Graphics/LeftWall.png"));
-			brickWallRight = ImageIO.read(HGame1.class.getResource("Graphics/RightWall.png"));//help from pixabay.com
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+		brick = b;
+		brickWallLeft = bwl;
+		brickWallRight = bwr;
 	}
 
 	public int getPlatform(){
 		return platform;
+	}
+	
+	public void setbreakable(boolean b){
+		breakable = b;
 	}
 	
 	public void setType(char t){

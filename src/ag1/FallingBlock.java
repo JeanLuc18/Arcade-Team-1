@@ -16,13 +16,20 @@ import arcadia.Game;
 public class FallingBlock extends Enemy{
 
 	private boolean Fall = false;
+	float startingX = 0;
+	float startingY = 0;
 	
 	Image fallingblock;
+	Image faller;
+
 
 	public ArrayList<Integer> fallYs = new ArrayList<>();
-	public FallingBlock(float x, float y, int width, int height) {
+	public FallingBlock(float x, float y, int width, int height, Image f) {
 		super(x, y, width, height);
-	}
+		faller = f;
+		startingX = x;
+		startingY = y;
+ 	}
 	
 	
 	
@@ -46,27 +53,36 @@ public class FallingBlock extends Enemy{
 	
 	public void render(Graphics2D g){
 		g.setColor(Color.RED);
-		g.fillRect((int)x, (int)y, width, height);//Colors in block for debugging
+		//g.fillRect((int)x, (int)y, width, height);//Colors in block for debugging
 		g.drawImage(fallingblock,(int)x, (int)y, width, height, null);
 	}
+	
+	public void setThere(){
+		x = startingX;
+		y = startingY;
+		Fall = false;
+		fallingblock = null;
+	}
+	
+	public void setNotThere(){
+		x = -80000;
+		y = startingY;
+		Fall = false;
+	}
+	
+	public boolean isThere(){
+		return x != -80000;
+	}
+	
 	public void collided(Player p){
 		//checks to see if the falling block hasn't been triggered 
 		if(!Fall){
-			//sets the falling blocks texture
-			try {
-				fallingblock = ImageIO.read(HGame1.class.getResource("Graphics/fallingblock.gif")); //help from pixabay.com
-				this.setX(p.getX());//sets the block to fall right above the player
-				this.setY(p.getY()-300);//sets the block above the player
-				
-				this.setVelY(1);//begins its downward journey 
-				Fall = true;//sets that it has been triggered 
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			fallingblock = faller; //help from pixabay.com
+			this.setX(p.getX());//sets the block to fall right above the player
+			this.setY(p.getY()-300);//sets the block above the player
 			
-			
-			
+			this.setVelY(1);//begins its downward journey 
+			Fall = true;//sets that it has been triggered 
 		}
 		
 		else{
@@ -83,6 +99,5 @@ public class FallingBlock extends Enemy{
 		p.y = p.startingY;
 		
 		}
-
 	}
 }

@@ -24,26 +24,21 @@ import arcadia.Game;
 public class Repairer  extends Enemy{
 	boolean repair;
 	boolean faceing = true;
+	boolean there = true;
 	boolean pushLeft, pushRight;
 	boolean inAir = false;
 	Image left1, left2, right1, right2, brick;
 	
-	public Repairer(float x, float y, int width, int height) {
+	public Repairer(float x, float y, int width, int height, Image l, Image r, Image b ) {
 		super(x, y, width, height);
-		try {
-			left1 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking1_L.png")); //help from pixabay.com
-			left2 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking2.png"));
-			right1 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking3.png"));
-			right2 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking4.png"));
-			brick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+		
+		left1 = l; //help from pixabay.com
+		right1 = r;
+		brick = b;	
 	}
 
 	public void tick(LinkedList<GameObject> objects, Player player){
-		
+		if(there){
 		if(inAir){
 			velY += gravity;
 		}
@@ -59,7 +54,7 @@ public class Repairer  extends Enemy{
 				}
 			}
 		}
-		
+	}
 	}
 	
 	private void blockCollision(block block){
@@ -134,6 +129,7 @@ public class Repairer  extends Enemy{
 		}
 	}
 	public void render(Graphics2D g){
+		if(there){
 		g.setColor(Color.RED);
 		if(faceing == false)
 			g.drawImage(right1,(int)x, (int)y, width, height,null);
@@ -160,12 +156,27 @@ public class Repairer  extends Enemy{
 			g.setColor(Color.GRAY);
 			g.drawImage(brick,blockX, blockY, blockWidth, blockHeight, null);
 		}
+		}
+	}
+	
+	public void setThere(){
+		there = true;
+	}
+	
+	public void setNotThere(){
+		there = false;
+	}
+	
+	public boolean isThere(){
+		return there;
 	}
 	
 	public void collided(Player p){
+		if(there){
 		p.lives -= 1;
 		p.x = p.startingX;
 		p.y = p.startingY;
+		}
 	}
 }
 

@@ -16,7 +16,8 @@ public class LSCounter extends GameObject {
 	public LSCounter(Player player, Camera camera){
 		super(camera.getX()+500, camera.getY()+500, GOID.Counter);
 		this.camera = camera;
-		Score = Long.toString(player.score);
+		long score = player.Lscore + player.Tscore;
+		Score = Long.toString(score);
 		Score = ("00000000" + Score).substring(Score.length());
 		Score = Score + " Lives: " + player.lives;
 	}
@@ -25,8 +26,12 @@ public class LSCounter extends GameObject {
 	public void tick(LinkedList<GameObject> objects, Player player) {
 		x = camera.getX() + Game.WIDTH - 300;
 		y = -camera.getY() + 40;
+		
+		if(Long.toString(player.getCurrentTime()) != null)
 		time = Long.toString(player.getCurrentTime());
-		Score = Long.toString(player.score);
+		
+		long score = player.Lscore + player.Tscore;
+		Score = Long.toString(score);
 		Score = ("00000000" + Score).substring(Score.length());
 		Score = Score + " Lives: " + player.lives;
 	}
@@ -35,9 +40,13 @@ public class LSCounter extends GameObject {
 	public void render(Graphics2D g) {
 		g.setColor(Color.RED);
 		g.setFont(new Font("Stencil", Font.PLAIN, 36));
-		g.drawRect(50, (int) y, 100, 100);
-		g.drawString("Time", 52 , y + 32);
-		g.drawString(time, 52, y + 64);
+		
+		if(time != null){
+			g.draw3DRect(50, (int) y, 100, 100, true);
+			g.drawString("Time", 52 , y + 32);
+			g.drawString(time, 52, y + 64);
+		}
+		
 		g.drawString(Score, x , y);
 		
 	}
