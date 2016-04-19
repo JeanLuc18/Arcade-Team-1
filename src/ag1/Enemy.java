@@ -12,7 +12,7 @@ import java.util.LinkedList;
 
 public class Enemy extends GameObject{
 	
-	float speed = 2;        //Speed in horizontal direction, constant
+	protected float speed = 2;        //Speed in horizontal direction, constant
 
 	public Enemy(float x, float y, int width, int height){
 		super(x, y, width, height, GOID.Enemy);
