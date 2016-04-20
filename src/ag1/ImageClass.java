@@ -11,7 +11,7 @@ public class ImageClass{
 		  fallingblock, cloud, playerLeft1,
 		  playerLeftAttack, playerRight1, playerRightAttack, 
 		  repairerLeft1, repairerLeft2, repairerRight1, 
-		  repairerRight2, heldBrick;
+		  repairerRight2, heldBrick, bomber, explosion;
 	
 	public ImageClass(){
 		try {
@@ -30,6 +30,8 @@ public class ImageClass{
 			repairerRight1 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking3.png"));
 			repairerRight2 = ImageIO.read(HGame1.class.getResource("Graphics/Mage_Walking4.png"));
 			heldBrick = ImageIO.read(HGame1.class.getResource("Graphics/bricks.png"));
+			bomber = ImageIO.read(HGame1.class.getResource("Graphics/Bat_Flying_Left.png"));
+			explosion = ImageIO.read(HGame1.class.getResource("Graphics/Fire5.png"));
 			
 		} catch (IOException e) {
 			e.printStackTrace();

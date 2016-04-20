@@ -2,6 +2,7 @@ package ag1;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
@@ -21,9 +22,12 @@ public class Bomber extends Enemy{
 	private int bombRadius = 100;
 	private int explosionCounter = 0;
 	private int velY = 2;
+	Image flyLeft, explosion;
 
-	public Bomber(float y, int width, int height) {
+	public Bomber(float y, int width, int height, Image i, Image j) {
 		super(Game.WIDTH,y,width,height);
+		flyLeft = i;
+		explosion = j;
 		x = Game.WIDTH + 20;
 		this.y -= 20;
 	}
@@ -81,20 +85,14 @@ public class Bomber extends Enemy{
 		}
 	}
 	public void render(Graphics2D g) {
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		//NEEDS IMAGES
-		//NO SUITABLE IMAGES FOR ENEMIES, BOMBS, AND EXPLOSIONS
-		//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 		
-		g.setColor(Color.RED);
-		g.fillRect((int)x, (int)y, width, height);
+		g.drawImage(flyLeft, (int)x, (int)y, width, height, null);
 		if(dropped){
 			g.setColor(Color.BLACK);
 			g.fillRect(bombX, bombY, bombWidth, bombHeight);
 		}
 		if(exploding){
-			g.setColor(Color.YELLOW);
-			g.fillRect(expX, expY, expWidth, expHeight);
+			g.drawImage(explosion, expX, expY, expWidth, expHeight, null);
 		}
 	}
 	public void dropBomb(){

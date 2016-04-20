@@ -108,7 +108,7 @@ public class levels{
 						}
 						//Bomber enemy
 						if(curr == 'B'){
-							level.add(new Bomber(blockY-32,32,32));
+							level.add(new Bomber(blockY-32,32,32, I.bomber, I.explosion));
 							blocksAdded += 1;
 							blocksPerLvl += 1;
 						}
